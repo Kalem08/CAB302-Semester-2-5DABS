@@ -1,8 +1,10 @@
-package com.example.cab302_jfx_project;
+//package com.example.cab302_jfx_project;
+package app;
 
 import javafx.application.Application;
 
-public class Launcher {
+public class Launcher
+{
     public static void main(String[] args) {
         Application.launch(HelloApplication.class, args);
     }

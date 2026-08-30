@@ -1,4 +1,6 @@
-module com.example.cab302_jfx_project {
+//module com.example.cab302_jfx_project
+module app
+{
     requires javafx.controls;
     requires javafx.fxml;
 
