@@ -19,7 +19,8 @@ public class HelloApplication extends Application
     //MARK: Variables
     private Label label2;
 
-    Boolean useLoginScene = true;
+    Boolean useLoginScene = false;
+    Boolean useEntryScene = true;
 
     //MARK: Start
     @Override
@@ -29,6 +30,11 @@ public class HelloApplication extends Application
         {
             LoginScene logScn = new LoginScene();
             logScn.create(stage);
+        }
+        else if (useEntryScene)
+        {
+            EntryScene entryScn = new EntryScene();
+            entryScn.create(stage);
         }
         else
         {
