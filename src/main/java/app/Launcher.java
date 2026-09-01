@@ -1,4 +1,3 @@
-//package com.example.cab302_jfx_project;
 package app;
 
 import javafx.application.Application;
