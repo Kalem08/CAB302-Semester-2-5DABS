@@ -2,6 +2,8 @@ package app;
 
 //MARK: Imports
 import javafx.application.Application;
+import javafx.fxml.FXMLLoader;
+
 import java.io.IOException;
 // import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
@@ -10,6 +12,7 @@ import javafx.scene.Scene;
 // import javafx.scene.control.TextField;
 import javafx.scene.control.*; // load everything in the control package
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
@@ -19,8 +22,9 @@ public class HelloApplication extends Application
     //MARK: Variables
     private Label label2;
 
+    // Boolean useEntryScene = false;
     Boolean useLoginScene = false;
-    Boolean useEntryScene = true;
+    Boolean useFXMLLoader = false;
 
     //MARK: Start
     @Override
@@ -31,51 +35,24 @@ public class HelloApplication extends Application
             LoginScene logScn = new LoginScene();
             logScn.create(stage);
         }
-        else if (useEntryScene)
+        else if (useFXMLLoader)
         {
-            EntryScene entryScn = new EntryScene();
-            entryScn.create(stage);
+            Loader loaderScn = new Loader();
+            loaderScn.start(stage);
         }
+        //default to entry scene
         else
         {
-            //load the .fxml file into a scene variable
-            // FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("hello-view.fxml"));
-            // Scene scene = new Scene(fxmlLoader.load(), 960, 540); //create scene (with width and height)
-
-            //create a scene from scatch
-            VBox root = new VBox();
-            root.setAlignment(javafx.geometry.Pos.CENTER);
-            root.setSpacing(15.0);
-            root.setFillWidth(false); //set the fillWidth property to false so the children are not resized to fill the width of the VBox
-
-            //create a TextField, a Label, and an HBox with appropriate text
-            TextField textField = new TextField();
-            textField.setText("TextField");
-            Label label = new Label("Label");
-            //the HBox is used to hold the buttons
-            HBox hbox = new HBox();
-            hbox.setAlignment(javafx.geometry.Pos.CENTER);
-            hbox.setSpacing(15.0);
-            Button button1 = new Button("Button 1");
-            Button button2 = new Button("Button 2");
-            Button button3 = new Button("Button 3");
-
-            Button button4 = new Button("Interactive button");
-            button4.setOnAction(event -> buttonMethod());
-
-            label2 = new Label("My Label");
-
-            //add the buttons to the HBox
-            hbox.getChildren().addAll(button1, button2, button3);
-            //add the children to the root vbox
-            root.getChildren().addAll(textField, label, hbox, button4, label2);
+            // StackPane root = new StackPane();
+            EntryScene entryScn = new EntryScene();
+            entryScn.create(stage);
 
             //MARK: Scene
             //define the scene, add to the stage (window) and show the stage
-            Scene scene = new Scene(root, 960, 540);
-            stage.setTitle("Window Title"); //the window title
-            stage.setScene(scene); //sets the scene
-            stage.show();
+            // Scene scene = new Scene(root, 960, 540);
+            // stage.setTitle("Entry Page"); //the window title
+            // stage.setScene(scene); //sets the scene
+            // stage.show();
         }
     }
 

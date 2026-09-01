@@ -8,6 +8,8 @@ import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
+import javafx.scene.paint.Color;
+import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
 
 public class EntryScene
@@ -20,14 +22,13 @@ public class EntryScene
     private Button loginButton;
     private Button registerButton;
 
-    // @Override
-    public void create(Stage stage) // throws IOException
+    public void create(Stage stage)
     {
         //middle
         titleLabel = new Label("Plantopedia");
         subtitleLabel = new Label("A digital encyclopedia for Australian native plants");
-        searchTextfield = new TextField();
-        searchTextfield.setText("Search...");
+        searchTextfield = new TextField("Search...");
+        searchTextfield.setPrefWidth(400);
         searchButton = new Button("Search");
         searchButton.setOnAction(event -> openSearchPage());
 
@@ -41,22 +42,36 @@ public class EntryScene
         centreBox.setAlignment(Pos.CENTER);
         centreBox.setSpacing(15.0);
         centreBox.setFillWidth(false); //set the fillWidth property to false so the children are not resized to fill the width of the VBox
-        centreBox.getChildren().addAll(titleLabel, subtitleLabel, searchTextfield, searchButton);
+        centreBox.getChildren().addAll(
+            titleLabel,
+            subtitleLabel,
+            searchTextfield,
+            searchButton
+        );
 
         HBox lowerBox = new HBox();
         lowerBox.setAlignment(Pos.CENTER);
         lowerBox.setSpacing(20.0);
         lowerBox.setPadding(new Insets(0, 0, 20, 0)); //20 pixels of spacing from the bottom
         // lowerBox.setFillHeight(false);
-        lowerBox.getChildren().addAll(loginButton, registerButton);
+        lowerBox.getChildren().addAll(
+            loginButton,
+            registerButton
+        );
         
+        Header header = new Header();
+        header.setPrefHeight(50);
+        header.setMinWidth(0); //need to set min width so header can shrink when window shrinks
+
         BorderPane root = new BorderPane();
+        root.setTop(header);
         root.setCenter(centreBox);
         root.setBottom(lowerBox);
+        // root.setMinWidth(0);
+        // root.setMinHeight(0);
 
         // centreBox.setAlignment(Pos.CENTER);
         // centreBox.setSpacing(10);
-
         // lowerBox.setAlignment(Pos.CENTER);
         // lowerBox.setSpacing(10);
 
