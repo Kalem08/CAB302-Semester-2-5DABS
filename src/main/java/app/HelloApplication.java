@@ -3,7 +3,6 @@ package app;
 //MARK: Imports
 import javafx.application.Application;
 import java.io.IOException;
-
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 import javafx.scene.Parent;
@@ -13,7 +12,9 @@ import javafx.scene.Parent;
 //main class (an extension of 'Application')
 public class HelloApplication extends Application
 {
-    Boolean useLoginPage = false;
+    //because this variable is static, any other class can access this without an object reference
+    public static Scene scene;
+
     Boolean useFXMLLoader = false;
 
     //MARK: Start
@@ -28,27 +29,23 @@ public class HelloApplication extends Application
         //use nodes from .java files
         else
         {
-            Parent root; //= new EntryScene();
-
-            if (useLoginPage)
-            {
-                root = new LoginPage();
-            }
-            //default to entry scene
-            else
-            {
-                root = new EntryPage();
-            }
+            Parent root = new EntryPage();
 
             //MARK: Scene
             //define the scene, add to the stage/window, and display the stage
-            Scene scene = new Scene(root, 960, 540);
-            stage.setTitle("Window Title"); //the window title
+            scene = new Scene(root, 960, 540);
+            stage.setTitle("Plantopedia"); //the window title
             stage.setScene(scene); //sets the scene
             stage.show();
             
             //use .setRoot to change primary node/container that is present in the scene
             // scene.setRoot(header);
         }
+    }
+
+    //shorthand method for 'System.out.println()'
+    public static void print(Object value)
+    {
+        System.out.println(value);
     }
 }
