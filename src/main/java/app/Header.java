@@ -1,16 +1,14 @@
 package app;
 
 //MARK: Imports
-import javafx.geometry.Insets;
-import javafx.geometry.Pos;
-import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
+import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
-// import javafx.stage.Stage;
 
-
+//the header with logo, search bar and account button at the top of most pages
 public class Header extends StackPane
 {
     private Label titleLabel;
@@ -38,8 +36,6 @@ public class Header extends StackPane
         //create spacers
         Region leftSpacer = new Region();
         Region rightSpacer = new Region();
-        // leftSpacer.setPrefWidth(10);
-        // rightSpacer.setPrefWidth(10);
         HBox.setHgrow(leftSpacer, Priority.ALWAYS);
         HBox.setHgrow(rightSpacer, Priority.ALWAYS);
 
@@ -61,6 +57,8 @@ public class Header extends StackPane
         
         //add everything to the header stack
         getChildren().addAll(background, contents);
+        setPrefHeight(50);
+        setMinWidth(0); //need to set min width so header can shrink when window shrinks
     }
 
     //MARK: Methods
