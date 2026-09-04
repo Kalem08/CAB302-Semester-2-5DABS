@@ -4,11 +4,11 @@ package app;
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
 import javafx.geometry.Insets;
-// import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 
+//could also be called 'AccountPanel' or 'AuthenticationPanel', as this encompasses both log in AND registration
 public class LogInPage extends StackPane
 {
     //MARK: Variables
@@ -31,8 +31,10 @@ public class LogInPage extends StackPane
         statusLabel = new Label("* * *");
 
         //textfields
-        TextField usernameTextfield = new TextField("Username");
-        TextField passwordTextField = new TextField("Password");
+        TextField usernameTextfield = new TextField();
+        TextField passwordTextField = new TextField();
+        usernameTextfield.setPromptText("Username");
+        passwordTextField.setPromptText("Password");
         usernameTextfield.setPrefWidth(300);
         passwordTextField.setPrefWidth(300);
 

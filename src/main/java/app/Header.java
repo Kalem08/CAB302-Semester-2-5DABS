@@ -22,7 +22,10 @@ public class Header extends StackPane
         
         //MARK: Elements
         Label titleLabel = new Label("Plantopedia");
-        TextField searchTextfield = new TextField("Search...");
+        TextField searchTextfield = new TextField();
+        searchTextfield.setPromptText("Search...");
+        searchTextfield.setPrefWidth(400);
+        searchTextfield.setMinWidth(0);
 
         Button accountButton = new Button("Account");
         accountButton.setOnAction(event -> openAccountPage());
@@ -30,9 +33,6 @@ public class Header extends StackPane
         logInButton.setOnAction(event -> openLoginPage());
         Button registerButton = new Button("Register");
         registerButton.setOnAction(event -> openLoginPage());
-
-        searchTextfield.setPrefWidth(400);
-        searchTextfield.setMinWidth(0);
 
         Button searchButton = new Button("Search");
         searchButton.setOnAction(event -> search());
