@@ -3,8 +3,10 @@ package app;
 //MARK: Imports
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
+import javafx.scene.paint.Color;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.scene.image.*;
 
 //the entry page when the user first opens the app
 public class EntryPage extends BorderPane
@@ -12,25 +14,40 @@ public class EntryPage extends BorderPane
     public EntryPage()
     {
         //middle
-        Label titleLabel = new Label("Plantopedia");
         Label subtitleLabel = new Label("A digital encyclopedia for Australian native plants");
-        TextField searchTextfield = new TextField("Search...");
+        CustomTextfield searchTextfield = new CustomTextfield("Search...", 800, 50);
+        // searchTextfield.setPromptText("Search...");
         searchTextfield.setPrefWidth(400);
-        Button searchButton = new Button("Search");
-        searchButton.setOnAction(event -> openSearchPage());
 
-        //buttons
-        Button logInButton = new Button("Log in");
-        logInButton.setOnAction(event -> openLogInPage());
-        Button registerButton = new Button("Register");
-        registerButton.setOnAction(event -> openRegisterPage());
+        //search button
+        // Button searchButton = new Button("Search");
+        CustomButton searchButton = new CustomButton("Search");
+        searchButton.setBackgroundColor(Color.WHITESMOKE);
+        searchButton.setBackgroundHoverColor(Color.LIGHTGREY);
+        searchButton.setTextColour(Design.grey20);
+        searchButton.setTextHoverColour(Color.BLACK);
+        searchButton.setOnMouseClicked(event -> openResultsPage());
+
+        //account buttons
+        CustomButton logInButton = new CustomButton("Log in");
+        logInButton.setOnMouseClicked(event -> openLogInPage());
+        CustomButton registerButton = new CustomButton("Register");
+        registerButton.setOnMouseClicked(event -> openLogInPage());
+
+        //logo
+        Image image = new Image(getClass().getResource("/Logo.png").toExternalForm()); //relative to "/resources/"
+        ImageView imageView = new ImageView(image);
+        imageView.setFitWidth(800);
+        imageView.setPreserveRatio(true);
+
+        // CustomTextfield customTextfield = new CustomTextfield();
 
         VBox centreBox = new VBox();
         centreBox.setAlignment(Pos.CENTER);
         centreBox.setSpacing(15.0);
         centreBox.setFillWidth(false); //set the fillWidth property to false so the children are not resized to fill the width of the VBox
         centreBox.getChildren().addAll(
-            titleLabel,
+            imageView,
             subtitleLabel,
             searchTextfield,
             searchButton
@@ -57,9 +74,12 @@ public class EntryPage extends BorderPane
         // centreBox.setSpacing(10);
         lowerBox.setAlignment(Pos.CENTER);
         // lowerBox.setSpacing(10);
+
+        //for root GridPane
+        setStyle("-fx-background-color: #FFFFFF;");
     }
 
-    void openSearchPage()
+    void openResultsPage()
     {
         HelloApplication.scene.setRoot(new SearchPage());
     }

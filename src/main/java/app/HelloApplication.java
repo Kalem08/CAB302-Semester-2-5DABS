@@ -4,6 +4,7 @@ package app;
 import javafx.application.Application;
 import java.io.IOException;
 import javafx.scene.Scene;
+import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import javafx.scene.Parent;
 // import javafx.scene.control.*;
@@ -35,7 +36,10 @@ public class HelloApplication extends Application
             //define the scene, add to the stage/window, and display the stage
             scene = new Scene(root, 960, 540);
             stage.setTitle("Plantopedia"); //the window title
+            // scene.setFill(Color.DARKBLUE); //works for all other elements
+            // root.setStyle("-fx-background-color: #202020;"); //works for GridPane
             stage.setScene(scene); //sets the scene
+            stage.setMaximized(true);
             stage.show();
             
             //use .setRoot to change primary node/container that is present in the scene
