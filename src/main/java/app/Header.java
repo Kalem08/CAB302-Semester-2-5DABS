@@ -12,10 +12,6 @@ import javafx.scene.shape.Rectangle;
 //the header with logo, search bar and account button at the top of most pages
 public class Header extends StackPane
 {
-    // private Label titleLabel;
-    // private TextField searchTextfield;
-    // private Button accountButton;
-
     public Header()
     {
         //MARK: Background
@@ -31,9 +27,9 @@ public class Header extends StackPane
         Button accountButton = new Button("Account");
         accountButton.setOnAction(event -> openAccountPage());
         Button logInButton = new Button("Log in");
-        accountButton.setOnAction(event -> openAccountPage());
+        logInButton.setOnAction(event -> openLoginPage());
         Button registerButton = new Button("Register");
-        accountButton.setOnAction(event -> openAccountPage());
+        registerButton.setOnAction(event -> openLoginPage());
 
         searchTextfield.setPrefWidth(400);
         searchTextfield.setMinWidth(0);
@@ -80,5 +76,10 @@ public class Header extends StackPane
     void openAccountPage()
     {
         HelloApplication.scene.setRoot(new AccountPage());
+    }
+
+    void openLoginPage()
+    {
+        HelloApplication.scene.setRoot(new LogInPage());
     }
 }
