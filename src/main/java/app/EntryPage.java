@@ -16,8 +16,6 @@ public class EntryPage extends BorderPane
         //middle
         Label subtitleLabel = new Label("A digital encyclopedia for Australian native plants");
         CustomTextfield searchTextfield = new CustomTextfield("Search...", 800, 50);
-        // searchTextfield.setPromptText("Search...");
-        searchTextfield.setPrefWidth(400);
 
         //search button
         // Button searchButton = new Button("Search");
@@ -34,13 +32,10 @@ public class EntryPage extends BorderPane
         CustomButton registerButton = new CustomButton("Register");
         registerButton.setOnMouseClicked(event -> openLogInPage());
 
-        //logo
-        Image image = new Image(getClass().getResource("/Logo.png").toExternalForm()); //relative to "/resources/"
-        ImageView imageView = new ImageView(image);
+        //MARK: Logo
+        ImageView imageView = new ImageView(Design.getLogo());
         imageView.setFitWidth(800);
         imageView.setPreserveRatio(true);
-
-        // CustomTextfield customTextfield = new CustomTextfield();
 
         VBox centreBox = new VBox();
         centreBox.setAlignment(Pos.CENTER);
@@ -62,21 +57,15 @@ public class EntryPage extends BorderPane
             logInButton,
             registerButton
         );
-        
-        // Header header = new Header();
 
         //modify the root container (BorderPane)
-        // setTop(header);
         setCenter(centreBox);
         setBottom(lowerBox);
+        //change colour of root GridPane
+        setStyle("-fx-background-color: #FFFFFF;");
 
         centreBox.setAlignment(Pos.CENTER);
-        // centreBox.setSpacing(10);
         lowerBox.setAlignment(Pos.CENTER);
-        // lowerBox.setSpacing(10);
-
-        //for root GridPane
-        setStyle("-fx-background-color: #FFFFFF;");
     }
 
     void openResultsPage()

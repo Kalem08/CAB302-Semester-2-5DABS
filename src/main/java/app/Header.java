@@ -7,6 +7,7 @@ import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
+import javafx.scene.image.*;
 
 //MARK: Class
 //the header with logo, search bar and account button at the top of most pages
@@ -21,11 +22,27 @@ public class Header extends StackPane
         background.heightProperty().bind(this.heightProperty());
         
         //MARK: Elements
-        Label titleLabel = new Label("Plantopedia");
-        TextField searchTextfield = new TextField();
-        searchTextfield.setPromptText("Search...");
-        searchTextfield.setPrefWidth(400);
-        searchTextfield.setMinWidth(0);
+        //title
+        // Label titleLabel = new Label("Plantopedia");
+
+        //logo
+        int logoWidth = 200;
+        Rectangle logoRectangle = new Rectangle(logoWidth + 20, 50, Color.WHITE);
+        logoRectangle.setArcWidth(Design.cornerRadius);
+        logoRectangle.setArcHeight(Design.cornerRadius);
+
+        ImageView imageView = new ImageView(Design.getLogo());
+        imageView.setFitWidth(logoWidth);
+        imageView.setPreserveRatio(true);
+
+        StackPane logo = new StackPane(logoRectangle, imageView);
+        logo.setOnMouseClicked(event -> openEntryPage());
+
+        CustomTextfield searchTextfield = new CustomTextfield("Search...", 400, 30);
+        // TextField searchTextfield = new TextField();
+        // searchTextfield.setPromptText("Search...");
+        // searchTextfield.setPrefWidth(400);
+        // searchTextfield.setMinWidth(0);
 
         Button accountButton = new Button("Account");
         accountButton.setOnAction(event -> openAccountPage());
@@ -33,6 +50,8 @@ public class Header extends StackPane
         logInButton.setOnAction(event -> openLoginPage());
         Button registerButton = new Button("Register");
         registerButton.setOnAction(event -> openLoginPage());
+
+        AccountButton accountIcon = new AccountButton(50);
 
         Button searchButton = new Button("Search");
         searchButton.setOnAction(event -> search());
@@ -45,14 +64,16 @@ public class Header extends StackPane
 
         HBox content = new HBox();
         content.getChildren().addAll(
-            titleLabel,
+            // titleLabel,
+            logo,
             leftSpacer,
             searchTextfield,
             searchButton,
             rightSpacer,
             logInButton,
             registerButton,
-            accountButton
+            // accountButton,
+            accountIcon
         );
         content.setAlignment(Pos.CENTER);
         content.setSpacing(10.0);
@@ -73,6 +94,11 @@ public class Header extends StackPane
     }
 
     //MARK: Methods
+    void openEntryPage()
+    {
+        HelloApplication.scene.setRoot(new EntryPage());
+    }
+
     void openAccountPage()
     {
         HelloApplication.scene.setRoot(new AccountPage());
