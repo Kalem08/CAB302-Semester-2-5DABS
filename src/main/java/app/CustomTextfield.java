@@ -1,10 +1,9 @@
 package app;
 
-import javafx.geometry.Insets;
 //MARK: Imports
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
-// import javafx.geometry.Insets;
+import javafx.geometry.Insets;
 // import javafx.geometry.Pos;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
@@ -14,12 +13,13 @@ import javafx.scene.text.FontWeight;
 
 public class CustomTextfield extends StackPane
 {
+    Rectangle background;
+
     public CustomTextfield(String placeholderString, int width, int height)
     {
         //MARK: Background
-        Rectangle background = new Rectangle(width, height);
-        // background.setFill(Color.web("#dddddd"));
-        background.setFill(Design.superLightGrey);
+        background = new Rectangle(width, height);
+        background.setFill(Color.LIGHTGREY);
         background.setArcWidth(height);
         background.setArcHeight(height);
 
@@ -34,5 +34,10 @@ public class CustomTextfield extends StackPane
         );
 
         getChildren().addAll(background, textfield);
+    }
+
+    public void setBackgroundColor(Color colour)
+    {
+        background.setFill(colour);
     }
 }

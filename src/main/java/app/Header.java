@@ -39,22 +39,25 @@ public class Header extends StackPane
         logo.setOnMouseClicked(event -> openEntryPage());
 
         CustomTextfield searchTextfield = new CustomTextfield("Search...", 400, 30);
-        // TextField searchTextfield = new TextField();
-        // searchTextfield.setPromptText("Search...");
-        // searchTextfield.setPrefWidth(400);
-        // searchTextfield.setMinWidth(0);
+        searchTextfield.setBackgroundColor(Design.superLightGrey);
 
-        Button accountButton = new Button("Account");
-        accountButton.setOnAction(event -> openAccountPage());
+        // Button searchButton = new Button("Search");
+        // searchButton.setOnAction(event -> search());
+        CustomButton searchButton = new CustomButton("Search", 60, 30);
+        searchButton.setTextSize(12);
+        searchButton.setBackgroundColor(Color.WHITESMOKE);
+        searchButton.setBackgroundHoverColor(Color.LIGHTGREY);
+        searchButton.setTextColour(Design.grey20);
+        searchButton.setTextHoverColour(Color.BLACK);
+        searchButton.setOnMouseClicked(event -> search());
+
         Button logInButton = new Button("Log in");
         logInButton.setOnAction(event -> openLoginPage());
         Button registerButton = new Button("Register");
         registerButton.setOnAction(event -> openLoginPage());
 
-        AccountButton accountIcon = new AccountButton(50);
-
-        Button searchButton = new Button("Search");
-        searchButton.setOnAction(event -> search());
+        AccountButton accountIcon = new AccountButton(40);
+        accountIcon.setOnMouseClicked(event -> openAccountPage());
 
         //create spacers
         Region leftSpacer = new Region();
@@ -72,7 +75,6 @@ public class Header extends StackPane
             rightSpacer,
             logInButton,
             registerButton,
-            // accountButton,
             accountIcon
         );
         content.setAlignment(Pos.CENTER);
@@ -90,7 +92,7 @@ public class Header extends StackPane
     //MARK: Methods
     void search()
     {
-        HelloApplication.scene.setRoot(new SearchPage());
+        HelloApplication.scene.setRoot(new ResultsPage());
     }
 
     //MARK: Methods

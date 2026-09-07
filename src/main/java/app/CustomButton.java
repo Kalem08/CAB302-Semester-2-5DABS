@@ -20,15 +20,19 @@ public class CustomButton extends StackPane
     Label label;
     Rectangle background;
 
-    public CustomButton(String text) //, int width, int height)
+    //default values
+    int width = 100;
+    int height = 40;
+
+    public CustomButton(String text, int width, int height)
     {
         //MARK: Background
-        background = new Rectangle(100, 40);
+        background = new Rectangle(width, height);
         background.setFill(frameColour);
-        // background.widthProperty().bind(this.widthProperty());
-        // background.heightProperty().bind(this.heightProperty());
         background.setArcWidth(Design.cornerRadius);
         background.setArcHeight(Design.cornerRadius);
+        // background.widthProperty().bind(this.widthProperty());
+        // background.heightProperty().bind(this.heightProperty());
 
         label = new Label(text);
         label.setTextFill(textColour);
@@ -47,6 +51,11 @@ public class CustomButton extends StackPane
     }
 
     //MARK: Methods
+    public void setTextSize(int size)
+    {
+        label.setFont(Font.font(size));
+    }
+    
     void clicked()
     {
         HelloApplication.print("Button clicked");

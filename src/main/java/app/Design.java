@@ -2,6 +2,8 @@ package app;
 
 //MARK: Imports
 import javafx.scene.paint.Color;
+
+import java.net.URL;
 import javafx.scene.image.*;
 
 //Design class is a set of static variables
@@ -11,6 +13,8 @@ public class Design
     public static int cornerRadius = 20;
     public static int horizontalSpacing = 10;
     public static int verticalSpacing = 10;
+    public static int spacing = 10;
+    public static int padding = 10;
 
     //MARK: Colours
     public static Color superLightGrey = Color.web("#f0f0f0");
@@ -21,10 +25,30 @@ public class Design
     public static Color grey80 = Color.web("#cccccc");
     public static Color grey90 = Color.web("#e6e6e6");
     public static Color grey95 = Color.web("#f2f2f2");
+    public static Color hyperlinkColour = Color.web("#0066CC"); 
+
+    public static Image getImage(String localPath)
+    {
+        //when used in a non-static class, begin with 'getClass()' instead of 'Design.class'
+        // return new Image(Design.class.getResource("/" + localPath).toExternalForm()); //relative to "/resources/"
+
+        URL url = Design.class.getResource("/" + localPath);
+        // System.out.println(resource);
+        System.out.println("localPath: " + localPath);
+        System.out.println("URL: " + url);
+
+        if (url != null)
+        {
+            return new Image(url.toExternalForm());
+        }
+        else
+        {
+            return null;
+        }
+    }
 
     public static Image getLogo()
     {
-        //when used in a non-static class, begin with 'getClass()' instead of 'Design.class'
-        return new Image(Design.class.getResource("/Logo.png").toExternalForm()); //relative to "/resources/"
+        return getImage("Logo.png");
     }
 }
