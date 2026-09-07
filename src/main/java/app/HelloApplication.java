@@ -27,10 +27,13 @@ public class HelloApplication extends Application
             Loader loader = new Loader();
             loader.start(stage);
         }
-        //use nodes from .java files
+        //use nodes/pages from .java files
         else
         {
+            //define the inital page here
             Parent root = new EntryPage();
+            // Parent root = new ResultsPage();
+            // Parent root = new PlantPage();
 
             //MARK: Scene
             //define the scene, add to the stage/window, and display the stage
@@ -39,7 +42,7 @@ public class HelloApplication extends Application
             // scene.setFill(Color.DARKBLUE); //works for all other elements
             // root.setStyle("-fx-background-color: #202020;"); //works for GridPane
             stage.setScene(scene); //sets the scene
-            stage.setMaximized(true);
+            // stage.setMaximized(true); //start as a maximised window
             stage.show();
             
             //use .setRoot to change primary node/container that is present in the scene

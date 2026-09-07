@@ -6,7 +6,9 @@ import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+
 import javafx.scene.image.*;
+import java.net.URL;
 
 //the entry page when the user first opens the app
 public class EntryPage extends BorderPane
@@ -16,31 +18,26 @@ public class EntryPage extends BorderPane
         //middle
         Label subtitleLabel = new Label("A digital encyclopedia for Australian native plants");
         CustomTextfield searchTextfield = new CustomTextfield("Search...", 800, 50);
-        // searchTextfield.setPromptText("Search...");
-        searchTextfield.setPrefWidth(400);
+        searchTextfield.setBackgroundColor(Design.superLightGrey);
 
         //search button
-        // Button searchButton = new Button("Search");
-        CustomButton searchButton = new CustomButton("Search");
-        searchButton.setBackgroundColor(Color.WHITESMOKE);
+        CustomButton searchButton = new CustomButton("Search", 100, 40);
+        searchButton.setBackgroundColor(Design.superLightGrey);
         searchButton.setBackgroundHoverColor(Color.LIGHTGREY);
         searchButton.setTextColour(Design.grey20);
         searchButton.setTextHoverColour(Color.BLACK);
         searchButton.setOnMouseClicked(event -> openResultsPage());
 
         //account buttons
-        CustomButton logInButton = new CustomButton("Log in");
+        CustomButton logInButton = new CustomButton("Log in", 100, 40);
         logInButton.setOnMouseClicked(event -> openLogInPage());
-        CustomButton registerButton = new CustomButton("Register");
+        CustomButton registerButton = new CustomButton("Register", 100, 40);
         registerButton.setOnMouseClicked(event -> openLogInPage());
 
-        //logo
-        Image image = new Image(getClass().getResource("/Logo.png").toExternalForm()); //relative to "/resources/"
-        ImageView imageView = new ImageView(image);
+        //MARK: Logo
+        ImageView imageView = new ImageView(Design.getLogo());
         imageView.setFitWidth(800);
         imageView.setPreserveRatio(true);
-
-        // CustomTextfield customTextfield = new CustomTextfield();
 
         VBox centreBox = new VBox();
         centreBox.setAlignment(Pos.CENTER);
@@ -62,26 +59,25 @@ public class EntryPage extends BorderPane
             logInButton,
             registerButton
         );
-        
-        // Header header = new Header();
 
         //modify the root container (BorderPane)
-        // setTop(header);
         setCenter(centreBox);
         setBottom(lowerBox);
+        //change colour of root GridPane
+        setStyle("-fx-background-color: #FFFFFF;");
 
         centreBox.setAlignment(Pos.CENTER);
-        // centreBox.setSpacing(10);
         lowerBox.setAlignment(Pos.CENTER);
-        // lowerBox.setSpacing(10);
 
-        //for root GridPane
-        setStyle("-fx-background-color: #FFFFFF;");
+        // URL resource = Design.class.getResource("/Logo.png");
+        // System.out.println("Image: ");
+        // System.out.println(resource);
+        // Image img = new Image(resource.toExternalForm());
     }
 
     void openResultsPage()
     {
-        HelloApplication.scene.setRoot(new SearchPage());
+        HelloApplication.scene.setRoot(new ResultsPage());
     }
 
     void openLogInPage()
