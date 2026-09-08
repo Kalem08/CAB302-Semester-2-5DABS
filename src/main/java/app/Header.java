@@ -13,6 +13,8 @@ import javafx.scene.image.*;
 //the header with logo, search bar and account button at the top of most pages
 public class Header extends StackPane
 {
+    int searchElementHeight = 30;
+
     public Header()
     {
         //MARK: Background
@@ -22,8 +24,6 @@ public class Header extends StackPane
         background.heightProperty().bind(this.heightProperty());
         
         //MARK: Elements
-        //title
-        // Label titleLabel = new Label("Plantopedia");
 
         //logo
         int logoWidth = 200;
@@ -37,25 +37,27 @@ public class Header extends StackPane
 
         StackPane logo = new StackPane(logoRectangle, imageView);
         logo.setOnMouseClicked(event -> openEntryPage());
-
-        CustomTextfield searchTextfield = new CustomTextfield("Search...", 400, 30);
+        
+        //textfield
+        CustomTextfield searchTextfield = new CustomTextfield("Search...", 400, searchElementHeight);
         searchTextfield.setBackgroundColor(Design.superLightGrey);
 
-        // Button searchButton = new Button("Search");
-        // searchButton.setOnAction(event -> search());
-        CustomButton searchButton = new CustomButton("Search", 60, 30);
+        //search button
+        CustomButton searchButton = new CustomButton("Search", 60, searchElementHeight);
         searchButton.setTextSize(12);
         searchButton.setBackgroundColor(Color.WHITESMOKE);
-        searchButton.setBackgroundHoverColor(Color.LIGHTGREY);
+        searchButton.setBackgroundHoverColor(Design.grey70);
         searchButton.setTextColour(Design.grey20);
         searchButton.setTextHoverColour(Color.BLACK);
         searchButton.setOnMouseClicked(event -> search());
 
+        //login/register
         Button logInButton = new Button("Log in");
         logInButton.setOnAction(event -> openLoginPage());
         Button registerButton = new Button("Register");
         registerButton.setOnAction(event -> openLoginPage());
 
+        //acount
         AccountButton accountIcon = new AccountButton(40);
         accountIcon.setOnMouseClicked(event -> openAccountPage());
 
@@ -78,8 +80,9 @@ public class Header extends StackPane
             accountIcon
         );
         content.setAlignment(Pos.CENTER);
-        content.setSpacing(10.0);
-        content.setPadding(new Insets(10));
+        content.setSpacing(Design.spacing);
+        content.setPadding(new Insets(Design.padding));
+        content.setFillHeight(false); //sub-elements should not stretch to fill the container
         // content.setMinWidth(0);
         // content.prefWidthProperty().bind(this.widthProperty());
         

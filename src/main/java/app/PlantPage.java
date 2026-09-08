@@ -1,8 +1,9 @@
 package app;
 
-import javafx.geometry.Insets;
+//MARK: Imports
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
+import javafx.geometry.Insets;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;

@@ -1,31 +1,92 @@
 package app;
 
+//MARK: imports
+import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
+import javafx.scene.text.Font;
+import javafx.scene.text.FontWeight;
 
-public class AccountPage extends BorderPane
+public class AccountPage extends VBox
 {
+    int textfieldWidth = 200;
+    int textfieldHeight = 30;
+
     public AccountPage()
     {
         Header header = new Header();
-        Label label1 = new Label("This is the account page");
-        Button settingsButton = new Button("Edit account");
-        settingsButton.setOnAction(event -> openAccountSettingsPage());
 
-        VBox content = new VBox(
-            label1,
-            settingsButton
+        Label titleLabel = new Label("Account");
+        titleLabel.setFont(Font.font("Arial", FontWeight.BOLD, 24));
+        titleLabel.setUnderline(true);
+
+        //display name
+        Label displayNameLabel = new Label("Display name:");
+        CustomTextfield displayNameTextField = new CustomTextfield("Display name...", textfieldWidth, textfieldHeight);
+        HBox displayNameRow = new HBox(
+            displayNameLabel,
+            displayNameTextField
         );
-        content.setSpacing(10);
-        content.setAlignment(Pos.CENTER);
+        displayNameRow.setSpacing(Design.spacing);
+        displayNameRow.setAlignment(Pos.CENTER_LEFT);
 
-        setTop(header);
-        setCenter(content);
+        //username
+        Label usernameLabel = new Label("Username:");
+        CustomTextfield usernameTextfield = new CustomTextfield("Username...", textfieldWidth, textfieldHeight);
+        HBox usernameRow = new HBox(
+            usernameLabel,
+            usernameTextfield
+        );
+        usernameRow.setSpacing(Design.spacing);
+        usernameRow.setAlignment(Pos.CENTER_LEFT);
+
+        //password
+        Label passwordLabel = new Label("Password:");
+        CustomTextfield passwordTextField = new CustomTextfield("Password...", textfieldWidth, textfieldHeight);
+        HBox passwordRow = new HBox(
+            passwordLabel,
+            passwordTextField
+        );
+        passwordRow.setSpacing(Design.spacing);
+        passwordRow.setAlignment(Pos.CENTER_LEFT);
+
+        // Button saveButton = new Button("Save changes");
+        CustomButton saveButton = new CustomButton("Save changes", 120, textfieldHeight);
+        saveButton.setOnMouseClicked(event -> saveAccountDetails());
+        saveButton.setPrefHeight(30);
+
+        // Region horizontalSpacer = new Region();
+        // HBox.setHgrow(horizontalSpacer, Priority.ALWAYS);
+
+        VBox verticalStack = new VBox(
+            titleLabel,
+            displayNameRow,
+            usernameRow,
+            passwordRow,
+            saveButton
+        );
+        verticalStack.setSpacing(Design.spacing);
+        verticalStack.setPadding(new Insets(Design.padding));
+        verticalStack.setAlignment(Pos.TOP_LEFT);
+        // content.setPrefWidth(400);
+        // VBox.setVgrow(content, Priority.ALWAYS);
+        verticalStack.setFillWidth(false);
+
+        getChildren().addAll(
+            header,
+            verticalStack
+        );
     }
 
-    void openAccountSettingsPage()
+    //MARK: Methods
+    void saveAccountDetails()
     {
-        HelloApplication.scene.setRoot(new AccountSettingsPage());
+
     }
+    
+    // void openAccountSettingsPage()
+    // {
+    //     HelloApplication.scene.setRoot(new AccountSettingsPage());
+    // }
 }
