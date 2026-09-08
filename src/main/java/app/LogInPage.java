@@ -7,6 +7,8 @@ import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
+import javafx.scene.text.Font;
+import javafx.scene.text.FontWeight;
 
 //could also be called 'AccountPanel' or 'AuthenticationPanel', as this encompasses both log in AND registration
 public class LogInPage extends StackPane
@@ -14,46 +16,67 @@ public class LogInPage extends StackPane
     //MARK: Variables
     private Label statusLabel;
 
-    int elementWidth = 300;
-    int elementHeight = 350;
+    int boxWidth = 300;
+    int boxHeight = 400;
+    int elementWidth = boxWidth - (Design.padding * 2);
+    // int elementHeight = 350;
 
     public LogInPage()
     {
         //rectangle
-        Rectangle background = new Rectangle(elementWidth, elementHeight);
-        background.setFill(Color.LIGHTGRAY);
+        Rectangle background = new Rectangle(boxWidth, boxHeight);
+        background.setFill(Design.grey80);
+        background.setArcWidth(Design.cornerRadius);
+        background.setArcHeight(Design.cornerRadius);
         // background.prefWidth(100);
         // background.prefHeight(200);
         // background.widthProperty().bind(this.widthProperty());
         // background.heightProperty().bind(this.heightProperty());
         
         Label titleLabel = new Label("Log In");
-        statusLabel = new Label("* * *");
+        titleLabel.setFont(Font.font("Arial", FontWeight.BOLD, 24));
+        titleLabel.setUnderline(true);
 
         //textfields
-        TextField usernameTextfield = new TextField();
-        TextField passwordTextField = new TextField();
-        usernameTextfield.setPromptText("Username");
-        passwordTextField.setPromptText("Password");
-        usernameTextfield.setPrefWidth(300);
-        passwordTextField.setPrefWidth(300);
+        CustomTextfield usernameTextfield = new CustomTextfield("Username", elementWidth, 30);
+        usernameTextfield.setBackgroundColor(Color.WHITE);
+        CustomTextfield passwordTextfield = new CustomTextfield("Password", elementWidth, 30, true);
+        passwordTextfield.setBackgroundColor(Color.WHITE);
+        passwordTextfield.usePasswordField();
 
         //buttons
-        Button submitButton = new Button("Log in");
-        submitButton.setOnAction(event -> submitCredentials());
-        Button forgotPasswordButton = new Button("Forgot password?");
-        forgotPasswordButton.setOnAction(event -> forgotPassword());
-        Button registerButton = new Button("Register");
-        registerButton.setOnAction(event -> openRegisterPage());
-        Button guestButton = new Button("Continue as guest");
-        guestButton.setOnAction(event -> openEntryPage());
+        // Button submitButton = new Button("Log in");
+        CustomButton submitButton = new CustomButton("Log in", 60, 30);
+        submitButton.setBackgroundColor(Color.LIMEGREEN);
+        submitButton.setBackgroundHoverColor(Color.GREEN);
+        submitButton.setOnMouseClicked(event -> submitCredentials());
 
-        Region hSpacer = new Region();
-        HBox.setHgrow(hSpacer, Priority.ALWAYS);
+        // Button forgotPasswordButton = new Button("Forgot password?");
+        CustomButton forgotPasswordButton = new CustomButton("Forgot password?", 150, 30);
+        forgotPasswordButton.setBackgroundColor(Color.LIMEGREEN);
+        forgotPasswordButton.setBackgroundHoverColor(Color.GREEN);
+        forgotPasswordButton.setOnMouseClicked(event -> forgotPassword());
+
+        // Button registerButton = new Button("Register");
+        CustomButton registerButton = new CustomButton("Register", 80, 30);
+        registerButton.setBackgroundColor(Color.LIMEGREEN);
+        registerButton.setBackgroundHoverColor(Color.GREEN);
+        registerButton.setOnMouseClicked(event -> openRegisterPage());
+
+        // Button guestButton = new Button("Continue as guest");
+        CustomButton guestButton = new CustomButton("Continue as guest", 150, 30);
+        guestButton.setBackgroundColor(Color.LIMEGREEN);
+        guestButton.setBackgroundHoverColor(Color.GREEN);
+        guestButton.setOnMouseClicked(event -> openEntryPage());
+
+        statusLabel = new Label("");
+
+        Region horizontalSpacer = new Region();
+        HBox.setHgrow(horizontalSpacer, Priority.ALWAYS);
 
         HBox buttonsBox1 = new HBox(
             submitButton,
-            hSpacer,
+            horizontalSpacer,
             forgotPasswordButton
         );
         buttonsBox1.setSpacing(10);
@@ -78,7 +101,7 @@ public class LogInPage extends StackPane
             titleLabel,
             topSpacer,
             usernameTextfield,
-            passwordTextField,
+            passwordTextfield,
             buttonsBox1,
             statusLabel,
             bottomSpacer,
@@ -88,8 +111,8 @@ public class LogInPage extends StackPane
         vBox.setPadding(new Insets(10));
         vBox.setAlignment(Pos.CENTER);
         // vBox.setFillWidth(false); //set the fillWidth property to false so the children are not resized to fill the width of the VBox
-        vBox.setMaxWidth(elementWidth);
-        vBox.setMaxHeight(elementHeight);
+        vBox.setMaxWidth(boxWidth);
+        vBox.setMaxHeight(boxHeight);
         
         //add elements to StackPane
         getChildren().addAll(
@@ -105,6 +128,9 @@ public class LogInPage extends StackPane
         // //max
         // setMaxWidth(400);
         // setMaxHeight(400);
+
+        //set background colour
+        setStyle("-fx-background-color: #FFFFFF;");
     }
 
     void openEntryPage()

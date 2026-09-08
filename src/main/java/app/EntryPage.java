@@ -6,9 +6,7 @@ import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
-
 import javafx.scene.image.*;
-import java.net.URL;
 
 //the entry page when the user first opens the app
 public class EntryPage extends BorderPane
@@ -30,8 +28,13 @@ public class EntryPage extends BorderPane
 
         //account buttons
         CustomButton logInButton = new CustomButton("Log in", 100, 40);
+        logInButton.setBackgroundColor(Design.superLightGrey);
+        logInButton.setBackgroundHoverColor(Color.LIGHTGREY);
         logInButton.setOnMouseClicked(event -> openLogInPage());
+
         CustomButton registerButton = new CustomButton("Register", 100, 40);
+        registerButton.setBackgroundColor(Design.superLightGrey);
+        registerButton.setBackgroundHoverColor(Color.LIGHTGREY);
         registerButton.setOnMouseClicked(event -> openLogInPage());
 
         //MARK: Logo
@@ -68,11 +71,6 @@ public class EntryPage extends BorderPane
 
         centreBox.setAlignment(Pos.CENTER);
         lowerBox.setAlignment(Pos.CENTER);
-
-        // URL resource = Design.class.getResource("/Logo.png");
-        // System.out.println("Image: ");
-        // System.out.println(resource);
-        // Image img = new Image(resource.toExternalForm());
     }
 
     void openResultsPage()

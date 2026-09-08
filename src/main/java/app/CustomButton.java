@@ -21,11 +21,17 @@ public class CustomButton extends StackPane
     Rectangle background;
 
     //default values
-    int width = 100;
-    int height = 40;
+    // int width = 100;
+    // int height = 40;
 
     public CustomButton(String text, int width, int height)
     {
+        //a red frame to show the size of the button's true area
+        // Rectangle frame = new Rectangle();
+        // frame.setFill(Color.RED);
+        // frame.widthProperty().bind(this.widthProperty());
+        // frame.heightProperty().bind(this.heightProperty());
+
         //MARK: Background
         background = new Rectangle(width, height);
         background.setFill(frameColour);
@@ -43,11 +49,13 @@ public class CustomButton extends StackPane
 
         updateHoverColours();
 
-        getChildren().addAll(background, label);
-        setPrefHeight(50);
-        setMinWidth(0);
-
-        // setOnMouseClicked(event -> clicked());
+        getChildren().addAll(
+            // frame,
+            background,
+            label
+        );
+        setPrefHeight(height);
+        setMinWidth(width);
     }
 
     //MARK: Methods
@@ -55,10 +63,16 @@ public class CustomButton extends StackPane
     {
         label.setFont(Font.font(size));
     }
-    
-    void clicked()
+    void setTextColour(Color colourParameter)
     {
-        HelloApplication.print("Button clicked");
+        textColour = colourParameter;
+        updateHoverColours();
+        label.setTextFill(colourParameter);
+    }
+    void setTextHoverColour(Color colourParameter)
+    {
+        textHoverColor = colourParameter;
+        updateHoverColours();
     }
 
     void setBackgroundColor(Color colourParameter)
@@ -70,18 +84,6 @@ public class CustomButton extends StackPane
     void setBackgroundHoverColor(Color colourParameter)
     {
         frameHoverColour = colourParameter;
-        updateHoverColours();
-    }
-
-    void setTextColour(Color colourParameter)
-    {
-        textColour = colourParameter;
-        updateHoverColours();
-        label.setTextFill(colourParameter);
-    }
-    void setTextHoverColour(Color colourParameter)
-    {
-        textHoverColor = colourParameter;
         updateHoverColours();
     }
 

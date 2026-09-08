@@ -33,7 +33,7 @@ public class ResultsPage extends VBox
         // list.setMinWidth(0);
 
         Button showMoreButton = new Button("Show more");
-        showMoreButton.setOnAction(event -> openPlantPage());
+        showMoreButton.setOnAction(event -> loadMoreResults());
         
         //create a new VBox so 'more' button can sit centred
         VBox bottomSection = new VBox(showMoreButton);
@@ -41,13 +41,15 @@ public class ResultsPage extends VBox
 
         getChildren().addAll(list, bottomSection);
         // setAlignment(Pos.CENTER_LEFT); //does this stop header from shrinking-anchor being the centre
-
-        // setTop(header);
-        // setCenter(list);
     }
 
     void openPlantPage()
     {
         HelloApplication.scene.setRoot(new PlantPage());
+    }
+
+    void loadMoreResults()
+    {
+        
     }
 }

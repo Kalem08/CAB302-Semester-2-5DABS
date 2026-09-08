@@ -1,9 +1,11 @@
 package app;
 
+//MARK: Imports
 import javafx.geometry.Pos;
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
 
+//this page is currently unused, as changed can be made from the AccountPage
 public class AccountSettingsPage extends BorderPane
 {
     public AccountSettingsPage()
