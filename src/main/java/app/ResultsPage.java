@@ -2,6 +2,7 @@ package app;
 
 import app.model.MockPlantDAO;
 import app.model.Plant;
+import java.util.List;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.*;
@@ -13,17 +14,25 @@ public class ResultsPage extends VBox
 
     public ResultsPage()
     {
+        this("");
+    }
+
+    public ResultsPage(String query)
+    {
         Header header = new Header();
         getChildren().add(header);
 
         VBox list = new VBox();
 
         addExamplePlants();
-        Label label = new Label("Showing " + plantDAO.getAllPlants().size() + " results for 'SearchTerm'.");
+        List<Plant> results = plantDAO.search(query);
+        String displayedQuery = query == null ? "" : query.trim();
+        Label label = new Label("Showing " + results.size() + " results"
+            + (displayedQuery.isEmpty() ? "." : " for '" + displayedQuery + "'."));
         list.getChildren().add(label);
         
         //add results
-        for (Plant plant : plantDAO.getAllPlants())
+        for (Plant plant : results)
         {
             SearchResult result = new SearchResult(plant);
             result.setOnMouseClicked(event -> openPlantPage(plant));
