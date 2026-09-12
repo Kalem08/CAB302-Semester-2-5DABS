@@ -53,6 +53,14 @@ public class Plant {
         this.id = id;
     }
 
+    public String getGeneralisedInfo() {
+        return generalisedInfo;
+    } 
+
+    public void setGeneralisedInfo(String generalisedInfo) {
+        this.generalisedInfo = generalisedInfo;
+    }
+
     public String getImage() {
         return images;
     }
