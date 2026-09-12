@@ -1,4 +1,4 @@
-package model;
+package app.model;
 
 public class Plant {
     private int id;
@@ -108,6 +108,7 @@ public class Plant {
     public void setPclass(String pclass) {
         this.pclass = pclass;
     }
+
     public String getOrder() {
         return order;
     }
@@ -115,6 +116,7 @@ public class Plant {
     public void setOrder(String order) {
         this.order = order;
     }
+    
     public String getFamily() {
         return family;
     }
