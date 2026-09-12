@@ -1,5 +1,7 @@
 package app;
 
+import app.model.MockPlantDAO;
+import app.model.Plant;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.*;
@@ -7,6 +9,8 @@ import javafx.scene.layout.*;
 
 public class ResultsPage extends VBox
 {
+    private final MockPlantDAO plantDAO = new MockPlantDAO();
+
     public ResultsPage()
     {
         Header header = new Header();
@@ -14,14 +18,15 @@ public class ResultsPage extends VBox
 
         VBox list = new VBox();
 
-        Label label = new Label("Showing 3 results for 'SearchTerm'.");
+        addExamplePlants();
+        Label label = new Label("Showing " + plantDAO.getAllPlants().size() + " results for 'SearchTerm'.");
         list.getChildren().add(label);
         
         //add results
-        for (int i = 0; i < 3; i++)
+        for (Plant plant : plantDAO.getAllPlants())
         {
-            SearchResult result = new SearchResult();
-            result.setOnMouseClicked(event -> openPlantPage());
+            SearchResult result = new SearchResult(plant);
+            result.setOnMouseClicked(event -> openPlantPage(plant));
             // HBox.setHgrow(result, Priority.ALWAYS);
 
             list.getChildren().add(result);
@@ -43,9 +48,58 @@ public class ResultsPage extends VBox
         // setAlignment(Pos.CENTER_LEFT); //does this stop header from shrinking-anchor being the centre
     }
 
-    void openPlantPage()
+    private void addExamplePlants()
     {
-        HelloApplication.scene.setRoot(new PlantPage());
+        plantDAO.addPlant(new Plant(
+            "A hardy native shrub with bright yellow flowers.",
+            "",
+            "QLD",
+            "Acacia pycnantha",
+            "Plantae",
+            "Tracheophyta",
+            "Magnoliopsida",
+            "Fabales",
+            "Fabaceae",
+            "Acacia",
+            "species",
+            "Golden Wattle",
+            "pycnantha"
+        ));
+        plantDAO.addPlant(new Plant(
+            "A distinctive eucalyptus known for its pale flowers and smooth bark.",
+            "",
+            "VIC",
+            "Eucalyptus caesia",
+            "Plantae",
+            "Tracheophyta",
+            "Magnoliopsida",
+            "Myrtales",
+            "Myrtaceae",
+            "Eucalyptus",
+            "species",
+            "Silver Princess",
+            "caesia"
+        ));
+        plantDAO.addPlant(new Plant(
+            "A colourful flowering plant found across eastern Australia.",
+            "",
+            "NSW",
+            "Grevillea robusta",
+            "Plantae",
+            "Tracheophyta",
+            "Magnoliopsida",
+            "Proteales",
+            "Proteaceae",
+            "Grevillea",
+            "species",
+            "Silky Oak",
+            "robusta"
+        ));
+    }
+
+    void openPlantPage(Plant plant)
+    {
+        HelloApplication.scene.setRoot(new PlantPage(plant));
     }
 
     void loadMoreResults()

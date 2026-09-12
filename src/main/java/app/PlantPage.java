@@ -1,5 +1,6 @@
 package app;
 
+import app.model.Plant;
 //MARK: Imports
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
@@ -14,6 +15,11 @@ public class PlantPage extends VBox
 {
     public PlantPage()
     {
+        this(null);
+    }
+
+    public PlantPage(Plant plant)
+    {
         Header header = new Header();
 
         HBox hStack = new HBox();
@@ -23,9 +29,18 @@ public class PlantPage extends VBox
         Region horizontalSpacer = new Region();
         HBox.setHgrow(horizontalSpacer, Priority.ALWAYS);
         
-        Label title = new Label("Plant Name");
+        String titleText = plant == null ? "Plant Name" : plant.getVernacularName();
+        String scientificName = plant == null ? "Subtitle" : plant.getSciName();
+        String descriptionText = plant == null ? "Description" : plant.getGeneralisedInfo();
+        String location = plant == null ? "Location" : "Location: " + plant.getLocation();
+        String taxonomy = plant == null
+            ? ""
+            : "Family: " + plant.getFamily() + " | Genus: " + plant.getGenus()
+                + " | Species: " + plant.getSpecies();
+
+        Label title = new Label(titleText);
         title.setFont(Font.font("Arial", FontWeight.BOLD, 24));
-        Label subtitle = new Label("Subtitle");
+        Label subtitle = new Label(scientificName);
 
         Label editPrompt = new Label("Want to suggest a change? Click here.");
         editPrompt.setTextFill(Design.hyperlinkColour);
@@ -41,8 +56,9 @@ public class PlantPage extends VBox
         Region verticalSpacer = new Region();
         verticalSpacer.setPrefHeight(25);
 
-        Label description = new Label("Description");
-        Label locationText = new Label("Location");
+        Label description = new Label(descriptionText);
+        Label locationText = new Label(location);
+        Label taxonomyText = new Label(taxonomy);
 
         ImageView imageView = new ImageView(Design.getImage("Hibiscus.jpg"));
         imageView.setFitWidth(200);
@@ -53,10 +69,10 @@ public class PlantPage extends VBox
         leftColumn.getChildren().addAll(
             title,
             subtitle,
-            editPrompt,
             verticalSpacer,
             description,
-            locationText
+            locationText,
+            taxonomyText
         );
 
         rightColumn.getChildren().addAll(
@@ -72,9 +88,11 @@ public class PlantPage extends VBox
 
         getChildren().addAll(
             header,
-            hStack
+            hStack,
+            editPrompt
         );
         hStack.setSpacing(Design.spacing);
         hStack.setPadding(new Insets(Design.padding));
+        editPrompt.setPadding(new Insets(0, Design.padding, Design.padding, Design.padding));
     }
 }

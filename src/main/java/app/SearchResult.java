@@ -1,6 +1,7 @@
 package app;
 
 //MARK: Imports
+import app.model.Plant;
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
@@ -16,6 +17,11 @@ public class SearchResult extends StackPane
     int height = 100;
 
     public SearchResult()
+    {
+        this(null);
+    }
+
+    public SearchResult(Plant plant)
     {
         // Rectangle background = new Rectangle(width, height, Color.LIGHTGREY);
         Rectangle background = new Rectangle();
@@ -44,7 +50,11 @@ public class SearchResult extends StackPane
         innerPane.getChildren().addAll(innerBackground);
         HBox.setHgrow(innerPane, Priority.ALWAYS);
 
-        Label label = new Label("Plant Name\nPlant description.");
+        String plantName = plant == null ? "Plant Name" : plant.getVernacularName();
+        String scientificName = plant == null ? "" : plant.getSciName();
+        String location = plant == null ? "" : plant.getLocation();
+        String description = plant == null ? "Plant description." : plant.getGeneralisedInfo();
+        Label label = new Label(plantName + "\n" + scientificName + " - " + location + "\n" + description);
 
         HBox hStack = new HBox(
             // innerPane,
