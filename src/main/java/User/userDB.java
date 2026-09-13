@@ -1,8 +1,8 @@
 package User;
 
 public class userDB {
-    String username;
-    String password;
+    private String username;
+    private String password;
     public userDB(String username, String password) {
         this.username = username;
         this.password = password;

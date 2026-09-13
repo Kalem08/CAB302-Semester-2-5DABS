@@ -72,7 +72,7 @@ public class authManager
         this.password = password;
     }
     // For registration
-    public boolean checkUsernameExistence(String Username)
+    private boolean checkUsernameExistence(String Username)
     {
         saferUsername = this.username.toLowerCase();
         if(!userTrack.containsKey(this.saferUsername))
