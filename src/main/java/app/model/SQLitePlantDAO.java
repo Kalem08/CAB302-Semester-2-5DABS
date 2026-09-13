@@ -125,6 +125,98 @@ public class SQLitePlantDAO implements IPlantDAO {
 
     @Override
     public List<Plant> search(String query) {
-        return List.of();
+        return search(query, Integer.MAX_VALUE, 0);
+    }
+
+    public List<Plant> search(String query, int limit, int offset) {
+        if (limit < 1 || offset < 0) {
+            throw new IllegalArgumentException("Limit must be positive and offset cannot be negative");
+        }
+
+        List<Plant> plants = new ArrayList<>();
+        String sql = """
+            SELECT *
+            FROM PlantsData
+            %s
+            ORDER BY PlantID
+            LIMIT ? OFFSET ?
+            """;
+        boolean hasQuery = query != null && !query.trim().isEmpty();
+        String whereClause = hasQuery
+                ? "WHERE LOWER(scientificName) LIKE LOWER(?) OR LOWER(vernacularName) LIKE LOWER(?)"
+                : "";
+        sql = sql.formatted(whereClause);
+
+        try (Connection connection = DatabaseConnection.getConnection();
+             PreparedStatement statement = connection.prepareStatement(sql)) {
+
+            int parameterIndex = 1;
+            if (hasQuery) {
+                String searchPattern = "%" + query.trim() + "%";
+                statement.setString(parameterIndex++, searchPattern);
+                statement.setString(parameterIndex++, searchPattern);
+            }
+            statement.setInt(parameterIndex++, limit);
+            statement.setInt(parameterIndex, offset);
+
+            try (ResultSet resultSet = statement.executeQuery()) {
+                while (resultSet.next()) {
+                    Plant plant = new Plant(
+                            resultSet.getString("Generalised_info"),
+                            resultSet.getString("images"),
+                            resultSet.getString("stateProvince"),
+                            resultSet.getString("scientificName"),
+                            resultSet.getString("kingdom"),
+                            resultSet.getString("phylum"),
+                            resultSet.getString("class"),
+                            resultSet.getString("order"),
+                            resultSet.getString("family"),
+                            resultSet.getString("genus"),
+                            resultSet.getString("taxonRank"),
+                            resultSet.getString("vernacularName"),
+                            resultSet.getString("species")
+                    );
+
+                    plant.setID(resultSet.getInt("PlantID"));
+                    plants.add(plant);
+                }
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(
+                    "Unable to search plants in database",
+                    e
+            );
+        }
+
+        return plants;
+    }
+
+    public int count(String query) {
+        String sql = "SELECT COUNT(*) FROM PlantsData";
+        boolean hasQuery = query != null && !query.trim().isEmpty();
+        if (hasQuery) {
+            sql += " WHERE LOWER(scientificName) LIKE LOWER(?)"
+                    + " OR LOWER(vernacularName) LIKE LOWER(?)";
+        }
+
+        try (Connection connection = DatabaseConnection.getConnection();
+             PreparedStatement statement = connection.prepareStatement(sql)) {
+
+            if (hasQuery) {
+                String searchPattern = "%" + query.trim() + "%";
+                statement.setString(1, searchPattern);
+                statement.setString(2, searchPattern);
+            }
+
+            try (ResultSet resultSet = statement.executeQuery()) {
+                resultSet.next();
+                return resultSet.getInt(1);
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(
+                    "Unable to count plants in database",
+                    e
+            );
+        }
     }
 }

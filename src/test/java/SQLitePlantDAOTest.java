@@ -31,4 +31,19 @@ public class SQLitePlantDAOTest {
         assertNotNull(plants);
         assertEquals(313, plants.size());
     }
+
+    @Test
+    public void searchShouldSupportTwentyPlantPages() {
+
+        SQLitePlantDAO dao = new SQLitePlantDAO();
+
+        List<Plant> firstPage = dao.search("", 20, 0);
+        List<Plant> secondPage = dao.search("", 20, 20);
+
+        assertEquals(313, dao.count(""));
+        assertEquals(20, firstPage.size());
+        assertEquals(20, secondPage.size());
+        assertEquals(1, firstPage.get(0).getId());
+        assertEquals(21, secondPage.get(0).getId());
+    }
 }
