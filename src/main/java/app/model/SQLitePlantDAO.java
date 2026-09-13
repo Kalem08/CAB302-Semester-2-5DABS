@@ -122,4 +122,9 @@ public class SQLitePlantDAO implements IPlantDAO {
 
         return plants;
     }
+
+    @Override
+    public List<Plant> search(String query) {
+        return List.of();
+    }
 }
