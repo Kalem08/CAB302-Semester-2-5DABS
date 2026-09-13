@@ -6,6 +6,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
 public class SQLitePlantDAO implements IPlantDAO {
@@ -77,6 +78,48 @@ public class SQLitePlantDAO implements IPlantDAO {
 
     @Override
     public List<Plant> getAllPlants() {
-        return List.of();
+
+        List<Plant> plants = new ArrayList<>();
+
+        String sql = """
+            SELECT *
+            FROM PlantsData
+            """;
+
+        try (Connection connection = DatabaseConnection.getConnection();
+             PreparedStatement statement = connection.prepareStatement(sql);
+             ResultSet resultSet = statement.executeQuery()) {
+
+            while (resultSet.next()) {
+
+                Plant plant = new Plant(
+                        resultSet.getString("Generalised_info"),
+                        resultSet.getString("images"),
+                        resultSet.getString("stateProvince"),
+                        resultSet.getString("scientificName"),
+                        resultSet.getString("kingdom"),
+                        resultSet.getString("phylum"),
+                        resultSet.getString("class"),
+                        resultSet.getString("order"),
+                        resultSet.getString("family"),
+                        resultSet.getString("genus"),
+                        resultSet.getString("taxonRank"),
+                        resultSet.getString("vernacularName"),
+                        resultSet.getString("species")
+                );
+
+                plant.setID(resultSet.getInt("PlantID"));
+
+                plants.add(plant);
+            }
+
+        } catch (SQLException e) {
+            throw new RuntimeException(
+                    "Unable to retrieve plants from database",
+                    e
+            );
+        }
+
+        return plants;
     }
 }
