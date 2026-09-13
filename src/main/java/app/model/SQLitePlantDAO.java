@@ -27,6 +27,51 @@ public class SQLitePlantDAO implements IPlantDAO {
 
     @Override
     public Plant getPlant(int id) {
+
+        String sql = """
+            SELECT *
+            FROM PlantsData
+            WHERE PlantID = ?
+            """;
+
+        try (Connection connection = DatabaseConnection.getConnection();
+             PreparedStatement statement = connection.prepareStatement(sql)) {
+
+            statement.setInt(1, id);
+
+            try (ResultSet resultSet = statement.executeQuery()) {
+
+                if (resultSet.next()) {
+
+                    Plant plant = new Plant(
+                            resultSet.getString("Generalised_info"),
+                            resultSet.getString("images"),
+                            resultSet.getString("stateProvince"),
+                            resultSet.getString("scientificName"),
+                            resultSet.getString("kingdom"),
+                            resultSet.getString("phylum"),
+                            resultSet.getString("class"),
+                            resultSet.getString("order"),
+                            resultSet.getString("family"),
+                            resultSet.getString("genus"),
+                            resultSet.getString("taxonRank"),
+                            resultSet.getString("vernacularName"),
+                            resultSet.getString("species")
+                    );
+
+                    plant.setID(resultSet.getInt("PlantID"));
+
+                    return plant;
+                }
+            }
+
+        } catch (SQLException e) {
+            throw new RuntimeException(
+                    "Unable to retrieve plant with ID " + id,
+                    e
+            );
+        }
+
         return null;
     }
 
