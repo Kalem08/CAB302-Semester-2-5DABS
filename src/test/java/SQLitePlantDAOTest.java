@@ -1,3 +1,4 @@
+import java.util.List;
 import app.model.Plant;
 import app.model.SQLitePlantDAO;
 import org.junit.jupiter.api.Test;
@@ -18,5 +19,16 @@ public class SQLitePlantDAOTest {
         assertEquals(1, plant.getId());
         assertEquals("Gungurru", plant.getVernacularName());
         assertEquals("Eucalyptus caesia", plant.getSciName());
+    }
+
+    @Test
+    public void getAllPlantsShouldReturnAllPlantsFromDatabase() {
+
+        SQLitePlantDAO dao = new SQLitePlantDAO();
+
+        List<Plant> plants = dao.getAllPlants();
+
+        assertNotNull(plants);
+        assertEquals(313, plants.size());
     }
 }
