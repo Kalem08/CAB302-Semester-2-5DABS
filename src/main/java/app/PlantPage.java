@@ -60,11 +60,15 @@ public class PlantPage extends VBox
         Label locationText = new Label(location);
         Label taxonomyText = new Label(taxonomy);
 
-        ImageView imageView = new ImageView(Design.getImage("Hibiscus.jpg"));
+        ImageView imageView = new ImageView();
         imageView.setFitWidth(200);
         imageView.setPreserveRatio(true);
 
-        Label imageSubtitle = new Label("A photo of the Hibiscus flower.");
+        if (plant != null && plant.getImageUrl() != null) {
+            imageView.setImage(new Image(plant.getImageUrl(), true));
+        }
+
+        Label imageSubtitle = new Label("Image from the Atlas of Living Australia.");
 
         leftColumn.getChildren().addAll(
             title,
@@ -72,7 +76,8 @@ public class PlantPage extends VBox
             verticalSpacer,
             description,
             locationText,
-            taxonomyText
+            taxonomyText,
+            createTaxonomyPane(plant)
         );
 
         rightColumn.getChildren().addAll(
@@ -86,13 +91,48 @@ public class PlantPage extends VBox
             rightColumn
         );
 
+        Region bottomSpacer = new Region();
+        VBox.setVgrow(bottomSpacer, Priority.ALWAYS);
+
         getChildren().addAll(
             header,
             hStack,
+            bottomSpacer,
             editPrompt
         );
         hStack.setSpacing(Design.spacing);
         hStack.setPadding(new Insets(Design.padding));
         editPrompt.setPadding(new Insets(0, Design.padding, Design.padding, Design.padding));
+    }
+
+    private TitledPane createTaxonomyPane(Plant plant)
+    {
+        GridPane table = new GridPane();
+        table.setHgap(Design.spacing * 2);
+        table.setVgap(Design.spacing);
+        table.setPadding(new Insets(Design.padding));
+
+        addTaxonomyRow(table, 0, "Scientific name", plant == null ? null : plant.getSciName());
+        addTaxonomyRow(table, 1, "Kingdom", plant == null ? null : plant.getKingdom());
+        addTaxonomyRow(table, 2, "Phylum", plant == null ? null : plant.getPhylum());
+        addTaxonomyRow(table, 3, "Class", plant == null ? null : plant.getPclass());
+        addTaxonomyRow(table, 4, "Order", plant == null ? null : plant.getOrder());
+        addTaxonomyRow(table, 5, "Family", plant == null ? null : plant.getFamily());
+        addTaxonomyRow(table, 6, "Genus", plant == null ? null : plant.getGenus());
+        addTaxonomyRow(table, 7, "Taxon rank", plant == null ? null : plant.getTaxonRank());
+        addTaxonomyRow(table, 8, "Species", plant == null ? null : plant.getSpecies());
+
+        TitledPane taxonomyPane = new TitledPane("Taxonomic information", table);
+        taxonomyPane.setExpanded(false);
+        taxonomyPane.setMaxWidth(Double.MAX_VALUE);
+        return taxonomyPane;
+    }
+
+    private void addTaxonomyRow(GridPane table, int row, String field, String value)
+    {
+        Label fieldLabel = new Label(field);
+        fieldLabel.setStyle("-fx-font-weight: bold;");
+        table.add(fieldLabel, 0, row);
+        table.add(new Label(value == null || value.isBlank() ? "Not available" : value), 1, row);
     }
 }
