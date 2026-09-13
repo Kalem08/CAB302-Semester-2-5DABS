@@ -6,6 +6,8 @@ module app
     requires org.xerial.sqlitejdbc;
 
     opens app to javafx.fxml;
+
     exports app;
     exports app.model;
+    exports database;
 }
