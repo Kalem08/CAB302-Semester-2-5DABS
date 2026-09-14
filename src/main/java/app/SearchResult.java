@@ -1,13 +1,15 @@
 package app;
 
 //MARK: Imports
+import app.model.Plant;
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
-// import javafx.scene.image.*;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 
 //this file creates a UI element for each search result
 public class SearchResult extends StackPane
@@ -17,6 +19,11 @@ public class SearchResult extends StackPane
 
     public SearchResult()
     {
+        this(null);
+    }
+
+    public SearchResult(Plant plant)
+    {
         // Rectangle background = new Rectangle(width, height, Color.LIGHTGREY);
         Rectangle background = new Rectangle();
         background.setFill(Color.LIGHTGREY);
@@ -25,30 +32,34 @@ public class SearchResult extends StackPane
         background.widthProperty().bind(this.widthProperty()); //completely fill this parent element
         background.heightProperty().bind(this.heightProperty());
 
-        StackPane innerPane = new StackPane();
-
         int size = height - Design.spacing / 2;
-        Rectangle imageRectangle = new Rectangle(size, size, Color.GREEN);
-        imageRectangle.setArcWidth(Design.cornerRadius);
-        imageRectangle.setArcHeight(Design.cornerRadius);
-        // imageRectangle.widthProperty().bind(innerPane.widthProperty()); //completely fill this parent element
-        // imageRectangle.heightProperty().bind(innerPane.heightProperty());
+        Rectangle imageBackground = new Rectangle(size, size, Color.GREEN);
+        imageBackground.setArcWidth(Design.cornerRadius);
+        imageBackground.setArcHeight(Design.cornerRadius);
 
-        //try a region instead of a rectangle
-        Region innerBackground = new Region();
-        innerBackground.setStyle(
-            "-fx-background-color: green;" +
-            "-fx-background-radius: 10;"
-        );
+        ImageView imageView = new ImageView();
+        imageView.setFitWidth(size);
+        imageView.setFitHeight(size);
+        imageView.setPreserveRatio(true);
+        imageView.setSmooth(true);
 
-        innerPane.getChildren().addAll(innerBackground);
-        HBox.setHgrow(innerPane, Priority.ALWAYS);
+        if (plant != null && plant.getImageUrl() != null) {
+            imageView.setImage(new Image(plant.getImageUrl(), true));
+        }
 
-        Label label = new Label("Plant Name\nPlant description.");
+        StackPane imagePane = new StackPane(imageBackground, imageView);
+        imagePane.setMinSize(size, size);
+        imagePane.setPrefSize(size, size);
+        imagePane.setMaxSize(size, size);
+
+        String plantName = plant == null ? "Plant Name" : plant.getVernacularName();
+        String scientificName = plant == null ? "" : plant.getSciName();
+        String location = plant == null ? "" : plant.getLocation();
+        String description = plant == null ? "Plant description." : plant.getGeneralisedInfo();
+        Label label = new Label(plantName + "\n" + scientificName + " - " + location + "\n" + description);
 
         HBox hStack = new HBox(
-            // innerPane,
-            imageRectangle,
+            imagePane,
             label
         );
         hStack.setSpacing(Design.spacing);

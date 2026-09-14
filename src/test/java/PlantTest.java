@@ -3,6 +3,7 @@ import app.model.Plant;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
 
 public class PlantTest {
     private Plant plant;
@@ -45,6 +46,21 @@ public class PlantTest {
     public void testGetImage() {
         assertEquals("0428", plant.getImage());
     }
+
+    @Test
+    public void testGetImageUrl() {
+        assertEquals(
+                "https://images-assets.ala.org.au/store/4/8/9/f/0428/original",
+                plant.getImageUrl()
+        );
+    }
+
+    @Test
+    public void testGetImageUrlReturnsNullForBlankCode() {
+        plant.setImage(" ");
+        assertNull(plant.getImageUrl());
+    }
+
     @Test
     public void testSetImage() {
         plant.setImage("ImageTest");

@@ -33,4 +33,11 @@ public interface IPlantDAO {
      * @return A list of all plants in the database.
      */
     List<Plant> getAllPlants();
+
+    /**
+     * Searches plants by scientific or vernacular name.
+     * @param query the name text to search for
+     * @return all plants when the query is blank, otherwise matching plants
+     */
+    List<Plant> search(String query);
 }

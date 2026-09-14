@@ -66,6 +66,11 @@ public class CustomTextfield extends StackPane
         background.setFill(colour);
     }
 
+    public String getText()
+    {
+        return textfield.getText();
+    }
+
     public void usePasswordField()
     {
         textfield = new PasswordField();

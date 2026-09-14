@@ -49,7 +49,7 @@ public class Header extends StackPane
         searchButton.setBackgroundHoverColor(Design.grey70);
         searchButton.setTextColour(Design.grey20);
         searchButton.setTextHoverColour(Color.BLACK);
-        searchButton.setOnMouseClicked(event -> search());
+        searchButton.setOnMouseClicked(event -> search(searchTextfield.getText()));
 
         //login/register
         Button logInButton = new Button("Log in");
@@ -93,9 +93,9 @@ public class Header extends StackPane
     }
 
     //MARK: Methods
-    void search()
+    void search(String query)
     {
-        HelloApplication.scene.setRoot(new ResultsPage());
+        HelloApplication.scene.setRoot(new ResultsPage(query));
     }
 
     //MARK: Methods

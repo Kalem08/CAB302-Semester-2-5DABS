@@ -2,6 +2,7 @@ package app.model;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 public class MockPlantDAO implements IPlantDAO {
     /**
@@ -46,5 +47,22 @@ public class MockPlantDAO implements IPlantDAO {
     @Override
     public List<Plant> getAllPlants() {
         return new ArrayList<>(plants);
+    }
+
+    @Override
+    public List<Plant> search(String query) {
+        if (query == null || query.trim().isEmpty()) {
+            return getAllPlants();
+        }
+
+        String normalisedQuery = query.trim().toLowerCase(Locale.ROOT);
+        List<Plant> matches = new ArrayList<>();
+        for (Plant plant : plants) {
+            if (plant.getSciName().toLowerCase(Locale.ROOT).contains(normalisedQuery)
+                    || plant.getVernacularName().toLowerCase(Locale.ROOT).contains(normalisedQuery)) {
+                matches.add(plant);
+            }
+        }
+        return matches;
     }
 }

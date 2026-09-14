@@ -1,6 +1,10 @@
 package app.model;
 
 public class Plant {
+    private static final String IMAGE_URL_PREFIX =
+            "https://images-assets.ala.org.au/store/4/8/9/f/";
+    private static final String IMAGE_URL_SUFFIX = "/original";
+
     private int id;
     private String generalisedInfo;
     private String images;
@@ -67,6 +71,14 @@ public class Plant {
 
     public void setImage(String image) {
         this.images = image;
+    }
+
+    public String getImageUrl() {
+        if (images == null || images.trim().isEmpty()) {
+            return null;
+        }
+
+        return IMAGE_URL_PREFIX + images.trim() + IMAGE_URL_SUFFIX;
     }
 
     public String getLocation() {
