@@ -24,7 +24,7 @@ public class EntryPage extends BorderPane
         searchButton.setBackgroundHoverColor(Color.LIGHTGREY);
         searchButton.setTextColour(Design.grey20);
         searchButton.setTextHoverColour(Color.BLACK);
-        searchButton.setOnMouseClicked(event -> openResultsPage());
+        searchButton.setOnMouseClicked(event -> openResultsPage(searchTextfield.getText()));
 
         //account buttons
         CustomButton logInButton = new CustomButton("Log in", 100, 40);
@@ -73,9 +73,9 @@ public class EntryPage extends BorderPane
         lowerBox.setAlignment(Pos.CENTER);
     }
 
-    void openResultsPage()
+    void openResultsPage(String query)
     {
-        HelloApplication.scene.setRoot(new ResultsPage());
+        HelloApplication.scene.setRoot(new ResultsPage(query));
     }
 
     void openLogInPage()

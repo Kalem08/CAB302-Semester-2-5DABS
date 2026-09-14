@@ -1,55 +1,99 @@
 package app;
 
+import app.model.Plant;
+import app.model.SQLitePlantDAO;
+import java.util.List;
 import javafx.geometry.Insets;
-import javafx.geometry.Pos;
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
 
 public class ResultsPage extends VBox
 {
+    private static final int PAGE_SIZE = 20;
+    private final SQLitePlantDAO plantDAO = new SQLitePlantDAO();
+    private final String query;
+    private final ComboBox<String> locationFilter = createFilter("Location", "stateProvince");
+    private final ComboBox<String> familyFilter = createFilter("Family", "family");
+    private final ComboBox<String> genusFilter = createFilter("Genus", "genus");
+    private final Label resultLabel = new Label();
+    private final Pagination pagination = new Pagination();
+
     public ResultsPage()
     {
+        this("");
+    }
+
+    public ResultsPage(String query)
+    {
+        this.query = query == null ? "" : query;
         Header header = new Header();
         getChildren().add(header);
 
-        VBox list = new VBox();
+        HBox filters = new HBox(Design.spacing, locationFilter, familyFilter, genusFilter);
+        filters.setPadding(new Insets(Design.padding, Design.padding, 0, Design.padding));
+        locationFilter.setOnAction(event -> refreshResults());
+        familyFilter.setOnAction(event -> refreshResults());
+        genusFilter.setOnAction(event -> refreshResults());
 
-        Label label = new Label("Showing 3 results for 'SearchTerm'.");
-        list.getChildren().add(label);
-        
-        //add results
-        for (int i = 0; i < 3; i++)
+        getChildren().addAll(resultLabel, filters, pagination);
+        VBox.setVgrow(pagination, Priority.ALWAYS);
+        refreshResults();
+    }
+
+    private ComboBox<String> createFilter(String prompt, String column)
+    {
+        ComboBox<String> filter = new ComboBox<>();
+        filter.setPromptText(prompt);
+        filter.getItems().add("All " + prompt.toLowerCase());
+        filter.getItems().addAll(plantDAO.distinctValues(column));
+        filter.getSelectionModel().selectFirst();
+        return filter;
+    }
+
+    private void refreshResults()
+    {
+        int resultCount = plantDAO.count(query, selectedValue(locationFilter),
+            selectedValue(familyFilter), selectedValue(genusFilter));
+        String displayedQuery = query.trim();
+        resultLabel.setText("Showing " + resultCount + " results"
+            + (displayedQuery.isEmpty() ? "." : " for '" + displayedQuery + "'."));
+
+        int pageCount = Math.max(1, (resultCount + PAGE_SIZE - 1) / PAGE_SIZE);
+        pagination.setPageCount(pageCount);
+        pagination.setCurrentPageIndex(0);
+        pagination.setPageFactory(this::createPage);
+    }
+
+    private String selectedValue(ComboBox<String> filter)
+    {
+        String value = filter.getValue();
+        return value == null || value.startsWith("All ") ? "" : value;
+    }
+
+    private ScrollPane createPage(int pageIndex)
+    {
+        VBox list = new VBox(Design.spacing);
+        list.setPadding(new Insets(Design.padding));
+
+        List<Plant> results = plantDAO.search(query, selectedValue(locationFilter),
+            selectedValue(familyFilter), selectedValue(genusFilter), PAGE_SIZE, pageIndex * PAGE_SIZE);
+        for (Plant plant : results)
         {
-            SearchResult result = new SearchResult();
-            result.setOnMouseClicked(event -> openPlantPage());
-            // HBox.setHgrow(result, Priority.ALWAYS);
-
+            SearchResult result = new SearchResult(plant);
+            result.setOnMouseClicked(event -> openPlantPage(plant, query));
             list.getChildren().add(result);
         }
 
-        list.setSpacing(Design.spacing);
-        list.setPadding(new Insets(Design.padding));
-        // list.setAlignment(Pos.TOP_LEFT);
-        // list.setMinWidth(0);
-
-        Button showMoreButton = new Button("Show more");
-        showMoreButton.setOnAction(event -> loadMoreResults());
-        
-        //create a new VBox so 'more' button can sit centred
-        VBox bottomSection = new VBox(showMoreButton);
-        bottomSection.setAlignment(Pos.CENTER);
-
-        getChildren().addAll(list, bottomSection);
-        // setAlignment(Pos.CENTER_LEFT); //does this stop header from shrinking-anchor being the centre
+        ScrollPane scrollPane = new ScrollPane(list);
+        scrollPane.setFitToWidth(true);
+        scrollPane.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
+        scrollPane.setVbarPolicy(ScrollPane.ScrollBarPolicy.AS_NEEDED);
+        return scrollPane;
     }
 
-    void openPlantPage()
+    void openPlantPage(Plant plant, String query)
     {
-        HelloApplication.scene.setRoot(new PlantPage());
+        HelloApplication.scene.setRoot(new PlantPage(plant, query));
     }
 
-    void loadMoreResults()
-    {
-        
-    }
 }
