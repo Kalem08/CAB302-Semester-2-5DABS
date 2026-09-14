@@ -44,7 +44,7 @@ public class ResultsPage extends VBox
     {
         ComboBox<String> filter = new ComboBox<>();
         filter.setPromptText(prompt);
-        filter.getItems().add("All " + prompt.toLowerCase() + "s");
+        filter.getItems().add("All " + prompt.toLowerCase());
         filter.getItems().addAll(plantDAO.distinctValues(column));
         filter.getSelectionModel().selectFirst();
         return filter;
