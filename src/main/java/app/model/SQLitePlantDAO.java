@@ -129,6 +129,11 @@ public class SQLitePlantDAO implements IPlantDAO {
     }
 
     public List<Plant> search(String query, int limit, int offset) {
+        return search(query, "", "", "", limit, offset);
+    }
+
+    public List<Plant> search(String query, String location, String family,
+                              String genus, int limit, int offset) {
         if (limit < 1 || offset < 0) {
             throw new IllegalArgumentException("Limit must be positive and offset cannot be negative");
         }
@@ -142,9 +147,14 @@ public class SQLitePlantDAO implements IPlantDAO {
             LIMIT ? OFFSET ?
             """;
         boolean hasQuery = query != null && !query.trim().isEmpty();
-        String whereClause = hasQuery
-                ? "WHERE LOWER(scientificName) LIKE LOWER(?) OR LOWER(vernacularName) LIKE LOWER(?)"
-                : "";
+        List<String> conditions = new ArrayList<>();
+        if (hasQuery) {
+            conditions.add("(LOWER(scientificName) LIKE LOWER(?) OR LOWER(vernacularName) LIKE LOWER(?))");
+        }
+        addFilterCondition(conditions, location, "stateProvince");
+        addFilterCondition(conditions, family, "family");
+        addFilterCondition(conditions, genus, "genus");
+        String whereClause = conditions.isEmpty() ? "" : "WHERE " + String.join(" AND ", conditions);
         sql = sql.formatted(whereClause);
 
         try (Connection connection = DatabaseConnection.getConnection();
@@ -156,6 +166,9 @@ public class SQLitePlantDAO implements IPlantDAO {
                 statement.setString(parameterIndex++, searchPattern);
                 statement.setString(parameterIndex++, searchPattern);
             }
+            parameterIndex = setFilterParameter(statement, parameterIndex, location);
+            parameterIndex = setFilterParameter(statement, parameterIndex, family);
+            parameterIndex = setFilterParameter(statement, parameterIndex, genus);
             statement.setInt(parameterIndex++, limit);
             statement.setInt(parameterIndex, offset);
 
@@ -192,11 +205,21 @@ public class SQLitePlantDAO implements IPlantDAO {
     }
 
     public int count(String query) {
+        return count(query, "", "", "");
+    }
+
+    public int count(String query, String location, String family, String genus) {
         String sql = "SELECT COUNT(*) FROM PlantsData";
         boolean hasQuery = query != null && !query.trim().isEmpty();
+        List<String> conditions = new ArrayList<>();
         if (hasQuery) {
-            sql += " WHERE LOWER(scientificName) LIKE LOWER(?)"
-                    + " OR LOWER(vernacularName) LIKE LOWER(?)";
+            conditions.add("(LOWER(scientificName) LIKE LOWER(?) OR LOWER(vernacularName) LIKE LOWER(?))");
+        }
+        addFilterCondition(conditions, location, "stateProvince");
+        addFilterCondition(conditions, family, "family");
+        addFilterCondition(conditions, genus, "genus");
+        if (!conditions.isEmpty()) {
+            sql += " WHERE " + String.join(" AND ", conditions);
         }
 
         try (Connection connection = DatabaseConnection.getConnection();
@@ -207,6 +230,10 @@ public class SQLitePlantDAO implements IPlantDAO {
                 statement.setString(1, searchPattern);
                 statement.setString(2, searchPattern);
             }
+            int parameterIndex = hasQuery ? 3 : 1;
+            parameterIndex = setFilterParameter(statement, parameterIndex, location);
+            parameterIndex = setFilterParameter(statement, parameterIndex, family);
+            setFilterParameter(statement, parameterIndex, genus);
 
             try (ResultSet resultSet = statement.executeQuery()) {
                 resultSet.next();
@@ -218,5 +245,42 @@ public class SQLitePlantDAO implements IPlantDAO {
                     e
             );
         }
+    }
+
+    public List<String> distinctValues(String column) {
+        if (!List.of("stateProvince", "family", "genus").contains(column)) {
+            throw new IllegalArgumentException("Unsupported filter column: " + column);
+        }
+
+        List<String> values = new ArrayList<>();
+        String sql = "SELECT DISTINCT " + column + " FROM PlantsData"
+                + " WHERE " + column + " IS NOT NULL AND TRIM(" + column + ") <> ''"
+                + " ORDER BY " + column;
+
+        try (Connection connection = DatabaseConnection.getConnection();
+             PreparedStatement statement = connection.prepareStatement(sql);
+             ResultSet resultSet = statement.executeQuery()) {
+            while (resultSet.next()) {
+                values.add(resultSet.getString(1));
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException("Unable to retrieve filter values", e);
+        }
+
+        return values;
+    }
+
+    private void addFilterCondition(List<String> conditions, String value, String column) {
+        if (value != null && !value.trim().isEmpty()) {
+            conditions.add("LOWER(" + column + ") = LOWER(?)");
+        }
+    }
+
+    private int setFilterParameter(PreparedStatement statement, int parameterIndex, String value)
+            throws SQLException {
+        if (value != null && !value.trim().isEmpty()) {
+            statement.setString(parameterIndex++, value);
+        }
+        return parameterIndex;
     }
 }

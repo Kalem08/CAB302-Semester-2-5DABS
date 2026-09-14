@@ -4,7 +4,6 @@ import app.model.Plant;
 import app.model.SQLitePlantDAO;
 import java.util.List;
 import javafx.geometry.Insets;
-import javafx.geometry.Pos;
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
 
@@ -12,6 +11,12 @@ public class ResultsPage extends VBox
 {
     private static final int PAGE_SIZE = 20;
     private final SQLitePlantDAO plantDAO = new SQLitePlantDAO();
+    private final String query;
+    private final ComboBox<String> locationFilter = createFilter("Location", "stateProvince");
+    private final ComboBox<String> familyFilter = createFilter("Family", "family");
+    private final ComboBox<String> genusFilter = createFilter("Genus", "genus");
+    private final Label resultLabel = new Label();
+    private final Pagination pagination = new Pagination();
 
     public ResultsPage()
     {
@@ -20,28 +25,58 @@ public class ResultsPage extends VBox
 
     public ResultsPage(String query)
     {
+        this.query = query == null ? "" : query;
         Header header = new Header();
         getChildren().add(header);
 
-        int resultCount = plantDAO.count(query);
-        String displayedQuery = query == null ? "" : query.trim();
-        Label label = new Label("Showing " + resultCount + " results"
+        HBox filters = new HBox(Design.spacing, locationFilter, familyFilter, genusFilter);
+        filters.setPadding(new Insets(Design.padding, Design.padding, 0, Design.padding));
+        locationFilter.setOnAction(event -> refreshResults());
+        familyFilter.setOnAction(event -> refreshResults());
+        genusFilter.setOnAction(event -> refreshResults());
+
+        getChildren().addAll(resultLabel, filters, pagination);
+        VBox.setVgrow(pagination, Priority.ALWAYS);
+        refreshResults();
+    }
+
+    private ComboBox<String> createFilter(String prompt, String column)
+    {
+        ComboBox<String> filter = new ComboBox<>();
+        filter.setPromptText(prompt);
+        filter.getItems().add("All " + prompt.toLowerCase() + "s");
+        filter.getItems().addAll(plantDAO.distinctValues(column));
+        filter.getSelectionModel().selectFirst();
+        return filter;
+    }
+
+    private void refreshResults()
+    {
+        int resultCount = plantDAO.count(query, selectedValue(locationFilter),
+            selectedValue(familyFilter), selectedValue(genusFilter));
+        String displayedQuery = query.trim();
+        resultLabel.setText("Showing " + resultCount + " results"
             + (displayedQuery.isEmpty() ? "." : " for '" + displayedQuery + "'."));
 
         int pageCount = Math.max(1, (resultCount + PAGE_SIZE - 1) / PAGE_SIZE);
-        Pagination pagination = new Pagination(pageCount, 0);
-        pagination.setPageFactory(pageIndex -> createPage(query, pageIndex));
-        VBox.setVgrow(pagination, Priority.ALWAYS);
-
-        getChildren().addAll(label, pagination);
+        pagination.setPageCount(pageCount);
+        pagination.setCurrentPageIndex(0);
+        pagination.setPageFactory(this::createPage);
     }
 
-    private ScrollPane createPage(String query, int pageIndex)
+    private String selectedValue(ComboBox<String> filter)
+    {
+        String value = filter.getValue();
+        return value == null || value.startsWith("All ") ? "" : value;
+    }
+
+    private ScrollPane createPage(int pageIndex)
     {
         VBox list = new VBox(Design.spacing);
         list.setPadding(new Insets(Design.padding));
 
-        List<Plant> results = plantDAO.search(query, PAGE_SIZE, pageIndex * PAGE_SIZE);
+        List<Plant> results = plantDAO.search(query, selectedValue(locationFilter),
+            selectedValue(familyFilter), selectedValue(genusFilter), PAGE_SIZE, pageIndex * PAGE_SIZE);
         for (Plant plant : results)
         {
             SearchResult result = new SearchResult(plant);
@@ -54,11 +89,6 @@ public class ResultsPage extends VBox
         scrollPane.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
         scrollPane.setVbarPolicy(ScrollPane.ScrollBarPolicy.AS_NEEDED);
         return scrollPane;
-    }
-
-    void openPlantPage(Plant plant)
-    {
-        openPlantPage(plant, "");
     }
 
     void openPlantPage(Plant plant, String query)
