@@ -45,7 +45,7 @@ public class ResultsPage extends VBox
         for (Plant plant : results)
         {
             SearchResult result = new SearchResult(plant);
-            result.setOnMouseClicked(event -> openPlantPage(plant));
+            result.setOnMouseClicked(event -> openPlantPage(plant, query));
             list.getChildren().add(result);
         }
 
@@ -58,7 +58,12 @@ public class ResultsPage extends VBox
 
     void openPlantPage(Plant plant)
     {
-        HelloApplication.scene.setRoot(new PlantPage(plant));
+        openPlantPage(plant, "");
+    }
+
+    void openPlantPage(Plant plant, String query)
+    {
+        HelloApplication.scene.setRoot(new PlantPage(plant, query));
     }
 
 }

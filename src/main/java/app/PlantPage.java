@@ -20,6 +20,11 @@ public class PlantPage extends VBox
 
     public PlantPage(Plant plant)
     {
+        this(plant, "");
+    }
+
+    public PlantPage(Plant plant, String searchQuery)
+    {
         Header header = new Header();
 
         HBox hStack = new HBox();
@@ -94,10 +99,15 @@ public class PlantPage extends VBox
         Region bottomSpacer = new Region();
         VBox.setVgrow(bottomSpacer, Priority.ALWAYS);
 
+        Button returnToResultsButton = new Button("Return to search results");
+        returnToResultsButton.setOnAction(event ->
+            HelloApplication.scene.setRoot(new ResultsPage(searchQuery)));
+
         getChildren().addAll(
             header,
             hStack,
             bottomSpacer,
+            returnToResultsButton,
             editPrompt
         );
         hStack.setSpacing(Design.spacing);
