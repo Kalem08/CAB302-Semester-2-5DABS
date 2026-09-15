@@ -10,4 +10,5 @@ module app
     exports app;
     exports app.model;
     exports database;
+    exports User;
 }
