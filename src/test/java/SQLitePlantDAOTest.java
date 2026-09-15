@@ -65,4 +65,29 @@ public class SQLitePlantDAOTest {
 
         assertEquals(true, found);
     }
+
+    @Test
+    public void updatePlantShouldPersistChangesToDatabase() {
+
+        SQLitePlantDAO dao = new SQLitePlantDAO();
+
+        Plant plant = dao.getPlant(1);
+
+        assertNotNull(plant);
+
+        String originalName = plant.getVernacularName();
+
+        plant.setVernacularName("Updated TDD Plant");
+
+        dao.updatePlant(plant);
+
+        Plant updatedPlant = dao.getPlant(1);
+
+        assertNotNull(updatedPlant);
+        assertEquals("Updated TDD Plant", updatedPlant.getVernacularName());
+
+        // Restore original database value after test
+        plant.setVernacularName(originalName);
+        dao.updatePlant(plant);
+    }
 }
