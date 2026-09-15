@@ -3,8 +3,7 @@ import app.model.Plant;
 import app.model.SQLitePlantDAO;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class SQLitePlantDAOTest {
 
@@ -55,6 +54,8 @@ public class SQLitePlantDAOTest {
 
         dao.addPlant(newPlant);
 
+        assertTrue(newPlant.getId() > 0);
+
         List<Plant> plants = dao.getAllPlants();
 
         boolean found = plants.stream()
@@ -89,5 +90,38 @@ public class SQLitePlantDAOTest {
         // Restore original database value after test
         plant.setVernacularName(originalName);
         dao.updatePlant(plant);
+    }
+
+    @Test
+    void deletePlantShouldRemovePlantFromDatabase() {
+
+        SQLitePlantDAO dao = new SQLitePlantDAO();
+
+        // Arrange
+        Plant plant = new Plant(
+                "Plant to be deleted",
+                "delete-test.jpg",
+                "Queensland",
+                "Delete test scientific name",
+                "Plantae",
+                "Tracheophyta",
+                "Magnoliopsida",
+                "Myrtales",
+                "Myrtaceae",
+                "Eucalyptus",
+                "species",
+                "Delete Test Plant",
+                "deleteSpecies"
+        );
+
+        dao.addPlant(plant);
+
+        // Act
+        dao.deletePlant(plant);
+
+        // Assert
+        Plant deletedPlant = dao.getPlant(plant.getId());
+
+        assertNull(deletedPlant);
     }
 }
