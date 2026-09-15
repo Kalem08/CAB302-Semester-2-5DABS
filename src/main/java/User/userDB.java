@@ -1,6 +1,6 @@
 package User;
 
-public class userDB {
+public class userDB implements IUser{
     private String username;
     private String password;
     public userDB(String username, String password) {
@@ -18,5 +18,20 @@ public class userDB {
     public String getPassword()
     {
         return this.password;
+    }
+    public void changeAccountInformation()
+    {
+
+    }
+    public void updateUsername(){}
+    public void updatePassword(){}
+
+    public boolean loggedIn()
+    {
+        return true;
+    }
+    public void logOut()
+    {
+
     }
 }
