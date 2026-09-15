@@ -85,6 +85,6 @@ public class EntryPage extends BorderPane
 
     void openRegisterPage()
     {
-        HelloApplication.scene.setRoot(new LogInPage());
+        HelloApplication.scene.setRoot(new LogInPage(true));
     }
 }

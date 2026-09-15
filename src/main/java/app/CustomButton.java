@@ -63,6 +63,11 @@ public class CustomButton extends StackPane
     {
         label.setFont(Font.font(size));
     }
+
+    public void setText(String text)
+    {
+        label.setText(text);
+    }
     void setTextColour(Color colourParameter)
     {
         textColour = colourParameter;
