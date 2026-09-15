@@ -71,6 +71,11 @@ public class CustomTextfield extends StackPane
         return textfield.getText();
     }
 
+    public void clear()
+    {
+        textfield.clear();
+    }
+
     public void usePasswordField()
     {
         textfield = new PasswordField();

@@ -9,12 +9,20 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
+import User.authManager;
 
 //could also be called 'AccountPanel' or 'AuthenticationPanel', as this encompasses both log in AND registration
 public class LogInPage extends StackPane
 {
     //MARK: Variables
     private Label statusLabel;
+    private Label titleLabel;
+    private CustomTextfield usernameTextfield;
+    private CustomTextfield passwordTextfield;
+    private CustomButton submitButton;
+    private CustomButton registerButton;
+    private CustomButton forgotPasswordButton;
+    private boolean registrationMode;
 
     int boxWidth = 300;
     int boxHeight = 400;
@@ -23,6 +31,12 @@ public class LogInPage extends StackPane
 
     public LogInPage()
     {
+        this(false);
+    }
+
+    public LogInPage(boolean registrationMode)
+    {
+        this.registrationMode = registrationMode;
         //rectangle
         Rectangle background = new Rectangle(boxWidth, boxHeight);
         background.setFill(Design.grey80);
@@ -33,32 +47,31 @@ public class LogInPage extends StackPane
         // background.widthProperty().bind(this.widthProperty());
         // background.heightProperty().bind(this.heightProperty());
         
-        Label titleLabel = new Label("Log In");
+        titleLabel = new Label();
         titleLabel.setFont(Font.font("Arial", FontWeight.BOLD, 24));
         titleLabel.setUnderline(true);
 
         //textfields
-        CustomTextfield usernameTextfield = new CustomTextfield("Username", elementWidth, 30);
+        usernameTextfield = new CustomTextfield("Username", elementWidth, 30);
         usernameTextfield.setBackgroundColor(Color.WHITE);
-        CustomTextfield passwordTextfield = new CustomTextfield("Password", elementWidth, 30, true);
+        passwordTextfield = new CustomTextfield("Password", elementWidth, 30, true);
         passwordTextfield.setBackgroundColor(Color.WHITE);
-        passwordTextfield.usePasswordField();
 
         //buttons
         // Button submitButton = new Button("Log in");
-        CustomButton submitButton = new CustomButton("Log in", 60, 30);
+        submitButton = new CustomButton("", 120, 30);
         submitButton.setBackgroundColor(Color.LIMEGREEN);
         submitButton.setBackgroundHoverColor(Color.GREEN);
         submitButton.setOnMouseClicked(event -> submitCredentials());
 
         // Button forgotPasswordButton = new Button("Forgot password?");
-        CustomButton forgotPasswordButton = new CustomButton("Forgot password?", 150, 30);
+        forgotPasswordButton = new CustomButton("Forgot password?", 150, 30);
         forgotPasswordButton.setBackgroundColor(Color.LIMEGREEN);
         forgotPasswordButton.setBackgroundHoverColor(Color.GREEN);
         forgotPasswordButton.setOnMouseClicked(event -> forgotPassword());
 
         // Button registerButton = new Button("Register");
-        CustomButton registerButton = new CustomButton("Register", 80, 30);
+        registerButton = new CustomButton("", 100, 30);
         registerButton.setBackgroundColor(Color.LIMEGREEN);
         registerButton.setBackgroundHoverColor(Color.GREEN);
         registerButton.setOnMouseClicked(event -> openRegisterPage());
@@ -70,6 +83,10 @@ public class LogInPage extends StackPane
         guestButton.setOnMouseClicked(event -> openEntryPage());
 
         statusLabel = new Label("");
+        statusLabel.setMaxWidth(elementWidth);
+        statusLabel.setWrapText(true);
+        statusLabel.setAlignment(Pos.CENTER);
+        statusLabel.setTextAlignment(javafx.scene.text.TextAlignment.CENTER);
 
         Region horizontalSpacer = new Region();
         HBox.setHgrow(horizontalSpacer, Priority.ALWAYS);
@@ -131,6 +148,8 @@ public class LogInPage extends StackPane
 
         //set background colour
         setStyle("-fx-background-color: #FFFFFF;");
+
+        updateMode();
     }
 
     void openEntryPage()
@@ -140,18 +159,45 @@ public class LogInPage extends StackPane
 
     void openRegisterPage()
     {
-        System.out.println("Register");
+        registrationMode = !registrationMode;
+        statusLabel.setText("");
+        updateMode();
     }
 
     void submitCredentials()
     {
-        System.out.println("Attempt login");
+        String username = usernameTextfield.getText().trim();
+        String password = passwordTextfield.getText();
+        authManager manager = new authManager(username, password);
 
-        statusLabel.setText("Checking creditials...");
+        if (registrationMode) {
+            if (manager.Registration()) {
+                statusLabel.setText("Account created. You can now log in.");
+                registrationMode = false;
+                passwordTextfield.clear();
+                updateMode();
+            } else {
+                statusLabel.setText("Username exists or password is invalid (8+ chars, upper, lower, special).");
+            }
+        } else if (manager.authenticate()) {
+            statusLabel.setText("Login successful.");
+            HelloApplication.scene.setRoot(new EntryPage());
+        } else {
+            statusLabel.setText("Invalid username or password.");
+        }
     }
 
     void forgotPassword()
     {
         System.out.println("User forgot password");
+    }
+
+    private void updateMode()
+    {
+        titleLabel.setText(registrationMode ? "Register" : "Log In");
+        submitButton.setText(registrationMode ? "Create account" : "Log in");
+        registerButton.setText(registrationMode ? "Back to login" : "Register");
+        forgotPasswordButton.setVisible(!registrationMode);
+        forgotPasswordButton.setManaged(!registrationMode);
     }
 }
