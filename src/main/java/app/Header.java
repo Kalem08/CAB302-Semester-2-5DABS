@@ -8,12 +8,17 @@ import javafx.geometry.Pos;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.image.*;
+import User.authManager;
 
 //MARK: Class
 //the header with logo, search bar and account button at the top of most pages
 public class Header extends StackPane
 {
     int searchElementHeight = 30;
+
+    Button logInButton;
+    Button registerButton;
+    ImageButton accountIcon;
 
     public Header()
     {
@@ -55,13 +60,14 @@ public class Header extends StackPane
         searchButton.setOnMouseClicked(event -> search(searchTextfield.getText()));
 
         //login/register
-        Button logInButton = new Button("Log in");
+        logInButton = new Button("Log in");
         logInButton.setOnAction(event -> openLoginPage());
-        Button registerButton = new Button("Register");
+
+        registerButton = new Button("Register");
         registerButton.setOnAction(event -> openLoginPage());
 
         //account
-        ImageButton accountIcon = new ImageButton("Leaf.png", 20, 40, 40);
+        accountIcon = new ImageButton("Leaf.png", 20, 40, 40);
         accountIcon.background.setArcWidth(40);
         accountIcon.background.setArcHeight(40);
         accountIcon.setBackgroundColor(Design.mediumGreen);
@@ -97,6 +103,8 @@ public class Header extends StackPane
         getChildren().addAll(background, content);
         setPrefHeight(50);
         setMinWidth(0); //need to set min width so header can shrink when window shrinks
+
+        updateAccountButtonsVisibility();
     }
 
     //MARK: Methods
@@ -105,7 +113,6 @@ public class Header extends StackPane
         HelloApplication.scene.setRoot(new ResultsPage(query));
     }
 
-    //MARK: Methods
     void openEntryPage()
     {
         HelloApplication.scene.setRoot(new EntryPage());
@@ -119,5 +126,17 @@ public class Header extends StackPane
     void openLoginPage()
     {
         HelloApplication.scene.setRoot(new LogInPage());
+    }
+
+    //toggles visibility of buttons
+    private void updateAccountButtonsVisibility()
+    {
+        Boolean isSignedIn = authManager.isSignedIn();
+        logInButton.setVisible(!isSignedIn);
+        logInButton.setManaged(!isSignedIn);
+        registerButton.setVisible(!isSignedIn);
+        registerButton.setManaged(!isSignedIn);
+        accountIcon.setVisible(isSignedIn);
+        accountIcon.setManaged(isSignedIn);
     }
 }
