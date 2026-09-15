@@ -31,4 +31,38 @@ public class SQLitePlantDAOTest {
         assertNotNull(plants);
         assertEquals(313, plants.size());
     }
+
+    @Test
+    public void addPlantShouldPersistPlantToDatabase() {
+
+        SQLitePlantDAO dao = new SQLitePlantDAO();
+
+        Plant newPlant = new Plant(
+                "TDD test plant for SQLite persistence",
+                "",
+                "Queensland",
+                "Testus plantus",
+                "Plantae",
+                "Tracheophyta",
+                "Magnoliopsida",
+                "Myrtales",
+                "Myrtaceae",
+                "Testus",
+                "species",
+                "TDD Test Plant",
+                "Testus plantus"
+        );
+
+        dao.addPlant(newPlant);
+
+        List<Plant> plants = dao.getAllPlants();
+
+        boolean found = plants.stream()
+                .anyMatch(plant ->
+                        "TDD Test Plant".equals(plant.getVernacularName())
+                                && "Testus plantus".equals(plant.getSciName())
+                );
+
+        assertEquals(true, found);
+    }
 }
