@@ -1,6 +1,10 @@
-package app;
+package app.pages;
 
 //MARK: Imports
+import app.Design;
+import app.HelloApplication;
+import app.components.CustomButton;
+import app.components.CustomTextfield;
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
 import javafx.geometry.Insets;

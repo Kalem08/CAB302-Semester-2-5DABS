@@ -1,6 +1,8 @@
-package app;
+package app.pages;
 
 //MARK: Imports
+import app.components.Header;
+import app.HelloApplication;
 import javafx.geometry.Pos;
 import javafx.scene.control.*;
 import javafx.scene.layout.*;

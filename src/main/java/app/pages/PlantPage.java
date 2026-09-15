@@ -1,5 +1,8 @@
-package app;
+package app.pages;
 
+import app.Design;
+import app.HelloApplication;
+import app.components.Header;
 import app.model.Plant;
 //MARK: Imports
 import javafx.scene.control.*;
