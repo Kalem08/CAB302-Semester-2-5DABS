@@ -114,7 +114,7 @@ public class userDB implements IUser{
 
     public boolean loggedIn()
     {
-        return true;
+        return authManager.isSignedIn();
     }
     public void logOut()
     {

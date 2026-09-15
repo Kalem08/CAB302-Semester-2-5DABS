@@ -1,8 +1,5 @@
 package User;
 
-import java.util.Map;
-import  java.util.HashMap;
-
 public class authManager
 {
     private String username;
@@ -10,9 +7,7 @@ public class authManager
     private String saferUsername;
     private int passwordMinLength = 8;
     private boolean validUsername;
-    // create array for errors[];
-    private Map<String, userDB> userTrack = new HashMap<>();
-
+    private static boolean signedIn;
     public enum PasswordError
     {
         VALID,
@@ -34,48 +29,51 @@ public class authManager
         this.username = username;
         this.password = password;
     }
-    public void Registration()
+    public boolean Registration()
     {
-        //input wanted username
         validUsername = checkUsernameExistence(username);
-        if(validUsername)
-        {
-            createPassword();
-        }
-        else
-        {
-            //make user input username again
-            System.out.println("Invalid Username.");
+        if (!validUsername || checkValidPass() != PasswordError.VALID) {
+            return false;
         }
 
-
+        userDB userAccount = new userDB(saferUsername, password);
+        return userAccount.registerUser();
     }
     public void signIN()
     {
-        //get username
-        saferUsername = this.username.toLowerCase();
-        //use key to find the account
-        if(userTrack.containsKey(saferUsername))
-        {
-            System.out.println("Username found.");
-            enterPassword();
-
-        }
-        else
-        {
-            System.out.println("Username does not exist.");
+        if (authenticate()) {
+            System.out.println("Logged In???");
+        } else {
+            System.out.println("Invalid username or password.");
         }
     }
 
-    //public void setPassword(String password)
+    public boolean authenticate()
     {
-        this.password = password;
+        signedIn = false;
+        if (username == null || username.trim().isEmpty() || password == null) {
+            return false;
+        }
+
+        saferUsername = username.trim().toLowerCase();
+        signedIn = userDB.authenticate(saferUsername, password);
+        return signedIn;
     }
+
+    public static boolean isSignedIn()
+    {
+        return signedIn;
+    }
+
     // For registration
     private boolean checkUsernameExistence(String Username)
     {
-        saferUsername = this.username.toLowerCase();
-        if(!userTrack.containsKey(this.saferUsername))
+        if (Username == null || Username.trim().isEmpty()) {
+            return false;
+        }
+
+        saferUsername = Username.trim().toLowerCase();
+        if(!userDB.exists(this.saferUsername))
         {
             System.out.println("Valid username");
             return true;
@@ -85,17 +83,6 @@ public class authManager
             System.out.println("Username already exists.");
             return false;
         }
-    }
-    // might need to give the original value in the ()
-    private void createPassword()
-    {
-        //get input of password
-        if (checkValidPass() == PasswordError.VALID)
-        {
-            userDB userAccount = new userDB(this.username,this.password);
-            userTrack.put(saferUsername,userAccount);
-        }
-
     }
     private PasswordError checkValidPass()
     {
@@ -111,20 +98,6 @@ public class authManager
             return PasswordError.NO_LOWER;
         } else {
             return PasswordError.VALID;
-        }
-    }
-    private void enterPassword()
-    {
-        //get password
-        userDB userAccount = userTrack.get(saferUsername);
-        //check if the password is the same as the existing account
-        if(this.password == userAccount.getPassword())
-        {
-            System.out.println("Logged In???");
-        }
-        else
-        {
-            System.out.println("Wrong Password.");
         }
     }
 //    private boolean checkValidUsername()
