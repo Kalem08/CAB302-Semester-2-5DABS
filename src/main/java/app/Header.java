@@ -27,15 +27,18 @@ public class Header extends StackPane
 
         //logo
         int logoWidth = 200;
-        Rectangle logoRectangle = new Rectangle(logoWidth + 20, 50, Color.WHITE);
-        logoRectangle.setArcWidth(Design.cornerRadius);
-        logoRectangle.setArcHeight(Design.cornerRadius);
+        // Rectangle logoRectangle = new Rectangle(logoWidth + 20, 50, Color.WHITE);
+        // logoRectangle.setArcWidth(Design.cornerRadius);
+        // logoRectangle.setArcHeight(Design.cornerRadius);
 
-        ImageView imageView = new ImageView(Design.getLogo());
-        imageView.setFitWidth(logoWidth);
-        imageView.setPreserveRatio(true);
+        // ImageView imageView = new ImageView(Design.getLogo());
+        // imageView.setFitWidth(logoWidth);
+        // imageView.setPreserveRatio(true);
 
-        StackPane logo = new StackPane(logoRectangle, imageView);
+        // StackPane logo = new StackPane(logoRectangle, imageView);
+        ImageButton logo = new ImageButton("Logo.png", logoWidth, logoWidth + 20, 50);
+        logo.setBackgroundColor(Color.WHITE);
+        logo.setBackgroundHoverColor(Design.grey70);
         logo.setOnMouseClicked(event -> openEntryPage());
         
         //textfield
@@ -57,8 +60,12 @@ public class Header extends StackPane
         Button registerButton = new Button("Register");
         registerButton.setOnAction(event -> openLoginPage());
 
-        //acount
-        AccountButton accountIcon = new AccountButton(40);
+        //account
+        ImageButton accountIcon = new ImageButton("Leaf.png", 20, 40, 40);
+        accountIcon.background.setArcWidth(40);
+        accountIcon.background.setArcHeight(40);
+        accountIcon.setBackgroundColor(Design.mediumGreen);
+        accountIcon.setBackgroundHoverColor(Design.darkGreen);
         accountIcon.setOnMouseClicked(event -> openAccountPage());
 
         //create spacers
