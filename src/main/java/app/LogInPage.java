@@ -22,18 +22,19 @@ public class LogInPage extends StackPane
     private CustomButton submitButton;
     private CustomButton registerButton;
     private CustomButton forgotPasswordButton;
-    private boolean registrationMode;
 
+    private boolean registrationMode; //defines whether the page shows 'log in' or 'register'
     int boxWidth = 300;
     int boxHeight = 400;
     int elementWidth = boxWidth - (Design.padding * 2);
-    // int elementHeight = 350;
 
+    //empty constructor
     public LogInPage()
     {
         this(false);
     }
 
+    //MARK: Constructor
     public LogInPage(boolean registrationMode)
     {
         this.registrationMode = registrationMode;
@@ -152,6 +153,7 @@ public class LogInPage extends StackPane
         updateMode();
     }
 
+    //MARK: Methods
     void openEntryPage()
     {
         HelloApplication.scene.setRoot(new EntryPage());
@@ -159,8 +161,8 @@ public class LogInPage extends StackPane
 
     void openRegisterPage()
     {
-        registrationMode = !registrationMode;
-        statusLabel.setText("");
+        registrationMode = !registrationMode; //toggle boolean
+        statusLabel.setText(""); //reset text
         updateMode();
     }
 
@@ -189,15 +191,17 @@ public class LogInPage extends StackPane
 
     void forgotPassword()
     {
+        //not implemented yet
         System.out.println("User forgot password");
     }
 
+    //updates Nodes to correctly represent the current mode
     private void updateMode()
     {
         titleLabel.setText(registrationMode ? "Register" : "Log In");
         submitButton.setText(registrationMode ? "Create account" : "Log in");
         registerButton.setText(registrationMode ? "Back to login" : "Register");
-        forgotPasswordButton.setVisible(!registrationMode);
-        forgotPasswordButton.setManaged(!registrationMode);
+        forgotPasswordButton.setVisible(!registrationMode); //show or hide
+        forgotPasswordButton.setManaged(!registrationMode); //when false, tells the parent layout container to ignore the button during its automatic layout and sizing calculations
     }
 }

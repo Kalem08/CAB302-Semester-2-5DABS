@@ -60,6 +60,7 @@ public class authManager
         return signedIn;
     }
 
+    //returns signedIn variable, so it can remain private
     public static boolean isSignedIn()
     {
         return signedIn;

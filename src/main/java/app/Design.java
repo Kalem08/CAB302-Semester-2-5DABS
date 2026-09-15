@@ -40,8 +40,6 @@ public class Design
     public static Image getImage(String localPath)
     {
         URL url = Design.class.getResource("/images/" + localPath);
-        System.out.println("localPath: " + localPath);
-        System.out.println("URL: " + url);
 
         if (url != null)
         {
@@ -49,6 +47,9 @@ public class Design
         }
         else
         {
+            System.out.println("Could not find image in resources folder.");
+            System.out.println("localPath: " + localPath);
+            System.out.println("URL: " + url);
             return null;
         }
     }
