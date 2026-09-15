@@ -14,6 +14,47 @@ public class SQLitePlantDAO implements IPlantDAO {
     @Override
     public void addPlant(Plant plant) {
 
+        String sql = """
+            INSERT INTO PlantsData (
+                Generalised_info,
+                images,
+                stateProvince,
+                scientificName,
+                kingdom,
+                phylum,
+                class,
+                "order",
+                family,
+                genus,
+                taxonRank,
+                vernacularName,
+                species
+            )
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+            """;
+
+        try (Connection connection = DatabaseConnection.getConnection();
+             PreparedStatement statement = connection.prepareStatement(sql)) {
+
+            statement.setString(1, plant.getGeneralisedInfo());
+            statement.setString(2, plant.getImage());
+            statement.setString(3, plant.getLocation());
+            statement.setString(4, plant.getSciName());
+            statement.setString(5, plant.getKingdom());
+            statement.setString(6, plant.getPhylum());
+            statement.setString(7, plant.getPclass());
+            statement.setString(8, plant.getOrder());
+            statement.setString(9, plant.getFamily());
+            statement.setString(10, plant.getGenus());
+            statement.setString(11, plant.getTaxonRank());
+            statement.setString(12, plant.getVernacularName());
+            statement.setString(13, plant.getSpecies());
+
+            statement.executeUpdate();
+
+        } catch (SQLException e) {
+            throw new RuntimeException("Failed to add plant to database", e);
+        }
     }
 
     @Override
