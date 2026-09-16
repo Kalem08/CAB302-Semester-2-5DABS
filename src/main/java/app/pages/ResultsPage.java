@@ -1,8 +1,13 @@
-package app;
+package app.pages;
 
+import app.Design;
+import app.HelloApplication;
+import app.components.SearchResult;
+import app.components.Header;
 import app.model.Plant;
 import app.model.SQLitePlantDAO;
 import java.util.List;
+
 import javafx.geometry.Insets;
 import javafx.scene.control.*;
 import javafx.scene.layout.*;

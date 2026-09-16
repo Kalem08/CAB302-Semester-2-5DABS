@@ -1,6 +1,7 @@
-package app;
+package app.components;
 
 //MARK: Imports
+import app.Design;
 import app.model.Plant;
 import javafx.scene.control.*;
 import javafx.scene.layout.*;

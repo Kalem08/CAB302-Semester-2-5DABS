@@ -1,4 +1,4 @@
-package app;
+package app.components;
 
 //MARK: Imports
 import javafx.scene.control.*;

@@ -1,6 +1,7 @@
-package app;
+package app.components;
 
 //MARK: Imports
+import app.Design;
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
 // import javafx.geometry.Insets;
@@ -8,7 +9,6 @@ import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
-import javafx.scene.text.FontWeight;
 
 public class CustomButton extends StackPane
 {
@@ -68,25 +68,25 @@ public class CustomButton extends StackPane
     {
         label.setText(text);
     }
-    void setTextColour(Color colourParameter)
+    public void setTextColour(Color colourParameter)
     {
         textColour = colourParameter;
         updateHoverColours();
         label.setTextFill(colourParameter);
     }
-    void setTextHoverColour(Color colourParameter)
+    public void setTextHoverColour(Color colourParameter)
     {
         textHoverColor = colourParameter;
         updateHoverColours();
     }
 
-    void setBackgroundColor(Color colourParameter)
+    public void setBackgroundColor(Color colourParameter)
     {
         frameColour = colourParameter;
         updateHoverColours();
         background.setFill(colourParameter);
     }
-    void setBackgroundHoverColor(Color colourParameter)
+    public void setBackgroundHoverColor(Color colourParameter)
     {
         frameHoverColour = colourParameter;
         updateHoverColours();

@@ -1,13 +1,17 @@
-package app;
+package app.components;
 
 //MARK: Imports
+import app.*;
+import app.pages.AccountPage;
+import app.pages.EntryPage;
+import app.pages.LogInPage;
+import app.pages.ResultsPage;
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
-import javafx.scene.image.*;
 import User.authManager;
 
 //MARK: Class
