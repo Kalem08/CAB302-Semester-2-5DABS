@@ -3,10 +3,11 @@ package app;
 //MARK: Imports
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
-import javafx.scene.paint.Color;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.scene.paint.Color;
 import javafx.scene.image.*;
+
 import User.authManager;
 
 //the entry page when the user first opens the app
@@ -15,13 +16,20 @@ public class EntryPage extends BorderPane
     Label signedInLabel;
     CustomButton logInButton;
     CustomButton registerButton;
+    CustomTextfield searchTextfield;
 
     public EntryPage()
     {
-        //middle
+        //MARK: Logo
+        ImageView logo = new ImageView(Design.getLogo());
+        logo.setFitWidth(800);
+        logo.setPreserveRatio(true);
+
         Label subtitleLabel = new Label("A digital encyclopedia for Australian native plants");
-        CustomTextfield searchTextfield = new CustomTextfield("Search...", 800, 50);
+
+        searchTextfield = new CustomTextfield("Search...", 800, 50);
         searchTextfield.setBackgroundColor(Design.superLightGrey);
+        searchTextfield.textfield.setOnAction(event -> search());
 
         //search button
         CustomButton searchButton = new CustomButton("Search", 100, 40);
@@ -29,7 +37,7 @@ public class EntryPage extends BorderPane
         searchButton.setBackgroundHoverColor(Color.LIGHTGREY);
         searchButton.setTextColour(Design.grey20);
         searchButton.setTextHoverColour(Color.BLACK);
-        searchButton.setOnMouseClicked(event -> openResultsPage(searchTextfield.getText()));
+        searchButton.setOnMouseClicked(event -> search());
 
         //account buttons
         logInButton = new CustomButton("Log in", 100, 40);
@@ -40,22 +48,17 @@ public class EntryPage extends BorderPane
         registerButton = new CustomButton("Register", 100, 40);
         registerButton.setBackgroundColor(Design.superLightGrey);
         registerButton.setBackgroundHoverColor(Color.LIGHTGREY);
-        registerButton.setOnMouseClicked(event -> openLogInPage());
+        registerButton.setOnMouseClicked(event -> openRegisterPage());
 
         //signed in label
         signedInLabel = new Label("Signed in");
-
-        //MARK: Logo
-        ImageView imageView = new ImageView(Design.getLogo());
-        imageView.setFitWidth(800);
-        imageView.setPreserveRatio(true);
 
         VBox centreBox = new VBox();
         centreBox.setAlignment(Pos.CENTER);
         centreBox.setSpacing(15.0);
         centreBox.setFillWidth(false); //set the fillWidth property to false so the children are not resized to fill the width of the VBox
         centreBox.getChildren().addAll(
-            imageView,
+            logo,
             subtitleLabel,
             searchTextfield,
             searchButton
@@ -85,6 +88,11 @@ public class EntryPage extends BorderPane
     }
 
     //MARK: Methods
+    void search()
+    {
+        openResultsPage(searchTextfield.getText());
+    }
+
     void openResultsPage(String query)
     {
         HelloApplication.scene.setRoot(new ResultsPage(query));
@@ -92,7 +100,7 @@ public class EntryPage extends BorderPane
 
     void openLogInPage()
     {
-        HelloApplication.scene.setRoot(new LogInPage());
+        HelloApplication.scene.setRoot(new LogInPage(false));
     }
 
     void openRegisterPage()

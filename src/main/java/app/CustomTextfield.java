@@ -66,11 +66,11 @@ public class CustomTextfield extends StackPane
         background.setFill(colour);
     }
 
+    //access text value
     public String getText()
     {
         return textfield.getText();
     }
-
     public void clear()
     {
         textfield.clear();

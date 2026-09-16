@@ -8,7 +8,7 @@ import javafx.stage.Stage;
 import javafx.scene.Parent;
 // import javafx.scene.control.*;
 // import javafx.scene.layout.*;
-import javafx.scene.paint.Color;
+// import javafx.scene.paint.Color;
 
 //main class (an extension of 'Application')
 public class HelloApplication extends Application
@@ -31,15 +31,15 @@ public class HelloApplication extends Application
         else
         {
             //define the inital page here
-            Parent root = new EntryPage();
-            // Parent root = new AccountPage();
+            // Parent root = new EntryPage();
+            Parent root = new LogInPage(); //a temporary swap
 
             //MARK: Scene
             //define the scene, add to the stage/window, and display the stage
-            scene = new Scene(root, 960, 540);
+            scene = new Scene(root, 960, 540); //small window
             stage.setTitle("Plantopedia"); //the window title
-            stage.setScene(scene); //sets the scene
-            // stage.setMaximized(true); //start as a maximised window
+            stage.setScene(scene);
+            stage.setMaximized(true); //start as a maximised window
             stage.show();
 
             //change background colour

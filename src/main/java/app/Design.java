@@ -10,30 +10,41 @@ import javafx.scene.image.*;
 public class Design
 {
     //MARK: Sizing
+    public static int smallCornerRadius = 5;
     public static int cornerRadius = 20;
-    public static int horizontalSpacing = 10;
-    public static int verticalSpacing = 10;
+    public static int largeCornerRadius = 40;
+    
+    //spacing & padding
     public static int spacing = 10;
     public static int padding = 10;
+    public static int horizontalSpacing = 10;
+    public static int verticalSpacing = 10;
 
     //MARK: Colours
     //greys
     public static Color superLightGrey = Color.web("#f0f0f0");
     public static Color superDarkGrey = Color.web("#0f0f0f");
     //greys with a brightness from 0->100
+    public static Color white = Color.WHITE;
     public static Color grey95 = Color.web("#f2f2f2");
     public static Color grey90 = Color.web("#e6e6e6");
     public static Color grey80 = Color.web("#cccccc");
     public static Color grey70 = Color.web("#bfbfbf");
+    public static Color grey60 = Color.web("#999999");
+    public static Color grey50 = Color.web("#808080");
+    public static Color grey40 = Color.web("#666666");
     public static Color grey30 = Color.web("#4d4d4d");
     public static Color grey20 = Color.web("#333333");
     public static Color grey10 = Color.web("#1a1a1a");
+    public static Color black = Color.BLACK;
 
     //greens
     public static Color green = Color.web("#00ff00"); //lime
     public static Color lightGreen = Color.web("#0fff0f");
     public static Color mediumGreen = Color.web("#008000"); //50%
     public static Color darkGreen = Color.web("#007000");
+    public static Color softGreen = Color.LIMEGREEN;
+    public static Color darkSoftGreen = Color.web("#32b432");
 
     public static Color hyperlinkColour = Color.web("#0066CC"); 
 

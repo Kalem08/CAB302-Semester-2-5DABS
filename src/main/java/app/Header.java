@@ -7,7 +7,7 @@ import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
-import javafx.scene.image.*;
+
 import User.authManager;
 
 //MARK: Class
@@ -49,6 +49,7 @@ public class Header extends StackPane
         //textfield
         CustomTextfield searchTextfield = new CustomTextfield("Search...", 400, searchElementHeight);
         searchTextfield.setBackgroundColor(Design.superLightGrey);
+        searchTextfield.textfield.setOnAction(event -> search(searchTextfield.getText()));
 
         //search button
         CustomButton searchButton = new CustomButton("Search", 60, searchElementHeight);
@@ -66,7 +67,7 @@ public class Header extends StackPane
         registerButton = new Button("Register");
         registerButton.setOnAction(event -> openLoginPage());
 
-        //account
+        //account button
         accountIcon = new ImageButton("Leaf.png", 20, 40, 40);
         accountIcon.background.setArcWidth(40);
         accountIcon.background.setArcHeight(40);
@@ -101,7 +102,8 @@ public class Header extends StackPane
         
         //add everything to the header stack
         getChildren().addAll(background, content);
-        setPrefHeight(50);
+        setPrefHeight(60); //previously 50
+        setMinHeight(60);
         setMinWidth(0); //need to set min width so header can shrink when window shrinks
 
         updateAccountButtonsVisibility();
