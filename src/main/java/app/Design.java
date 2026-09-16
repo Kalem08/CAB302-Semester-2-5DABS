@@ -6,7 +6,7 @@ import javafx.scene.paint.Color;
 import java.net.URL;
 import javafx.scene.image.*;
 
-//Design class is a set of static variables
+//this class contains static properties relating to the design and appearance of the app
 public class Design
 {
     //MARK: Sizing
@@ -46,8 +46,12 @@ public class Design
     public static Color softGreen = Color.LIMEGREEN;
     public static Color darkSoftGreen = Color.web("#32b432");
 
-    public static Color hyperlinkColour = Color.web("#0066CC"); 
+    //misc colours
+    public static Color hyperlinkColour = Color.web("#0066CC");
+    public static Color red = Color.web("#FF0000");
+    public static Color darkRed = Color.web("#c80000");
 
+    //MARK: Images
     public static Image getImage(String localPath)
     {
         URL url = Design.class.getResource("/images/" + localPath);

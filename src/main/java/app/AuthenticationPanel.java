@@ -89,6 +89,7 @@ public class AuthenticationPanel extends VBox
         passwordTextfield.setBackgroundColor(Color.WHITE);
         passwordTextfield.background.setArcWidth(Design.cornerRadius);
         passwordTextfield.background.setArcHeight(Design.cornerRadius);
+        passwordTextfield.textfield.setOnAction(event -> submitCredentials());
 
         VBox passwordContainer = new VBox(
             passwordLabel,
@@ -175,10 +176,8 @@ public class AuthenticationPanel extends VBox
         content.setSpacing(Design.spacing);
         content.setPadding(new Insets(Design.padding));
         content.setAlignment(Pos.CENTER);
-        // content.setFillWidth(false); //set the fillWidth property to false so the children are not resized to fill the width of the VBox
         content.setMaxWidth(boxWidth);
         content.setMaxHeight(boxHeight);
-        // VBox.setMargin(logInButton, new Insets(20, 0, 0, 0)); //give this element some extra padding
 
         StackPane stack = new StackPane(
             frame,
@@ -189,9 +188,6 @@ public class AuthenticationPanel extends VBox
             stack,
             guestButton
         );
-
-        //set background colour
-        // setStyle("-fx-background-color: #FFFFFF;");
 
         updateMode();
     }
@@ -236,7 +232,7 @@ public class AuthenticationPanel extends VBox
     void forgotPassword()
     {
         //not implemented yet
-        System.out.println("User forgot password not implemented yet");
+        System.out.println("forgotPassword not implemented yet");
     }
 
     //updates Nodes to correctly represent the current mode

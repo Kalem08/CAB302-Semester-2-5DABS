@@ -34,8 +34,8 @@ public class HelloApplication extends Application
         else
         {
             //define the inital page here
-            // Parent root = new EntryPage();
-            Parent root = new LogInPage(); //a temporary swap
+            Parent root = new EntryPage();
+            // Parent root = new LogInPage(); //a temporary initial page
 
             //MARK: Scene
             //define the scene, add to the stage/window, and display the stage
@@ -46,12 +46,18 @@ public class HelloApplication extends Application
             stage.show();
 
             //change background colour
-            // root.setStyle("-fx-background-color: #202020;"); //works for GridPane
-            // scene.setFill(Color.DARKBLUE); //works for all other elements
+            // root.setStyle("-fx-background-color: #202020;");
             
             //use .setRoot to change primary node/container that is present in the scene
-            // scene.setRoot(header);
+            // scene.setRoot(page);
+            // HelloApplication.changePage(page);
         }
+    }
+
+    //use this method to change primary node/container that is present in the scene
+    public static void setPage(Parent newPage)
+    {
+        scene.setRoot(newPage);
     }
 
     //shorthand method for 'System.out.println()'

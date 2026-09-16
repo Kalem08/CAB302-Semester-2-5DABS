@@ -1,13 +1,15 @@
 package User;
 
+//authentication manager
 public class authManager
 {
+    private static boolean signedIn;
+    
     private String username;
     private String password;
     private String saferUsername;
     private int passwordMinLength = 8;
     private boolean validUsername;
-    private static boolean signedIn;
     public enum PasswordError
     {
         VALID,
@@ -64,6 +66,18 @@ public class authManager
     public static boolean isSignedIn()
     {
         return signedIn;
+    }
+
+    public static void signOut()
+    {
+        //set flag to false
+        signedIn = false;
+
+        //clear other variables (these are not static, hence are commented out)
+        // username = null;
+        // password = null;
+        // saferUsername = null;
+        // validUsername = false;
     }
 
     // For registration

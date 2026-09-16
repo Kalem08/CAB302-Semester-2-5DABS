@@ -1,21 +1,24 @@
 package app.pages;
 
-import app.Design;
-import app.components.CustomButton;
-import app.components.CustomTextfield;
-import app.components.Header;
 //MARK: imports
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
+import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
+
+import app.Design;
+import app.HelloApplication;
+import app.components.*;
+import User.*;
 
 public class AccountPage extends VBox
 {
     int textfieldWidth = 200;
     int textfieldHeight = 30;
+    int buttonWidth = 120;
 
     public AccountPage()
     {
@@ -56,9 +59,18 @@ public class AccountPage extends VBox
         passwordRow.setAlignment(Pos.CENTER_LEFT);
 
         // Button saveButton = new Button("Save changes");
-        CustomButton saveButton = new CustomButton("Save changes", 120, textfieldHeight);
+        CustomButton saveButton = new CustomButton("Save changes", buttonWidth, textfieldHeight);
+        // saveButton.setPrefHeight(30);
+        saveButton.setBackgroundColor(Design.grey80);
+        saveButton.setBackgroundHoverColor(Design.grey70);
         saveButton.setOnMouseClicked(event -> saveAccountDetails());
-        saveButton.setPrefHeight(30);
+
+        CustomButton logoutButton = new CustomButton("Log out", buttonWidth, textfieldHeight);
+        logoutButton.setTextColour(Design.white);
+        logoutButton.setTextHoverColour(Design.white);
+        logoutButton.setBackgroundColor(Color.RED);
+        logoutButton.setBackgroundHoverColor(Design.darkRed);
+        logoutButton.setOnMouseClicked(event -> logout());
 
         // Region horizontalSpacer = new Region();
         // HBox.setHgrow(horizontalSpacer, Priority.ALWAYS);
@@ -68,7 +80,8 @@ public class AccountPage extends VBox
             displayNameRow,
             usernameRow,
             passwordRow,
-            saveButton
+            saveButton,
+            logoutButton
         );
         verticalStack.setSpacing(Design.spacing);
         verticalStack.setPadding(new Insets(Design.padding));
@@ -86,7 +99,14 @@ public class AccountPage extends VBox
     //MARK: Methods
     void saveAccountDetails()
     {
+        HelloApplication.print("saveAccountDetails is not implemented yet.");
+    }
 
+    //sign out and load new page
+    void logout()
+    {
+        authManager.signOut();
+        HelloApplication.setPage(new EntryPage());
     }
     
     // void openAccountSettingsPage()
