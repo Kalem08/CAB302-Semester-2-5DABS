@@ -9,6 +9,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.image.*;
 
 import User.authManager;
+import app.AuthenticationPanel.AuthMode;
 
 //the entry page when the user first opens the app
 public class EntryPage extends BorderPane
@@ -100,12 +101,12 @@ public class EntryPage extends BorderPane
 
     void openLogInPage()
     {
-        HelloApplication.scene.setRoot(new LogInPage(false));
+        HelloApplication.scene.setRoot(new LogInPage(AuthMode.Login));
     }
 
     void openRegisterPage()
     {
-        HelloApplication.scene.setRoot(new LogInPage(true));
+        HelloApplication.scene.setRoot(new LogInPage(AuthMode.Register));
     }
 
     //toggles visibility of buttons
