@@ -1,4 +1,4 @@
-package app;
+package app.pages;
 
 //MARK: Imports
 import javafx.scene.control.*;
@@ -9,7 +9,11 @@ import javafx.scene.paint.Color;
 import javafx.scene.image.*;
 
 import User.authManager;
+import app.Design;
+import app.HelloApplication;
 import app.AuthenticationPanel.AuthMode;
+import app.components.CustomButton;
+import app.components.CustomTextfield;
 
 //the entry page when the user first opens the app
 public class EntryPage extends BorderPane

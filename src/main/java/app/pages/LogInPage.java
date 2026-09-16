@@ -1,8 +1,10 @@
-package app;
+package app.pages;
 
 //MARK: Imports
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
+import app.AuthenticationPanel;
+import app.Design;
 import app.AuthenticationPanel.AuthMode;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;

@@ -1,4 +1,4 @@
-package app;
+package app.components;
 
 //MARK: Imports
 import javafx.scene.control.*;
@@ -13,8 +13,8 @@ import javafx.scene.text.FontWeight;
 
 public class CustomTextfield extends StackPane
 {
-    Rectangle background;
-    TextField textfield;
+    public Rectangle background;
+    public TextField textfield;
 
     int width;
     int height;

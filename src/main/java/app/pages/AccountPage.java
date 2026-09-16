@@ -1,5 +1,9 @@
-package app;
+package app.pages;
 
+import app.Design;
+import app.components.CustomButton;
+import app.components.CustomTextfield;
+import app.components.Header;
 //MARK: imports
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;

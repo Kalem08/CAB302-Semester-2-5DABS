@@ -1,5 +1,6 @@
-package app;
+package app.components;
 
+import app.Design;
 //MARK: Imports
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
@@ -12,15 +13,15 @@ import javafx.scene.text.Font;
 
 public class CustomButton extends StackPane
 {
-    HoverState shouldUnderlineLabel = HoverState.never;
+    public HoverState shouldUnderlineLabel = HoverState.never;
 
     Color frameColour = Color.LIGHTGREY;
     Color frameHoverColour = Color.GREY;
     Color textColour = Color.BLACK;
     Color textHoverColor = Color.BLACK;
 
-    Label label;
-    Rectangle background;
+    public Label label;
+    public Rectangle background;
 
     //default values
     // int width = 100;
@@ -77,31 +78,31 @@ public class CustomButton extends StackPane
     {
         label.setFont(Font.font(size));
     }
-    void setTextColour(Color colourParameter)
+    public void setTextColour(Color colourParameter)
     {
         textColour = colourParameter;
         updateHoverColours();
         label.setTextFill(colourParameter);
     }
-    void setTextHoverColour(Color colourParameter)
+    public void setTextHoverColour(Color colourParameter)
     {
         textHoverColor = colourParameter;
         updateHoverColours();
     }
 
     //background properties
-    void setBackgroundColor(Color colourParameter)
+    public void setBackgroundColor(Color colourParameter)
     {
         frameColour = colourParameter;
         updateHoverColours();
         background.setFill(colourParameter);
     }
-    void setBackgroundHoverColor(Color colourParameter)
+    public void setBackgroundHoverColor(Color colourParameter)
     {
         frameHoverColour = colourParameter;
         updateHoverColours();
     }
-    void setBackgroundVisibility(Boolean state)
+    public void setBackgroundVisibility(Boolean state)
     {
         background.setVisible(state);
     }
@@ -125,7 +126,7 @@ public class CustomButton extends StackPane
     }
 
     //MARK: Enum
-    enum HoverState
+    public enum HoverState
     {
         never,
         always,

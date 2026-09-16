@@ -3,6 +3,8 @@ package app;
 //MARK: Imports
 import javafx.application.Application;
 import java.io.IOException;
+
+import app.pages.LogInPage;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 import javafx.scene.Parent;

@@ -1,5 +1,8 @@
-package app;
+package app.components;
 
+import app.Design;
+import app.HelloApplication;
+import app.pages.AccountPage;
 //MARK: Imports
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;

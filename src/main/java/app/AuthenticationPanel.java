@@ -9,8 +9,10 @@ import javafx.geometry.Pos;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.*;
-
-import app.CustomButton.HoverState; //an enum for on-hover settings
+import app.components.CustomButton;
+import app.components.CustomTextfield;
+import app.components.CustomButton.HoverState;
+import app.pages.EntryPage;
 
 public class AuthenticationPanel extends VBox
 {

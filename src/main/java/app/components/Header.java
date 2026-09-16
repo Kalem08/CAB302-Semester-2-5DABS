@@ -1,4 +1,4 @@
-package app;
+package app.components;
 
 //MARK: Imports
 import javafx.scene.control.*;
@@ -9,6 +9,12 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 
 import User.authManager;
+import app.Design;
+import app.HelloApplication;
+import app.pages.AccountPage;
+import app.pages.EntryPage;
+import app.pages.LogInPage;
+import app.pages.ResultsPage;
 
 //MARK: Class
 //the header with logo, search bar and account button at the top of most pages
