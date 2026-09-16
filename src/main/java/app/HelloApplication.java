@@ -1,6 +1,7 @@
 package app;
 
 //MARK: Imports
+import app.pages.EntryPage;
 import javafx.application.Application;
 import java.io.IOException;
 

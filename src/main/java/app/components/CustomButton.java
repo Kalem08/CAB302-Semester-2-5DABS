@@ -1,7 +1,7 @@
 package app.components;
 
-import app.Design;
 //MARK: Imports
+import app.Design;
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
 // import javafx.geometry.Insets;
