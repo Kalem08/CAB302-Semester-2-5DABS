@@ -50,6 +50,7 @@ public class PlantPage extends VBox
         title.setFont(Font.font("Arial", FontWeight.BOLD, 24));
         Label subtitle = new Label(scientificName);
 
+        //edit prompt
         Label editPrompt = new Label("Want to suggest a change? Click here.");
         editPrompt.setTextFill(Design.hyperlinkColour);
         editPrompt.setUnderline(true);
@@ -68,6 +69,7 @@ public class PlantPage extends VBox
         Label locationText = new Label(location);
         Label taxonomyText = new Label(taxonomy);
 
+        //MARK: Image
         ImageView imageView = new ImageView();
         imageView.setFitWidth(200);
         imageView.setPreserveRatio(true);

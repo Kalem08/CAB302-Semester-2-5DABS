@@ -1,211 +1,132 @@
 package app.pages;
 
 //MARK: Imports
-import app.Design;
-import app.HelloApplication;
-import app.components.CustomButton;
-import app.components.CustomTextfield;
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
+import app.AuthenticationPanel;
+import app.Design;
+import app.AuthenticationPanel.AuthMode;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
-import javafx.scene.text.Font;
-import javafx.scene.text.FontWeight;
-import User.authManager;
+import javafx.scene.text.*;
+import javafx.scene.image.*;
+import javafx.scene.effect.*; //for image colouring
 
 //could also be called 'AccountPanel' or 'AuthenticationPanel', as this encompasses both log in AND registration
 public class LogInPage extends StackPane
 {
     //MARK: Variables
-    private Label statusLabel;
-    private Label titleLabel;
-    private CustomTextfield usernameTextfield;
-    private CustomTextfield passwordTextfield;
-    private CustomButton submitButton;
-    private CustomButton registerButton;
-    private CustomButton forgotPasswordButton;
-
-    private boolean registrationMode; //defines whether the page shows 'log in' or 'register'
+    // boolean registrationMode; //defines whether the page shows 'log in' or 'register'
     int boxWidth = 300;
     int boxHeight = 400;
     int elementWidth = boxWidth - (Design.padding * 2);
+    Color darkTextColour = Design.grey20;
 
     //empty constructor
     public LogInPage()
     {
-        this(false);
+        // this(false); //default to 'log in' mode
+        this(AuthMode.Login);
     }
 
     //MARK: Constructor
-    public LogInPage(boolean registrationMode)
+    public LogInPage(AuthMode authenticationMode)
     {
-        this.registrationMode = registrationMode;
-        //rectangle
-        Rectangle background = new Rectangle(boxWidth, boxHeight);
-        background.setFill(Design.grey80);
-        background.setArcWidth(Design.cornerRadius);
-        background.setArcHeight(Design.cornerRadius);
-        // background.prefWidth(100);
-        // background.prefHeight(200);
-        // background.widthProperty().bind(this.widthProperty());
-        // background.heightProperty().bind(this.heightProperty());
-        
-        titleLabel = new Label();
-        titleLabel.setFont(Font.font("Arial", FontWeight.BOLD, 24));
-        titleLabel.setUnderline(true);
+        // this.registrationMode = registrationMode;
 
-        //textfields
-        usernameTextfield = new CustomTextfield("Username", elementWidth, 30);
-        usernameTextfield.setBackgroundColor(Color.WHITE);
-        passwordTextfield = new CustomTextfield("Password", elementWidth, 30, true);
-        passwordTextfield.setBackgroundColor(Color.WHITE);
+        //background
+        Rectangle background = new Rectangle();
+        background.setFill(Color.GREEN);
+        background.widthProperty().bind(this.widthProperty());
+        background.heightProperty().bind(this.heightProperty());
 
-        //buttons
-        // Button submitButton = new Button("Log in");
-        submitButton = new CustomButton("", 120, 30);
-        submitButton.setBackgroundColor(Color.LIMEGREEN);
-        submitButton.setBackgroundHoverColor(Color.GREEN);
-        submitButton.setOnMouseClicked(event -> submitCredentials());
+        //logo
+        ImageView logo = new ImageView(Design.getLogo());
+        logo.setFitWidth(400);
+        logo.setPreserveRatio(true);
 
-        // Button forgotPasswordButton = new Button("Forgot password?");
-        forgotPasswordButton = new CustomButton("Forgot password?", 150, 30);
-        forgotPasswordButton.setBackgroundColor(Color.LIMEGREEN);
-        forgotPasswordButton.setBackgroundHoverColor(Color.GREEN);
-        forgotPasswordButton.setOnMouseClicked(event -> forgotPassword());
-
-        // Button registerButton = new Button("Register");
-        registerButton = new CustomButton("", 100, 30);
-        registerButton.setBackgroundColor(Color.LIMEGREEN);
-        registerButton.setBackgroundHoverColor(Color.GREEN);
-        registerButton.setOnMouseClicked(event -> openRegisterPage());
-
-        // Button guestButton = new Button("Continue as guest");
-        CustomButton guestButton = new CustomButton("Continue as guest", 150, 30);
-        guestButton.setBackgroundColor(Color.LIMEGREEN);
-        guestButton.setBackgroundHoverColor(Color.GREEN);
-        guestButton.setOnMouseClicked(event -> openEntryPage());
-
-        statusLabel = new Label("");
-        statusLabel.setMaxWidth(elementWidth);
-        statusLabel.setWrapText(true);
-        statusLabel.setAlignment(Pos.CENTER);
-        statusLabel.setTextAlignment(javafx.scene.text.TextAlignment.CENTER);
-
-        Region horizontalSpacer = new Region();
-        HBox.setHgrow(horizontalSpacer, Priority.ALWAYS);
-
-        HBox buttonsBox1 = new HBox(
-            submitButton,
-            horizontalSpacer,
-            forgotPasswordButton
-        );
-        buttonsBox1.setSpacing(10);
-        buttonsBox1.setAlignment(Pos.CENTER_LEFT);
-
-        HBox buttonsBox2 = new HBox(
-            registerButton,
-            guestButton
-        );
-        buttonsBox2.setSpacing(10);
-        buttonsBox2.setAlignment(Pos.CENTER);
+        AuthenticationPanel authPanel = new AuthenticationPanel(authenticationMode);
 
         Region topSpacer = new Region();
-        Region bottomSpacer = new Region();
-        // topSpacer.prefHeight(10);
-        // bottomSpacer.prefHeight(10);
         VBox.setVgrow(topSpacer, Priority.ALWAYS);
+        topSpacer.setMaxHeight(180);
+        Region bottomSpacer = new Region();
         VBox.setVgrow(bottomSpacer, Priority.ALWAYS);
 
-        VBox vBox = new VBox();
-        vBox.getChildren().addAll(
-            titleLabel,
+        //the label at the very bottom of the screen
+        Label footingLabel = new Label("Access millions of Australian native plants and make changes to pages with a free account.");
+        footingLabel.setTextFill(Design.grey50);
+        // footingLabel.setWrapText(true);
+        footingLabel.maxWidth(boxWidth);
+        footingLabel.setWrapText(true);
+        // footingLabel.setAlignment(Pos.CENTER);
+        footingLabel.setTextAlignment(TextAlignment.CENTER);
+
+        VBox middleColumn = new VBox(
             topSpacer,
-            usernameTextfield,
-            passwordTextfield,
-            buttonsBox1,
-            statusLabel,
+            logo,
+            authPanel,
             bottomSpacer,
-            buttonsBox2
+            footingLabel
         );
-        vBox.setSpacing(10.0);
-        vBox.setPadding(new Insets(10));
-        vBox.setAlignment(Pos.CENTER);
-        // vBox.setFillWidth(false); //set the fillWidth property to false so the children are not resized to fill the width of the VBox
-        vBox.setMaxWidth(boxWidth);
-        vBox.setMaxHeight(boxHeight);
+        middleColumn.setAlignment(Pos.CENTER);
+        // middleColumn.setSpacing(Design.spacing);
+        middleColumn.setPadding(new Insets(Design.padding));
+        VBox.setMargin(logo, new Insets(0, 0, 50, 0)); //bottom padding
         
-        //add elements to StackPane
-        getChildren().addAll(
-            background,
-            vBox
+        //leaves
+        int imageHeight = 600;
+        Image leftLeafImage = Design.getImage("Leaf Right.png");
+        Image rightLeafImage = Design.getImage("Leaf Left.png");
+
+        ImageView leftLeaf = new ImageView(leftLeafImage);
+        leftLeaf.setPreserveRatio(true);
+        leftLeaf.setFitHeight(imageHeight);
+        // leftLeaf.fitHeightProperty().bind(this.heightProperty());
+
+        ImageView rightLeaf = new ImageView(rightLeafImage);
+        rightLeaf.setPreserveRatio(true);
+        rightLeaf.setFitHeight(imageHeight);
+        // rightLeaf.fitHeightProperty().bind(this.heightProperty());
+
+        ColorInput colour = new ColorInput(
+            0, 0,
+            // leftLeafImage.getWidth(),
+            // leftLeafImage.getHeight(),
+            imageHeight / 2,
+            imageHeight,
+            Design.superLightGrey
         );
-        //these values don't do anything if this StackPane is the root of a scene (it will always maximise to window size)
-        // prefWidth(100);
-        // prefHeight(200);
-        // //min
-        // setMinWidth(10);
-        // setMinHeight(10);
-        // //max
-        // setMaxWidth(400);
-        // setMaxHeight(400);
+        Blend blend = new Blend(
+            BlendMode.SRC_ATOP,
+            null,
+            colour
+        );
+        leftLeaf.setEffect(blend);
+        rightLeaf.setEffect(blend);
+
+        Region leftSpacer = new Region();
+        HBox.setHgrow(leftSpacer, Priority.ALWAYS);
+        Region rightSpacer = new Region();
+        HBox.setHgrow(rightSpacer, Priority.ALWAYS);
+
+        HBox hBox = new HBox(
+            leftLeaf,
+            leftSpacer,
+            middleColumn,
+            rightSpacer,
+            rightLeaf
+        );
+        hBox.setAlignment(Pos.CENTER);
+        
+        getChildren().addAll(
+            // background,
+            hBox
+        );
 
         //set background colour
         setStyle("-fx-background-color: #FFFFFF;");
-
-        updateMode();
-    }
-
-    //MARK: Methods
-    void openEntryPage()
-    {
-        HelloApplication.scene.setRoot(new EntryPage());
-    }
-
-    void openRegisterPage()
-    {
-        registrationMode = !registrationMode; //toggle boolean
-        statusLabel.setText(""); //reset text
-        updateMode();
-    }
-
-    void submitCredentials()
-    {
-        String username = usernameTextfield.getText().trim();
-        String password = passwordTextfield.getText();
-        authManager manager = new authManager(username, password);
-
-        if (registrationMode) {
-            if (manager.Registration()) {
-                statusLabel.setText("Account created. You can now log in.");
-                registrationMode = false;
-                passwordTextfield.clear();
-                updateMode();
-            } else {
-                statusLabel.setText("Username exists or password is invalid (8+ chars, upper, lower, special).");
-            }
-        } else if (manager.authenticate()) {
-            statusLabel.setText("Login successful.");
-            HelloApplication.scene.setRoot(new EntryPage());
-        } else {
-            statusLabel.setText("Invalid username or password.");
-        }
-    }
-
-    void forgotPassword()
-    {
-        //not implemented yet
-        System.out.println("User forgot password");
-    }
-
-    //updates Nodes to correctly represent the current mode
-    private void updateMode()
-    {
-        titleLabel.setText(registrationMode ? "Register" : "Log In");
-        submitButton.setText(registrationMode ? "Create account" : "Log in");
-        registerButton.setText(registrationMode ? "Back to login" : "Register");
-        forgotPasswordButton.setVisible(!registrationMode); //show or hide
-        forgotPasswordButton.setManaged(!registrationMode); //when false, tells the parent layout container to ignore the button during its automatic layout and sizing calculations
     }
 }
