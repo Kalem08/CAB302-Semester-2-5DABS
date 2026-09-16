@@ -68,6 +68,8 @@ public class AuthenticationPanel extends VBox
 
         usernameTextfield = new CustomTextfield("Username", elementWidth, 30);
         usernameTextfield.setBackgroundColor(Color.WHITE);
+        usernameTextfield.background.setArcWidth(Design.cornerRadius);
+        usernameTextfield.background.setArcHeight(Design.cornerRadius);
 
         VBox usernameContainer = new VBox(
             usernameLabel,
@@ -83,6 +85,8 @@ public class AuthenticationPanel extends VBox
 
         passwordTextfield = new CustomTextfield("Password", elementWidth, 30, true);
         passwordTextfield.setBackgroundColor(Color.WHITE);
+        passwordTextfield.background.setArcWidth(Design.cornerRadius);
+        passwordTextfield.background.setArcHeight(Design.cornerRadius);
 
         VBox passwordContainer = new VBox(
             passwordLabel,
