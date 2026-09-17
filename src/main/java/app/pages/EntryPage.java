@@ -10,21 +10,44 @@ import javafx.scene.image.*;
 
 import User.authManager;
 import app.Design;
+import app.Navigation;
 import app.HelloApplication;
-import app.AuthenticationPanel.AuthMode;
 import app.components.CustomButton;
 import app.components.CustomTextfield;
+import app.components.ImageButton;
 
 //the entry page when the user first opens the app
-public class EntryPage extends BorderPane
+public class EntryPage extends VBox
 {
     Label signedInLabel;
+    ImageButton accountButton;
     CustomButton logInButton;
     CustomButton registerButton;
     CustomTextfield searchTextfield;
 
+    /**
+     * Creates an entry page which is visible when the app is first opened.
+     */
     public EntryPage()
     {
+        //accountButton
+        int diameter = 40;
+        accountButton = new ImageButton("Leaf.png", diameter / 2, diameter, diameter);
+        accountButton.background.setArcWidth(diameter);
+        accountButton.background.setArcHeight(diameter);
+        accountButton.setBackgroundColor(Design.mediumGreen);
+        accountButton.setBackgroundHoverColor(Design.darkGreen);
+        accountButton.setOnMouseClicked(event -> Navigation.openAccountPage());
+
+        Region horizontalSpacer = new Region();
+        HBox.setHgrow(horizontalSpacer, Priority.ALWAYS);
+
+        HBox topBar = new HBox(
+            horizontalSpacer,
+            accountButton
+        );
+        topBar.setPadding(new Insets(Design.padding));
+
         //MARK: Logo
         ImageView logo = new ImageView(Design.getLogo());
         logo.setFitWidth(800);
@@ -48,15 +71,15 @@ public class EntryPage extends BorderPane
         logInButton = new CustomButton("Log in", 100, 40);
         logInButton.setBackgroundColor(Design.superLightGrey);
         logInButton.setBackgroundHoverColor(Color.LIGHTGREY);
-        logInButton.setOnMouseClicked(event -> openLogInPage());
+        logInButton.setOnMouseClicked(event -> Navigation.openLogInPage());
 
         registerButton = new CustomButton("Register", 100, 40);
         registerButton.setBackgroundColor(Design.superLightGrey);
         registerButton.setBackgroundHoverColor(Color.LIGHTGREY);
-        registerButton.setOnMouseClicked(event -> openRegisterPage());
+        registerButton.setOnMouseClicked(event -> Navigation.openRegisterPage());
 
         //signed in label
-        signedInLabel = new Label("Signed in");
+        signedInLabel = new Label("Signed in as '" + authManager.getUsername() + "'");
 
         VBox centreBox = new VBox();
         centreBox.setAlignment(Pos.CENTER);
@@ -68,6 +91,8 @@ public class EntryPage extends BorderPane
             searchTextfield,
             searchButton
         );
+        VBox.setVgrow(centreBox, Priority.ALWAYS);
+        // VBox.setV
 
         HBox lowerBox = new HBox();
         lowerBox.setAlignment(Pos.CENTER);
@@ -80,10 +105,19 @@ public class EntryPage extends BorderPane
             registerButton
         );
 
-        //modify the root container (BorderPane)
-        setCenter(centreBox);
-        setBottom(lowerBox);
-        //change colour of root GridPane
+        Region bottomSpacer = new Region();
+        bottomSpacer.setMaxHeight(50);
+        VBox.setVgrow(bottomSpacer, Priority.ALWAYS);
+
+        //add Nodes to root container
+        getChildren().addAll(
+            topBar,
+            centreBox,
+            bottomSpacer,
+            lowerBox
+        );
+
+        //change colour of root
         setStyle("-fx-background-color: #FFFFFF;");
 
         centreBox.setAlignment(Pos.CENTER);
@@ -100,25 +134,19 @@ public class EntryPage extends BorderPane
 
     void openResultsPage(String query)
     {
-        HelloApplication.scene.setRoot(new ResultsPage(query));
-    }
-
-    void openLogInPage()
-    {
-        HelloApplication.scene.setRoot(new LogInPage(AuthMode.Login));
-    }
-
-    void openRegisterPage()
-    {
-        HelloApplication.scene.setRoot(new LogInPage(AuthMode.Register));
+        HelloApplication.setPage(new ResultsPage(query));
     }
 
     //toggles visibility of buttons
     private void updateAccountButtonsVisibility()
     {
         Boolean isSignedIn = authManager.isSignedIn();
+        //when logged in
         signedInLabel.setVisible(isSignedIn);
         signedInLabel.setManaged(isSignedIn);
+        accountButton.setVisible(isSignedIn);
+
+        //when logged out
         logInButton.setVisible(!isSignedIn);
         logInButton.setManaged(!isSignedIn);
         registerButton.setVisible(!isSignedIn);

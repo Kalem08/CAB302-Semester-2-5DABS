@@ -11,6 +11,7 @@ import javafx.scene.shape.Rectangle;
 import User.authManager;
 import app.Design;
 import app.HelloApplication;
+import app.AuthenticationPanel.AuthMode;
 import app.pages.AccountPage;
 import app.pages.EntryPage;
 import app.pages.LogInPage;
@@ -21,32 +22,26 @@ import app.pages.ResultsPage;
 public class Header extends StackPane
 {
     int searchElementHeight = 30;
+    int buttonWidth = 100;
 
-    Button logInButton;
-    Button registerButton;
-    ImageButton accountIcon;
+    CustomButton logInButton;
+    CustomButton registerButton;
+    Label usernameLabel;
+    ImageButton accountButton;
 
+    //MARK: Constructor
+    /**
+     * Creates a new Header element to sit at the top of each page.
+     */
     public Header()
     {
-        //MARK: Background
         Rectangle background = new Rectangle();
         background.setFill(Color.LIGHTGRAY);
         background.widthProperty().bind(this.widthProperty()); //assume the width and height of the header
         background.heightProperty().bind(this.heightProperty());
-        
-        //MARK: Elements
 
         //logo
         int logoWidth = 200;
-        // Rectangle logoRectangle = new Rectangle(logoWidth + 20, 50, Color.WHITE);
-        // logoRectangle.setArcWidth(Design.cornerRadius);
-        // logoRectangle.setArcHeight(Design.cornerRadius);
-
-        // ImageView imageView = new ImageView(Design.getLogo());
-        // imageView.setFitWidth(logoWidth);
-        // imageView.setPreserveRatio(true);
-
-        // StackPane logo = new StackPane(logoRectangle, imageView);
         ImageButton logo = new ImageButton("Logo.png", logoWidth, logoWidth + 20, 50);
         logo.setBackgroundColor(Color.WHITE);
         logo.setBackgroundHoverColor(Design.grey70);
@@ -67,19 +62,26 @@ public class Header extends StackPane
         searchButton.setOnMouseClicked(event -> search(searchTextfield.getText()));
 
         //login/register
-        logInButton = new Button("Log in");
-        logInButton.setOnAction(event -> openLoginPage());
+        logInButton = new CustomButton("Log In", buttonWidth, logoWidth);
+        logInButton.setBackgroundColor(Color.WHITE);
+        logInButton.setBackgroundHoverColor(Design.grey70);
+        logInButton.setOnMouseClicked(event -> openLoginPage());
 
-        registerButton = new Button("Register");
-        registerButton.setOnAction(event -> openLoginPage());
+        registerButton = new CustomButton("Register", buttonWidth, logoWidth);
+        registerButton.setBackgroundColor(Color.WHITE);
+        registerButton.setBackgroundHoverColor(Design.grey70);
+        registerButton.setOnMouseClicked(event -> openRegisterPage());
 
         //account button
-        accountIcon = new ImageButton("Leaf.png", 20, 40, 40);
-        accountIcon.background.setArcWidth(40);
-        accountIcon.background.setArcHeight(40);
-        accountIcon.setBackgroundColor(Design.mediumGreen);
-        accountIcon.setBackgroundHoverColor(Design.darkGreen);
-        accountIcon.setOnMouseClicked(event -> openAccountPage());
+        int diameter = 40;
+        accountButton = new ImageButton("Leaf.png", diameter / 2, diameter, diameter);
+        accountButton.background.setArcWidth(diameter);
+        accountButton.background.setArcHeight(diameter);
+        accountButton.setBackgroundColor(Design.mediumGreen);
+        accountButton.setBackgroundHoverColor(Design.darkGreen);
+        accountButton.setOnMouseClicked(event -> openAccountPage());
+
+        usernameLabel = new Label(authManager.getUsername());
 
         //create spacers
         Region leftSpacer = new Region();
@@ -97,14 +99,13 @@ public class Header extends StackPane
             rightSpacer,
             logInButton,
             registerButton,
-            accountIcon
+            usernameLabel,
+            accountButton
         );
         content.setAlignment(Pos.CENTER);
         content.setSpacing(Design.spacing);
         content.setPadding(new Insets(Design.padding));
         content.setFillHeight(false); //sub-elements should not stretch to fill the container
-        // content.setMinWidth(0);
-        // content.prefWidthProperty().bind(this.widthProperty());
         
         //add everything to the header stack
         getChildren().addAll(background, content);
@@ -118,22 +119,27 @@ public class Header extends StackPane
     //MARK: Methods
     void search(String query)
     {
-        HelloApplication.scene.setRoot(new ResultsPage(query));
+        HelloApplication.setPage(new ResultsPage(query));
     }
 
     void openEntryPage()
     {
-        HelloApplication.scene.setRoot(new EntryPage());
+        HelloApplication.setPage(new EntryPage());
     }
 
     void openAccountPage()
     {
-        HelloApplication.scene.setRoot(new AccountPage());
+        HelloApplication.setPage(new AccountPage());
     }
 
     void openLoginPage()
     {
-        HelloApplication.scene.setRoot(new LogInPage());
+        HelloApplication.setPage(new LogInPage(AuthMode.Login));
+    }
+
+    void openRegisterPage()
+    {
+        HelloApplication.setPage(new LogInPage(AuthMode.Register));
     }
 
     //toggles visibility of buttons
@@ -144,7 +150,7 @@ public class Header extends StackPane
         logInButton.setManaged(!isSignedIn);
         registerButton.setVisible(!isSignedIn);
         registerButton.setManaged(!isSignedIn);
-        accountIcon.setVisible(isSignedIn);
-        accountIcon.setManaged(isSignedIn);
+        accountButton.setVisible(isSignedIn);
+        accountButton.setManaged(isSignedIn);
     }
 }

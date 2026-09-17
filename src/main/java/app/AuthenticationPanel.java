@@ -115,7 +115,6 @@ public class AuthenticationPanel extends VBox
         logInButton.setBackgroundColor(Design.softGreen);
         logInButton.setBackgroundHoverColor(Design.darkSoftGreen);
         logInButton.setOnMouseClicked(event -> submitCredentials());
-        // logInButton.setDefaultButton(true); 
 
         //forgot password button
         forgotPasswordButton = new CustomButton("Forgot password", 50, 20);
@@ -142,8 +141,8 @@ public class AuthenticationPanel extends VBox
         registerButton.label.setFont(Font.font("Arial", FontWeight.BOLD, 16));
         registerButton.setTextColour(darkTextColour);
         registerButton.setTextHoverColour(darkTextColour);
-        registerButton.setOnMouseClicked(event -> switchAuthMode());
         registerButton.shouldUnderlineLabel = HoverState.onHover;
+        registerButton.setOnMouseClicked(event -> switchAuthMode());
 
         //guest button
         CustomButton guestButton = new CustomButton("Continue as guest", 150, 30);
@@ -168,7 +167,7 @@ public class AuthenticationPanel extends VBox
             passwordContainer,
             statusLabel,
             logInButton,
-            forgotPasswordButton,
+            // forgotPasswordButton, //forgotPassword is not implemented yet
             bottomSpacer2,
             bottomLabel,
             registerButton

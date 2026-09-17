@@ -4,6 +4,7 @@ package User;
 public class authManager
 {
     private static boolean signedIn;
+    private static String signedInUsername; //this string represents the user's username if they are signed in, otherwise it is null
     
     private String username;
     private String password;
@@ -59,6 +60,8 @@ public class authManager
 
         saferUsername = username.trim().toLowerCase();
         signedIn = userDB.authenticate(saferUsername, password);
+        if (signedIn)
+            signedInUsername = saferUsername; //store the username for use in displaying pages
         return signedIn;
     }
 
@@ -114,6 +117,18 @@ public class authManager
         } else {
             return PasswordError.VALID;
         }
+    }
+
+    /**
+     * Gets the username from authManager
+     * @return username String of the signed in user
+     */
+    public static String getUsername()
+    {
+        if (signedIn)
+            return signedInUsername;
+        else
+            return "";
     }
 //    private boolean checkValidUsername()
 //    {
