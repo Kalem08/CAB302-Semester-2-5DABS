@@ -20,6 +20,9 @@ public class AccountPage extends VBox
     int textfieldHeight = 30;
     int buttonWidth = 120;
 
+    /**
+     * Creates an account page to view account details.
+     */
     public AccountPage()
     {
         Header header = new Header();
@@ -29,42 +32,41 @@ public class AccountPage extends VBox
         titleLabel.setUnderline(true);
 
         //display name
-        Label displayNameLabel = new Label("Display name:");
-        CustomTextfield displayNameTextField = new CustomTextfield("Display name...", textfieldWidth, textfieldHeight);
-        HBox displayNameRow = new HBox(
-            displayNameLabel,
-            displayNameTextField
-        );
-        displayNameRow.setSpacing(Design.spacing);
-        displayNameRow.setAlignment(Pos.CENTER_LEFT);
+        // Label displayNameLabel = new Label("Display name:");
+        // CustomTextfield displayNameTextField = new CustomTextfield("Display name...", textfieldWidth, textfieldHeight);
+        // HBox displayNameRow = new HBox(
+        //     displayNameLabel,
+        //     displayNameTextField
+        // );
+        // displayNameRow.setSpacing(Design.spacing);
+        // displayNameRow.setAlignment(Pos.CENTER_LEFT);
 
         //username
-        Label usernameLabel = new Label("Username:");
-        CustomTextfield usernameTextfield = new CustomTextfield("Username...", textfieldWidth, textfieldHeight);
+        Label usernameLabel = new Label("Username: " + authManager.getUsername());
+        // CustomTextfield usernameTextfield = new CustomTextfield("Username...", textfieldWidth, textfieldHeight);
         HBox usernameRow = new HBox(
-            usernameLabel,
-            usernameTextfield
+            usernameLabel
+            // usernameTextfield
         );
         usernameRow.setSpacing(Design.spacing);
         usernameRow.setAlignment(Pos.CENTER_LEFT);
 
         //password
-        Label passwordLabel = new Label("Password:");
-        CustomTextfield passwordTextField = new CustomTextfield("Password...", textfieldWidth, textfieldHeight);
-        HBox passwordRow = new HBox(
-            passwordLabel,
-            passwordTextField
-        );
-        passwordRow.setSpacing(Design.spacing);
-        passwordRow.setAlignment(Pos.CENTER_LEFT);
+        // Label passwordLabel = new Label("Password:");
+        // CustomTextfield passwordTextField = new CustomTextfield("Password...", textfieldWidth, textfieldHeight);
+        // HBox passwordRow = new HBox(
+        //     passwordLabel,
+        //     passwordTextField
+        // );
+        // passwordRow.setSpacing(Design.spacing);
+        // passwordRow.setAlignment(Pos.CENTER_LEFT);
 
-        // Button saveButton = new Button("Save changes");
-        CustomButton saveButton = new CustomButton("Save changes", buttonWidth, textfieldHeight);
-        // saveButton.setPrefHeight(30);
-        saveButton.setBackgroundColor(Design.grey80);
-        saveButton.setBackgroundHoverColor(Design.grey70);
-        saveButton.setOnMouseClicked(event -> saveAccountDetails());
+        // CustomButton saveButton = new CustomButton("Save changes", buttonWidth, textfieldHeight);
+        // saveButton.setBackgroundColor(Design.grey80);
+        // saveButton.setBackgroundHoverColor(Design.grey70);
+        // saveButton.setOnMouseClicked(event -> saveAccountDetails());
 
+        //logout button
         CustomButton logoutButton = new CustomButton("Log out", buttonWidth, textfieldHeight);
         logoutButton.setTextColour(Design.white);
         logoutButton.setTextHoverColour(Design.white);
@@ -72,28 +74,51 @@ public class AccountPage extends VBox
         logoutButton.setBackgroundHoverColor(Design.darkRed);
         logoutButton.setOnMouseClicked(event -> logout());
 
-        // Region horizontalSpacer = new Region();
-        // HBox.setHgrow(horizontalSpacer, Priority.ALWAYS);
+        Region verticalSpacer = new Region();
+        VBox.setVgrow(verticalSpacer, Priority.ALWAYS);
 
-        VBox verticalStack = new VBox(
+        VBox leftColumn = new VBox(
             titleLabel,
-            displayNameRow,
+            // displayNameRow,
             usernameRow,
-            passwordRow,
-            saveButton,
+            // passwordRow,
+            // saveButton,
+            verticalSpacer,
             logoutButton
         );
-        verticalStack.setSpacing(Design.spacing);
-        verticalStack.setPadding(new Insets(Design.padding));
-        verticalStack.setAlignment(Pos.TOP_LEFT);
+        leftColumn.setSpacing(Design.spacing);
+        leftColumn.setAlignment(Pos.TOP_LEFT);
         // content.setPrefWidth(400);
-        // VBox.setVgrow(content, Priority.ALWAYS);
-        verticalStack.setFillWidth(false);
+        leftColumn.setFillWidth(false);
+
+        Region horizontalSpacer = new Region();
+        HBox.setHgrow(horizontalSpacer, Priority.ALWAYS);
+
+        //MARK: Right column
+        //account icon
+        int diameter = 400;
+        ImageButton accountIcon = new ImageButton("Leaf.png", diameter / 2, diameter, diameter);
+        accountIcon.background.setArcWidth(diameter);
+        accountIcon.background.setArcHeight(diameter);
+        accountIcon.setBackgroundColor(Design.mediumGreen);
+        accountIcon.setBackgroundHoverColor(Design.mediumGreen);
+
+        VBox rightColumn = new VBox(
+            accountIcon
+        );
+
+        HBox horizontalStack = new HBox(
+            leftColumn,
+            horizontalSpacer,
+            rightColumn
+        );
+        horizontalStack.setPadding(new Insets(Design.padding));
 
         getChildren().addAll(
             header,
-            verticalStack
+            horizontalStack
         );
+        VBox.setVgrow(horizontalStack, Priority.ALWAYS);
     }
 
     //MARK: Methods
