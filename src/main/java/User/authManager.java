@@ -4,7 +4,7 @@ package User;
 public class authManager
 {
     private static boolean signedIn;
-    
+
     private String username;
     private String password;
     private String saferUsername;
@@ -25,6 +25,11 @@ public class authManager
 
     // add private list/dictionary/map being the user database
 
+    /**
+     * authManager contains the code for checking username and password when signing in, and verifiying those same fields when registering a new account.
+     * @param username The unique name of the account
+     * @param password The password of the account
+     */
     //Constructor getting the username and password to compare with the existing user database
     public authManager(String username, String password)
     {
