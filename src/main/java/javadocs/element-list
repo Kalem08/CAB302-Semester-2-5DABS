@@ -1,0 +1,7 @@
+module:app
+app
+app.components
+app.model
+app.pages
+database
+User
