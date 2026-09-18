@@ -8,6 +8,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.sql.Statement;
 
 public class SQLitePlantDAO implements IPlantDAO {
 
@@ -34,7 +35,8 @@ public class SQLitePlantDAO implements IPlantDAO {
             """;
 
         try (Connection connection = DatabaseConnection.getConnection();
-             PreparedStatement statement = connection.prepareStatement(sql)) {
+             PreparedStatement statement =
+                     connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
 
             statement.setString(1, plant.getGeneralisedInfo());
             statement.setString(2, plant.getImage());
@@ -51,6 +53,12 @@ public class SQLitePlantDAO implements IPlantDAO {
             statement.setString(13, plant.getSpecies());
 
             statement.executeUpdate();
+
+            try (ResultSet generatedKeys = statement.getGeneratedKeys()) {
+                if (generatedKeys.next()) {
+                    plant.setID(generatedKeys.getInt(1));
+                }
+            }
 
         } catch (SQLException e) {
             throw new RuntimeException("Failed to add plant to database", e);
@@ -107,6 +115,21 @@ public class SQLitePlantDAO implements IPlantDAO {
     @Override
     public void deletePlant(Plant plant) {
 
+        String sql = """
+            DELETE FROM PlantsData
+            WHERE PlantID = ?
+            """;
+
+        try (Connection connection = DatabaseConnection.getConnection();
+             PreparedStatement statement = connection.prepareStatement(sql)) {
+
+            statement.setInt(1, plant.getId());
+
+            statement.executeUpdate();
+
+        } catch (SQLException e) {
+            throw new RuntimeException("Failed to delete plant from database", e);
+        }
     }
 
     @Override
@@ -119,7 +142,8 @@ public class SQLitePlantDAO implements IPlantDAO {
             """;
 
         try (Connection connection = DatabaseConnection.getConnection();
-             PreparedStatement statement = connection.prepareStatement(sql)) {
+             PreparedStatement statement =
+                     connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
 
             statement.setInt(1, id);
 
