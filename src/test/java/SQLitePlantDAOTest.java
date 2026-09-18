@@ -137,6 +137,16 @@ public class SQLitePlantDAOTest {
     }
 
     @Test
+    public void getPlantShouldReturnNullWhenPlantDoesNotExist() {
+
+        SQLitePlantDAO dao = new SQLitePlantDAO();
+
+        Plant plant = dao.getPlant(999);
+
+        assertNull(plant);
+    }
+
+    @Test
     public void getAllPlantsShouldReturnAllPlantsFromDatabase() {
 
         SQLitePlantDAO dao = new SQLitePlantDAO();
@@ -209,6 +219,80 @@ public class SQLitePlantDAOTest {
     }
 
     @Test
+    void updateNonExistentPlantShouldNotAffectDatabase() {
+
+        SQLitePlantDAO dao = new SQLitePlantDAO();
+
+        // Arrange
+        Plant plant = new Plant(
+                "Non-existent update plant",
+                "",
+                "Queensland",
+                "Nonexistent update plantus",
+                "Plantae",
+                "Tracheophyta",
+                "Magnoliopsida",
+                "Myrtales",
+                "Myrtaceae",
+                "TestGenus",
+                "species",
+                "Missing Update Plant",
+                "Nonexistent species"
+        );
+
+        plant.setID(999);
+
+        int numberOfPlantsBeforeUpdate = dao.getAllPlants().size();
+
+        // Act
+        dao.updatePlant(plant);
+
+        // Assert
+        int numberOfPlantsAfterUpdate = dao.getAllPlants().size();
+
+        assertEquals(numberOfPlantsBeforeUpdate, numberOfPlantsAfterUpdate);
+        assertNull(dao.getPlant(999));
+    }
+
+    @Test
+    void addPlantWithEmptyImageShouldPersistToDatabase() {
+
+        SQLitePlantDAO dao = new SQLitePlantDAO();
+
+        // Arrange
+        Plant plant = new Plant(
+                "Plant with no image",
+                "",
+                "Queensland",
+                "Eucalyptus testus",
+                "Plantae",
+                "Tracheophyta",
+                "Magnoliopsida",
+                "Myrtales",
+                "Myrtaceae",
+                "Eucalyptus",
+                "species",
+                "No Image Test Plant",
+                "Eucalyptus testus"
+        );
+
+        // Act
+        dao.addPlant(plant);
+
+        // Assert
+        assertTrue(plant.getId() > 0);
+
+        Plant savedPlant = dao.getPlant(plant.getId());
+
+        assertNotNull(savedPlant);
+        assertEquals("", savedPlant.getImage());
+        assertEquals("No Image Test Plant", savedPlant.getVernacularName());
+
+        // Clean Up
+        dao.deletePlant(plant);
+    }
+
+    @Test
     void deletePlantShouldRemovePlantFromDatabase() {
 
         SQLitePlantDAO dao = new SQLitePlantDAO();
@@ -240,4 +324,60 @@ public class SQLitePlantDAOTest {
 
         assertNull(deletedPlant);
     }
+    @Test
+    void deleteNonExistentPlantShouldNotAffectDatabase() {
+
+        SQLitePlantDAO dao = new SQLitePlantDAO();
+
+        // Arrange
+        Plant plant = new Plant(
+                "Non-existent test plant",
+                "",
+                "Queensland",
+                "Nonexistent plantus",
+                "Plantae",
+                "Tracheophyta",
+                "Magnoliopsida",
+                "Myrtales",
+                "Myrtaceae",
+                "TestGenus",
+                "species",
+                "Missing Plant",
+                "Nonexistent species"
+        );
+
+        plant.setID(999);
+
+        int numberOfPlantsBeforeDelete = dao.getAllPlants().size();
+
+        // Act
+        dao.deletePlant(plant);
+
+        // Assert
+        int numberOfPlantsAfterDelete = dao.getAllPlants().size();
+
+        assertEquals(numberOfPlantsBeforeDelete, numberOfPlantsAfterDelete);
+        assertNull(dao.getPlant(999));
+    }
+
+    @Test
+    void getAllPlantsShouldReturnEmptyListWhenDatabaseIsEmpty() {
+
+        SQLitePlantDAO dao = new SQLitePlantDAO();
+
+        // Arrange
+        List<Plant> existingPlants = dao.getAllPlants();
+
+        for (Plant plant : existingPlants) {
+            dao.deletePlant(plant);
+        }
+
+        // Act
+        List<Plant> plants = dao.getAllPlants();
+
+        // Assert
+        assertNotNull(plants);
+        assertTrue(plants.isEmpty());
+    }
+
 }
