@@ -1,4 +1,4 @@
-
+// Import required modules and connections
 import database.DatabaseConnection;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -14,6 +14,7 @@ import app.model.SQLitePlantDAO;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
 
 public class SQLitePlantDAOTest {
 
@@ -21,13 +22,13 @@ public class SQLitePlantDAOTest {
 
     @BeforeEach
     void setUp() throws Exception {
-
+        // Create a temporary SQLite database file for this test
         testDatabasePath = Files.createTempFile("plantopedia-test-", ".db");
-
+        // Redirect DatabaseConnection to the temporary test database
         DatabaseConnection.setDatabaseUrl(
                 "jdbc:sqlite:" + testDatabasePath.toAbsolutePath()
         );
-
+        // Create the PlantsData schema required by SQLitePlantDAO
         try (
                 Connection connection = DatabaseConnection.getConnection();
                 Statement statement = connection.createStatement()
@@ -50,6 +51,8 @@ public class SQLitePlantDAOTest {
                     species VARCHAR(512)
                 )
                 """);
+            // Seed the temporary database with three known Plant records
+            // used by the DAO retrieval, update, and collection tests
             statement.execute("""
         INSERT INTO PlantsData (
             Generalised_info,
@@ -116,13 +119,18 @@ public class SQLitePlantDAOTest {
         }
     }
 
+    // Test Clean Up - Restores the normal database configuration and deletes
+    // the temporary SQLite database created for the completed test.
     @AfterEach
     void tearDown() throws Exception {
-
+        // Restore DatabaseConnection to its normal application database URL
         DatabaseConnection.resetDatabaseUrl();
-
+        // Remove the temporary test database file
         Files.deleteIfExists(testDatabasePath);
     }
+
+    // DAO Retrieval Test - Checks that an existing Plant can be retrieved by ID
+    // and that key Plant fields are correctly reconstructed from the database.
     @Test
     public void getPlantShouldReturnPlantFromDatabase() {
 
@@ -136,6 +144,8 @@ public class SQLitePlantDAOTest {
         assertEquals("Eucalyptus testus", plant.getSciName());
     }
 
+    // DAO Retrieval Edge Case - Checks that requesting a Plant ID that does not
+    // exist in the database returns null rather than an invalid Plant object.
     @Test
     public void getPlantShouldReturnNullWhenPlantDoesNotExist() {
 
@@ -146,6 +156,8 @@ public class SQLitePlantDAOTest {
         assertNull(plant);
     }
 
+    // DAO Collection Retrieval Test - Checks that getAllPlants() retrieves
+    // every Plant record currently stored in the SQLite database.
     @Test
     public void getAllPlantsShouldReturnAllPlantsFromDatabase() {
 
@@ -157,6 +169,8 @@ public class SQLitePlantDAOTest {
         assertEquals(3, plants.size());
     }
 
+    // DAO Create Test - Checks that addPlant() persists a new Plant to SQLite,
+    // assigns it a database ID, and makes the saved Plant retrievable.
     @Test
     public void addPlantShouldPersistPlantToDatabase() {
 
@@ -193,6 +207,8 @@ public class SQLitePlantDAOTest {
         assertEquals(true, found);
     }
 
+    // DAO Update Test - Checks that changes made to an existing Plant object
+    // are persisted to SQLite and returned when the Plant is retrieved again.
     @Test
     public void updatePlantShouldPersistChangesToDatabase() {
 
@@ -218,6 +234,8 @@ public class SQLitePlantDAOTest {
         dao.updatePlant(plant);
     }
 
+    // DAO Update Edge Case - Checks that attempting to update a Plant with an
+    // unknown ID does not create, remove, or modify records in the database.
     @Test
     void updateNonExistentPlantShouldNotAffectDatabase() {
 
@@ -254,6 +272,8 @@ public class SQLitePlantDAOTest {
         assertNull(dao.getPlant(999));
     }
 
+    // DAO Create Edge Case - Checks that a Plant with an empty image value can
+    // still be persisted and retrieved correctly from the SQLite database.
     @Test
     void addPlantWithEmptyImageShouldPersistToDatabase() {
 
@@ -292,6 +312,8 @@ public class SQLitePlantDAOTest {
         dao.deletePlant(plant);
     }
 
+    // DAO Delete Test - Checks that deletePlant() removes an existing Plant
+    // record so that it can no longer be retrieved from the database.
     @Test
     void deletePlantShouldRemovePlantFromDatabase() {
 
@@ -324,6 +346,9 @@ public class SQLitePlantDAOTest {
 
         assertNull(deletedPlant);
     }
+
+    // DAO Delete Edge Case - Checks that attempting to delete a Plant with an
+    // unknown ID leaves the existing SQLite database records unchanged.
     @Test
     void deleteNonExistentPlantShouldNotAffectDatabase() {
 
@@ -360,6 +385,8 @@ public class SQLitePlantDAOTest {
         assertNull(dao.getPlant(999));
     }
 
+    // DAO Collection Edge Case - Checks that getAllPlants() returns a non-null
+    // empty list when the SQLite database contains no Plant records.
     @Test
     void getAllPlantsShouldReturnEmptyListWhenDatabaseIsEmpty() {
 
@@ -378,6 +405,304 @@ public class SQLitePlantDAOTest {
         // Assert
         assertNotNull(plants);
         assertTrue(plants.isEmpty());
+    }
+
+    // Persistence Integration Test - Checks that all Plant fields are correctly
+    // stored in SQLite and reconstructed after being retrieved from the database
+    @Test
+    void allPlantFieldsShouldPersistAndBeRetrievedCorrectly() {
+
+        SQLitePlantDAO dao = new SQLitePlantDAO();
+
+        // Arrange
+        Plant plant = new Plant(
+                "Native Australian tree with distinctive red flowers",
+                "eucalyptus_test.jpg",
+                "Queensland",
+                "Eucalyptus tereticornis",
+                "Plantae",
+                "Tracheophyta",
+                "Magnoliopsida",
+                "Myrtales",
+                "Myrtaceae",
+                "Eucalyptus",
+                "species",
+                "Forest Red Gum",
+                "Eucalyptus tereticornis"
+        );
+
+        // Act
+        dao.addPlant(plant);
+
+        Plant savedPlant = dao.getPlant(plant.getId());
+
+        // Assert
+        assertNotNull(savedPlant);
+
+        assertEquals(plant.getGeneralisedInfo(), savedPlant.getGeneralisedInfo());
+        assertEquals(plant.getImage(), savedPlant.getImage());
+        assertEquals(plant.getLocation(), savedPlant.getLocation());
+        assertEquals(plant.getSciName(), savedPlant.getSciName());
+        assertEquals(plant.getKingdom(), savedPlant.getKingdom());
+        assertEquals(plant.getPhylum(), savedPlant.getPhylum());
+        assertEquals(plant.getPclass(), savedPlant.getPclass());
+        assertEquals(plant.getOrder(), savedPlant.getOrder());
+        assertEquals(plant.getFamily(), savedPlant.getFamily());
+        assertEquals(plant.getGenus(), savedPlant.getGenus());
+        assertEquals(plant.getTaxonRank(), savedPlant.getTaxonRank());
+        assertEquals(plant.getVernacularName(), savedPlant.getVernacularName());
+        assertEquals(plant.getSpecies(), savedPlant.getSpecies());
+
+        // Clean Up
+        dao.deletePlant(plant);
+    }
+
+    // Persistence Integration Test - Checks that multiple Plant objects are stored
+    // as separate database records and can be retrieved independently
+    @Test
+    void multiplePlantsShouldPersistIndependently() {
+
+        SQLitePlantDAO dao = new SQLitePlantDAO();
+
+        // Arrange
+        Plant plantOne = new Plant(
+                "Native Australian eucalyptus tree",
+                "eucalyptus.jpg",
+                "Queensland",
+                "Eucalyptus tereticornis",
+                "Plantae",
+                "Tracheophyta",
+                "Magnoliopsida",
+                "Myrtales",
+                "Myrtaceae",
+                "Eucalyptus",
+                "species",
+                "Forest Red Gum",
+                "Eucalyptus tereticornis"
+        );
+
+        Plant plantTwo = new Plant(
+                "Native Australian flowering tree",
+                "bottlebrush.jpg",
+                "New South Wales",
+                "Callistemon citrinus",
+                "Plantae",
+                "Tracheophyta",
+                "Magnoliopsida",
+                "Myrtales",
+                "Myrtaceae",
+                "Callistemon",
+                "species",
+                "Crimson Bottlebrush",
+                "Callistemon citrinus"
+        );
+
+        // Act
+        dao.addPlant(plantOne);
+        dao.addPlant(plantTwo);
+
+        Plant savedPlantOne = dao.getPlant(plantOne.getId());
+        Plant savedPlantTwo = dao.getPlant(plantTwo.getId());
+
+        // Assert
+        assertNotNull(savedPlantOne);
+        assertNotNull(savedPlantTwo);
+
+        assertNotEquals(plantOne.getId(), plantTwo.getId());
+
+        assertEquals("Forest Red Gum", savedPlantOne.getVernacularName());
+        assertEquals("Crimson Bottlebrush", savedPlantTwo.getVernacularName());
+
+        assertEquals("Eucalyptus tereticornis", savedPlantOne.getSciName());
+        assertEquals("Callistemon citrinus", savedPlantTwo.getSciName());
+
+        // Clean Up
+        dao.deletePlant(plantOne);
+        dao.deletePlant(plantTwo);
+    }
+    // Persistence Integration Test - Checks that updating one Plant record
+    // does not modify another Plant record stored in the database
+    @Test
+    void updatingOnePlantShouldNotAffectAnotherPlant() {
+
+        SQLitePlantDAO dao = new SQLitePlantDAO();
+
+        // Arrange
+        Plant plantOne = new Plant(
+                "Native Australian eucalyptus tree",
+                "eucalyptus.jpg",
+                "Queensland",
+                "Eucalyptus tereticornis",
+                "Plantae",
+                "Tracheophyta",
+                "Magnoliopsida",
+                "Myrtales",
+                "Myrtaceae",
+                "Eucalyptus",
+                "species",
+                "Forest Red Gum",
+                "Eucalyptus tereticornis"
+        );
+
+        Plant plantTwo = new Plant(
+                "Native Australian flowering tree",
+                "bottlebrush.jpg",
+                "New South Wales",
+                "Callistemon citrinus",
+                "Plantae",
+                "Tracheophyta",
+                "Magnoliopsida",
+                "Myrtales",
+                "Myrtaceae",
+                "Callistemon",
+                "species",
+                "Crimson Bottlebrush",
+                "Callistemon citrinus"
+        );
+
+        dao.addPlant(plantOne);
+        dao.addPlant(plantTwo);
+
+        // Act
+        plantOne.setVernacularName("Updated Forest Red Gum");
+        dao.updatePlant(plantOne);
+
+        Plant updatedPlantOne = dao.getPlant(plantOne.getId());
+        Plant unchangedPlantTwo = dao.getPlant(plantTwo.getId());
+
+        // Assert
+        assertNotNull(updatedPlantOne);
+        assertNotNull(unchangedPlantTwo);
+
+        assertEquals(
+                "Updated Forest Red Gum",
+                updatedPlantOne.getVernacularName()
+        );
+
+        assertEquals(
+                "Crimson Bottlebrush",
+                unchangedPlantTwo.getVernacularName()
+        );
+
+        // Clean Up
+        dao.deletePlant(plantOne);
+        dao.deletePlant(plantTwo);
+    }
+    // Persistence Integration Test - Checks that deleting one Plant record
+    // does not remove or modify another Plant record stored in the database
+    @Test
+    void deletingOnePlantShouldNotAffectAnotherPlant() {
+
+        SQLitePlantDAO dao = new SQLitePlantDAO();
+
+        // Arrange
+        Plant plantOne = new Plant(
+                "Native Australian eucalyptus tree",
+                "eucalyptus.jpg",
+                "Queensland",
+                "Eucalyptus tereticornis",
+                "Plantae",
+                "Tracheophyta",
+                "Magnoliopsida",
+                "Myrtales",
+                "Myrtaceae",
+                "Eucalyptus",
+                "species",
+                "Forest Red Gum",
+                "Eucalyptus tereticornis"
+        );
+
+        Plant plantTwo = new Plant(
+                "Native Australian flowering tree",
+                "bottlebrush.jpg",
+                "New South Wales",
+                "Callistemon citrinus",
+                "Plantae",
+                "Tracheophyta",
+                "Magnoliopsida",
+                "Myrtales",
+                "Myrtaceae",
+                "Callistemon",
+                "species",
+                "Crimson Bottlebrush",
+                "Callistemon citrinus"
+        );
+
+        dao.addPlant(plantOne);
+        dao.addPlant(plantTwo);
+
+        // Act
+        dao.deletePlant(plantOne);
+
+        Plant deletedPlant = dao.getPlant(plantOne.getId());
+        Plant remainingPlant = dao.getPlant(plantTwo.getId());
+
+        // Assert
+        assertNull(deletedPlant);
+        assertNotNull(remainingPlant);
+
+        assertEquals(
+                "Crimson Bottlebrush",
+                remainingPlant.getVernacularName()
+        );
+
+        assertEquals(
+                "Callistemon citrinus",
+                remainingPlant.getSciName()
+        );
+
+        // Clean Up
+        dao.deletePlant(plantTwo);
+    }
+    // Persistence Integration Edge Case - Checks that Plant data containing
+    // apostrophes and other special characters persists correctly in SQLite
+    @Test
+    void plantWithSpecialCharactersShouldPersistCorrectly() {
+
+        SQLitePlantDAO dao = new SQLitePlantDAO();
+
+        // Arrange
+        Plant plant = new Plant(
+                "Native plant that's commonly found in wet, shaded areas.",
+                "bird's-nest-fern.jpg",
+                "Queensland, Australia",
+                "Asplenium australasicum",
+                "Plantae",
+                "Tracheophyta",
+                "Polypodiopsida",
+                "Polypodiales",
+                "Aspleniaceae",
+                "Asplenium",
+                "species",
+                "Bird's Nest Fern",
+                "Asplenium australasicum"
+        );
+
+        // Act
+        dao.addPlant(plant);
+
+        Plant savedPlant = dao.getPlant(plant.getId());
+
+        // Assert
+        assertNotNull(savedPlant);
+
+        assertEquals(
+                "Bird's Nest Fern",
+                savedPlant.getVernacularName()
+        );
+
+        assertEquals(
+                "Native plant that's commonly found in wet, shaded areas.",
+                savedPlant.getGeneralisedInfo()
+        );
+
+        assertEquals(
+                "Queensland, Australia",
+                savedPlant.getLocation()
+        );
+
+        // Clean Up
+        dao.deletePlant(plant);
     }
 
 }
