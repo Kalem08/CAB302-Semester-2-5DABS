@@ -705,4 +705,45 @@ public class SQLitePlantDAOTest {
         dao.deletePlant(plant);
     }
 
+
+    @Test
+    public void searchShouldSupportTwentyPlantPages() {
+
+        SQLitePlantDAO dao = new SQLitePlantDAO();
+
+        // Arrange - add enough controlled records to test pagination.
+        // The temporary test database already contains 3 seeded plants.
+        for (int i = 4; i <= 25; i++) {
+            Plant plant = new Plant(
+                    "Pagination test plant " + i,
+                    "",
+                    "Queensland",
+                    "Scientific name " + i,
+                    "Plantae",
+                    "Test phylum",
+                    "Test class",
+                    "Test order",
+                    "Test family",
+                    "Test genus",
+                    "species",
+                    "Test Plant " + i,
+                    "Test species " + i
+            );
+
+            dao.addPlant(plant);
+        }
+
+        // Act
+        List<Plant> firstPage = dao.search("", 20, 0);
+        List<Plant> secondPage = dao.search("", 20, 20);
+
+        // Assert
+        assertEquals(25, dao.count(""));
+        assertEquals(20, firstPage.size());
+        assertEquals(5, secondPage.size());
+
+        // Verify that the second page begins after the first 20 records.
+        assertEquals(1, firstPage.get(0).getId());
+        assertEquals(21, secondPage.get(0).getId());
+    }
 }

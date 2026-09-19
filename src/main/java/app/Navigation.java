@@ -1,0 +1,35 @@
+package app;
+
+import app.pages.AccountPage;
+import app.pages.EntryPage;
+import app.pages.LogInPage;
+import app.pages.ResultsPage;
+import app.AuthenticationPanel.AuthMode;
+
+public class Navigation
+{
+    public static void openEntryPage()
+    {
+        HelloApplication.setPage(new EntryPage());
+    }
+
+    public static void openResultsPage(String query)
+    {
+        HelloApplication.setPage(new ResultsPage(query));
+    }
+
+    public static void openAccountPage()
+    {
+        HelloApplication.setPage(new AccountPage());
+    }
+
+    public static void openLogInPage()
+    {
+        HelloApplication.setPage(new LogInPage(AuthMode.Login));
+    }
+
+    public static void openRegisterPage()
+    {
+        HelloApplication.setPage(new LogInPage(AuthMode.Register));
+    }
+}

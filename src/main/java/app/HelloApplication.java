@@ -1,14 +1,17 @@
 package app;
 
 //MARK: Imports
+import app.pages.EntryPage;
 import javafx.application.Application;
 import java.io.IOException;
+
+import app.pages.LogInPage;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 import javafx.scene.Parent;
 // import javafx.scene.control.*;
 // import javafx.scene.layout.*;
-import javafx.scene.paint.Color;
+// import javafx.scene.paint.Color;
 
 //main class (an extension of 'Application')
 public class HelloApplication extends Application
@@ -32,23 +35,29 @@ public class HelloApplication extends Application
         {
             //define the inital page here
             Parent root = new EntryPage();
-            // Parent root = new AccountPage();
+            // Parent root = new LogInPage(); //a temporary initial page
 
             //MARK: Scene
             //define the scene, add to the stage/window, and display the stage
-            scene = new Scene(root, 960, 540);
+            scene = new Scene(root, 960, 540); //small window
             stage.setTitle("Plantopedia"); //the window title
-            stage.setScene(scene); //sets the scene
-            // stage.setMaximized(true); //start as a maximised window
+            stage.setScene(scene);
+            stage.setMaximized(true); //start as a maximised window
             stage.show();
 
             //change background colour
-            // root.setStyle("-fx-background-color: #202020;"); //works for GridPane
-            // scene.setFill(Color.DARKBLUE); //works for all other elements
+            // root.setStyle("-fx-background-color: #202020;");
             
             //use .setRoot to change primary node/container that is present in the scene
-            // scene.setRoot(header);
+            // scene.setRoot(page);
+            // HelloApplication.changePage(page);
         }
+    }
+
+    //use this method to change primary node/container that is present in the scene
+    public static void setPage(Parent newPage)
+    {
+        scene.setRoot(newPage);
     }
 
     //shorthand method for 'System.out.println()'

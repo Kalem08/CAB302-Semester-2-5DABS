@@ -10,4 +10,9 @@ module app
     exports app;
     exports app.model;
     exports database;
+    exports User;
+    exports app.pages;
+    opens app.pages to javafx.fxml;
+    exports app.components;
+    opens app.components to javafx.fxml;
 }

@@ -47,6 +47,21 @@ public class PlantTest {
     public void testGetImage() {
         assertEquals("0428", plant.getImage());
     }
+
+    @Test
+    public void testGetImageUrl() {
+        assertEquals(
+                "https://images-assets.ala.org.au/store/4/8/9/f/0428/original",
+                plant.getImageUrl()
+        );
+    }
+
+    @Test
+    public void testGetImageUrlReturnsNullForBlankCode() {
+        plant.setImage(" ");
+        assertNull(plant.getImageUrl());
+    }
+
     @Test
     public void testSetImage() {
         plant.setImage("ImageTest");
