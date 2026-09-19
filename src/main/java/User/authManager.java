@@ -104,16 +104,16 @@ public class authManager
     }
     private PasswordError checkValidPass()
     {
-        if (this.password == null) {
+        if (this.password == null || this.password.isEmpty()) {
             return PasswordError.EMPTY;
         } else if (this.password.length() < passwordMinLength) {
             return PasswordError.LENGTH_MIN;
-        } else if (!this.password.matches(".*[\\W_].*")) {
-            return PasswordError.NO_SPECIAL;
-        } else if (!this.password.matches(".*[A-Z].*")) {
-            return PasswordError.NO_CAPITAL;
         } else if (!this.password.matches(".*[a-z].*")) {
             return PasswordError.NO_LOWER;
+        } else if (!this.password.matches(".*[A-Z].*")) {
+                return PasswordError.NO_CAPITAL;
+        } else if (!this.password.matches(".*[\\W_].*")) {
+                return PasswordError.NO_SPECIAL;
         } else {
             return PasswordError.VALID;
         }
