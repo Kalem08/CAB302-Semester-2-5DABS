@@ -3,6 +3,7 @@ package User;
 //authentication manager
 public class authManager
 {
+    private static final SQLiteUserDAO userDAO = new SQLiteUserDAO();
     private static boolean signedIn;
     private static String signedInUsername; //this string represents the user's username if they are signed in, otherwise it is null
     
@@ -39,8 +40,8 @@ public class authManager
             return false;
         }
 
-        userDB userAccount = new userDB(saferUsername, password);
-        return userAccount.registerUser();
+        User userAccount = new User(saferUsername, password);
+        return userDAO.registerUser(userAccount);
     }
     public void signIN()
     {
@@ -59,7 +60,7 @@ public class authManager
         }
 
         saferUsername = username.trim().toLowerCase();
-        signedIn = userDB.authenticate(saferUsername, password);
+        signedIn = userDAO.authenticate(saferUsername, password);
         if (signedIn)
             signedInUsername = saferUsername; //store the username for use in displaying pages
         return signedIn;
@@ -91,7 +92,7 @@ public class authManager
         }
 
         saferUsername = Username.trim().toLowerCase();
-        if(!userDB.exists(this.saferUsername))
+        if(!userDAO.exists(this.saferUsername))
         {
             System.out.println("Valid username");
             return true;

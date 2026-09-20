@@ -10,31 +10,14 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-public class userDB implements IUser{
-    private final String username;
-    private final String password;
-
-    public userDB(String username, String password) {
-        if (username == null || username.trim().isEmpty()) {
-            throw new IllegalArgumentException("Username cannot be empty");
-        }
-        if (password == null || password.isEmpty()) {
-            throw new IllegalArgumentException("Password cannot be empty");
-        }
-
-        this.username = username;
-        this.password = password;
-
-    }
-
-    public boolean registerUser()
-    {
+public class SQLiteUserDAO {
+    public boolean registerUser(User user) {
         String sql = "INSERT INTO Users (Username, Hash) VALUES (?, ?)";
 
         try (Connection connection = DatabaseConnection.getConnection();
              PreparedStatement statement = connection.prepareStatement(sql)) {
-            statement.setString(1, username);
-            statement.setString(2, hashPassword(password));
+            statement.setString(1, user.getUsername());
+            statement.setString(2, hashPassword(user.getPassword()));
             statement.executeUpdate();
             return true;
         } catch (SQLException e) {
@@ -45,8 +28,7 @@ public class userDB implements IUser{
         }
     }
 
-    public static boolean exists(String username)
-    {
+    public boolean exists(String username) {
         String sql = "SELECT 1 FROM Users WHERE Username = ?";
 
         try (Connection connection = DatabaseConnection.getConnection();
@@ -61,8 +43,7 @@ public class userDB implements IUser{
         }
     }
 
-    public static boolean authenticate(String username, String password)
-    {
+    public boolean authenticate(String username, String password) {
         String sql = "SELECT Hash FROM Users WHERE Username = ?";
 
         try (Connection connection = DatabaseConnection.getConnection();
@@ -80,8 +61,7 @@ public class userDB implements IUser{
         }
     }
 
-    private static String hashPassword(String password)
-    {
+    private String hashPassword(String password) {
         try {
             MessageDigest digest = MessageDigest.getInstance("SHA-256");
             byte[] hash = digest.digest(password.getBytes(StandardCharsets.UTF_8));
@@ -95,29 +75,5 @@ public class userDB implements IUser{
         } catch (NoSuchAlgorithmException e) {
             throw new IllegalStateException("SHA-256 is unavailable", e);
         }
-    }
-
-    public String getUsername()
-    {
-      return this.username;
-    }
-    public String getPassword()
-    {
-        return this.password;
-    }
-    public void changeAccountInformation()
-    {
-
-    }
-    public void updateUsername(){}
-    public void updatePassword(){}
-
-    public boolean loggedIn()
-    {
-        return authManager.isSignedIn();
-    }
-    public void logOut()
-    {
-
     }
 }
