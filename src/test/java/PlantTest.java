@@ -3,6 +3,7 @@ import app.model.Plant;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 
 public class PlantTest {
@@ -175,5 +176,157 @@ public class PlantTest {
     public void testSetSpecies() {
         plant.setSpecies("SpeciesTest");
         assertEquals("SpeciesTest", plant.getSpecies());
+    }
+    // Unit test edge case - Checks that a Plant object correctly stores and returns an empty image value
+    @Test
+    public void testEmptyImageIsStoredCorrectly() {
+        // Arrange
+        plant.setImage("");
+
+        // Act
+        String image = plant.getImage();
+
+        // Assert
+        assertEquals("", image);
+    }
+    // Unit test Object State - Checks that changing a Plant's vernacular name
+    // does not change its scientific name
+    @Test
+    public void changingVernacularNameShouldNotChangeScientificName() {
+        // Arrange
+        String originalScientificName = plant.getSciName();
+
+        // Act
+        plant.setVernacularName("Updated Common Name");
+
+        // Assert
+        assertEquals("Updated Common Name", plant.getVernacularName());
+        assertEquals(originalScientificName, plant.getSciName());
+    }
+    // Unit test Object State - Checks that multiple updates to a Plant's vernacular name
+    // correctly retain the most recently assigned value
+    @Test
+    public void multipleVernacularNameUpdatesShouldRetainLatestValue() {
+
+        // Arrange
+        plant.setVernacularName("First Common Name");
+
+        // Act
+        plant.setVernacularName("Second Common Name");
+        plant.setVernacularName("Final Common Name");
+
+        // Assert
+        assertEquals("Final Common Name", plant.getVernacularName());
+    }
+    // Unit test Object State - Checks that changing a Plant's location
+    // does not modify its existing taxonomy information
+    @Test
+    public void changingLocationShouldNotChangeTaxonomyInformation() {
+
+        // Arrange
+        String originalKingdom = plant.getKingdom();
+        String originalFamily = plant.getFamily();
+        String originalGenus = plant.getGenus();
+        String originalSpecies = plant.getSpecies();
+
+        // Act
+        plant.setLocation("NSW");
+
+        // Assert
+        assertEquals("NSW", plant.getLocation());
+        assertEquals(originalKingdom, plant.getKingdom());
+        assertEquals(originalFamily, plant.getFamily());
+        assertEquals(originalGenus, plant.getGenus());
+        assertEquals(originalSpecies, plant.getSpecies());
+    }
+    // Unit test Edge Case - Checks that a Plant object can store and return
+    // an empty vernacular name without affecting the object
+    @Test
+    public void emptyVernacularNameShouldBeStoredCorrectly() {
+
+        // Arrange
+        plant.setVernacularName("");
+
+        // Act
+        String vernacularName = plant.getVernacularName();
+
+        // Assert
+        assertNotNull(vernacularName);
+        assertEquals("", vernacularName);
+    }
+    // Unit test Edge Case - Checks that a Plant object can store and return
+    // a null image value without affecting the object
+    @Test
+    public void nullImageShouldBeStoredCorrectly() {
+
+        // Arrange
+        plant.setImage(null);
+
+        // Act
+        String image = plant.getImage();
+
+        // Assert
+        assertNull(image);
+    }
+    // Unit test Boundary Case - Checks that a Plant object correctly stores
+    // and returns an ID value of zero
+    @Test
+    public void zeroPlantIDShouldBeStoredCorrectly() {
+
+        // Arrange
+        plant.setID(0);
+
+        // Act
+        int plantID = plant.getId();
+
+        // Assert
+        assertEquals(0, plantID);
+    }
+    // Unit test String Handling - Checks that a Plant object correctly stores
+    // and returns a vernacular name containing multiple words and spaces
+    @Test
+    public void multiWordVernacularNameShouldBeStoredCorrectly() {
+
+        // Arrange
+        plant.setVernacularName("Moreton Bay Fig");
+
+        // Act
+        String vernacularName = plant.getVernacularName();
+
+        // Assert
+        assertEquals("Moreton Bay Fig", vernacularName);
+    }
+    // Unit test String Handling - Checks that a Plant object correctly stores
+    // and returns a scientific name containing multiple words
+    @Test
+    public void multiWordScientificNameShouldBeStoredCorrectly() {
+
+        // Arrange
+        plant.setSciName("Eucalyptus tereticornis");
+
+        // Act
+        String scientificName = plant.getSciName();
+
+        // Assert
+        assertEquals("Eucalyptus tereticornis", scientificName);
+    }
+    // Unit test Object State - Checks that multiple taxonomy fields can be updated
+    // while an unrelated Plant field retains its original value
+    @Test
+    public void multipleTaxonomyUpdatesShouldNotChangeVernacularName() {
+
+        // Arrange
+        String originalVernacularName = plant.getVernacularName();
+
+        // Act
+        plant.setFamily("Myrtaceae");
+        plant.setGenus("Eucalyptus");
+        plant.setSpecies("Eucalyptus tereticornis");
+
+        // Assert
+        assertEquals("Myrtaceae", plant.getFamily());
+        assertEquals("Eucalyptus", plant.getGenus());
+        assertEquals("Eucalyptus tereticornis", plant.getSpecies());
+        assertEquals(originalVernacularName, plant.getVernacularName());
     }
 }
