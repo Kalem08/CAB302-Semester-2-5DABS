@@ -1,9 +1,9 @@
 package app.pages;
 
 //MARK: Imports
-import javafx.geometry.Insets;
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
+import javafx.geometry.Insets;
 import java.util.List;
 
 import app.Design;

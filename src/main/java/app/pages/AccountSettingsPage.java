@@ -1,12 +1,12 @@
 package app.pages;
 
 //MARK: Imports
-import app.Navigation;
-import app.components.Header;
-
-import javafx.geometry.Pos;
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
+import javafx.geometry.Pos;
+
+import app.Navigation;
+import app.components.Header;
 
 //this page is currently unused, as changed can be made from the AccountPage
 public class AccountSettingsPage extends BorderPane

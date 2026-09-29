@@ -1,9 +1,5 @@
 package app.pages;
 
-import app.Design;
-import app.HelloApplication;
-import app.components.Header;
-import app.model.Plant;
 //MARK: Imports
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
@@ -12,6 +8,11 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.image.*;
+
+import app.Design;
+import app.Navigation;
+import app.components.Header;
+import app.model.Plant;
 
 //this is the page that contains all of the details/content about a plant
 public class PlantPage extends VBox
@@ -108,7 +109,7 @@ public class PlantPage extends VBox
 
         Button returnToResultsButton = new Button("Return to search results");
         returnToResultsButton.setOnAction(event ->
-            HelloApplication.scene.setRoot(new ResultsPage(searchQuery)));
+            Navigation.openResultsPage(searchQuery));
 
         getChildren().addAll(
             header,

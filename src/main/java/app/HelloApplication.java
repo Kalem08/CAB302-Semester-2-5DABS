@@ -1,17 +1,13 @@
 package app;
 
 //MARK: Imports
-import app.pages.EntryPage;
+import app.pages.*;
+
 import javafx.application.Application;
 import java.io.IOException;
-
-import app.pages.LogInPage;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 import javafx.scene.Parent;
-// import javafx.scene.control.*;
-// import javafx.scene.layout.*;
-// import javafx.scene.paint.Color;
 
 //main class (an extension of 'Application')
 public class HelloApplication extends Application
