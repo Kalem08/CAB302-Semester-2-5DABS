@@ -129,12 +129,7 @@ public class EntryPage extends VBox
     //MARK: Methods
     void search()
     {
-        openResultsPage(searchTextfield.getText());
-    }
-
-    void openResultsPage(String query)
-    {
-        HelloApplication.setPage(new ResultsPage(query));
+        Navigation.openResultsPage(searchTextfield.getText());
     }
 
     //toggles visibility of buttons

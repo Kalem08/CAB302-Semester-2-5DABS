@@ -1,8 +1,5 @@
 package app.components;
 
-import app.Design;
-import app.HelloApplication;
-import app.pages.AccountPage;
 //MARK: Imports
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -13,6 +10,9 @@ import javafx.scene.image.ImageView;
 import javafx.scene.shape.Circle;
 // import javafx.scene.effect.*; //for image colouring
 // import javafx.scene.control.*;
+
+import app.Design;
+import app.Navigation;
 
 //MARK: Class
 public class ImageButton extends CustomButton
@@ -56,15 +56,10 @@ public class ImageButton extends CustomButton
             imageView
         );
 
-        setOnMouseClicked(event -> openAccountPage());
+        setOnMouseClicked(event -> Navigation.openAccountPage());
     }
 
     //MARK: Methods
-    void openAccountPage()
-    {
-        HelloApplication.scene.setRoot(new AccountPage());
-    }
-
     public void setImageWidth(int width)
     {
         imageView.setFitWidth(width);

@@ -16,16 +16,19 @@ import javafx.scene.image.*;
 //this is the page that contains all of the details/content about a plant
 public class PlantPage extends VBox
 {
+    //empty constructor
     public PlantPage()
     {
         this(null);
     }
 
+    //partial constructor
     public PlantPage(Plant plant)
     {
         this(plant, "");
     }
 
+    //full constructor
     public PlantPage(Plant plant, String searchQuery)
     {
         Header header = new Header();
@@ -69,7 +72,6 @@ public class PlantPage extends VBox
         Label locationText = new Label(location);
         Label taxonomyText = new Label(taxonomy);
 
-        //MARK: Image
         ImageView imageView = new ImageView();
         imageView.setFitWidth(200);
         imageView.setPreserveRatio(true);
@@ -120,6 +122,7 @@ public class PlantPage extends VBox
         editPrompt.setPadding(new Insets(0, Design.padding, Design.padding, Design.padding));
     }
 
+    //MARK: Taxonomy Pane
     private TitledPane createTaxonomyPane(Plant plant)
     {
         GridPane table = new GridPane();

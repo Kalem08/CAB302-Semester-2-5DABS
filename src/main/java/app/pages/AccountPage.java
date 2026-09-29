@@ -11,6 +11,7 @@ import javafx.scene.text.FontWeight;
 
 import app.Design;
 import app.HelloApplication;
+import app.Navigation;
 import app.components.*;
 import User.*;
 
@@ -131,7 +132,7 @@ public class AccountPage extends VBox
     void logout()
     {
         authManager.signOut();
-        HelloApplication.setPage(new EntryPage());
+        Navigation.openEntryPage();
     }
     
     // void openAccountSettingsPage()

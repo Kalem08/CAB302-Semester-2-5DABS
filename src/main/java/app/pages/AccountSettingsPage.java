@@ -1,8 +1,9 @@
 package app.pages;
 
-import app.HelloApplication;
-import app.components.Header;
 //MARK: Imports
+import app.Navigation;
+import app.components.Header;
+
 import javafx.geometry.Pos;
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
@@ -17,7 +18,7 @@ public class AccountSettingsPage extends BorderPane
         Button saveButton = new Button("Save changes");
         saveButton.setOnAction(event -> saveAccountSettings());
         Button discardButton = new Button("Discard changes");
-        discardButton.setOnAction(event -> openAccountPage());
+        discardButton.setOnAction(event -> Navigation.openAccountPage());
 
         HBox buttonsBox = new HBox(
             saveButton,
@@ -41,11 +42,6 @@ public class AccountSettingsPage extends BorderPane
     {
         //add some saving code here
 
-        openAccountPage();
-    }
-
-    void openAccountPage()
-    {
-        HelloApplication.scene.setRoot(new AccountPage());
+        Navigation.openAccountPage();
     }
 }

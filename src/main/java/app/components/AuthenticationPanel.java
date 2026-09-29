@@ -1,18 +1,18 @@
-package app;
+package app.components;
 
 //MARK: Imports
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
-import User.authManager;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.*;
-import app.components.CustomButton;
-import app.components.CustomTextfield;
+
+import app.Design;
+import app.Navigation;
 import app.components.CustomButton.HoverState;
-import app.pages.EntryPage;
+import User.authManager;
 
 public class AuthenticationPanel extends VBox
 {
@@ -194,7 +194,8 @@ public class AuthenticationPanel extends VBox
     //MARK: Methods
     void openEntryPage()
     {
-        HelloApplication.scene.setRoot(new EntryPage());
+        // HelloApplication.scene.setRoot(new EntryPage());
+        Navigation.openEntryPage();
     }
 
     void switchAuthMode()
@@ -222,7 +223,7 @@ public class AuthenticationPanel extends VBox
             }
         } else if (manager.authenticate()) {
             statusLabel.setText("Login successful.");
-            HelloApplication.scene.setRoot(new EntryPage());
+            Navigation.openEntryPage();
         } else {
             statusLabel.setText("Username or password is incorrect.");
         }
