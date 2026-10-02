@@ -9,15 +9,17 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Locale;
 
 public class SQLiteUserDAO {
     public boolean registerUser(User user) {
-        String sql = "INSERT INTO Users (Username, Hash) VALUES (?, ?)";
+        String sql = "INSERT INTO Users (Username, Hash, Role) VALUES (?, ?, ?)";
 
         try (Connection connection = DatabaseConnection.getConnection();
              PreparedStatement statement = connection.prepareStatement(sql)) {
             statement.setString(1, user.getUsername());
             statement.setString(2, hashPassword(user.getPassword()));
+            statement.setString(3, user.getRole().name());
             statement.executeUpdate();
             return true;
         } catch (SQLException e) {
@@ -58,6 +60,34 @@ public class SQLiteUserDAO {
             }
         } catch (SQLException e) {
             throw new IllegalStateException("Unable to authenticate user", e);
+        }
+    }
+
+    public Role getUserRole(String username) {
+        String sql = "SELECT Role FROM Users WHERE Username = ?";
+
+        try (Connection connection = DatabaseConnection.getConnection();
+             PreparedStatement statement = connection.prepareStatement(sql)) {
+            statement.setString(1, username);
+
+            try (ResultSet resultSet = statement.executeQuery()) {
+                if (!resultSet.next()) {
+                    return Role.STANDARD;
+                }
+
+                String storedRole = resultSet.getString("Role");
+                if (storedRole == null) {
+                    return Role.STANDARD;
+                }
+
+                String normalisedRole = storedRole.trim().toLowerCase(Locale.ROOT);
+                if (normalisedRole.equals("administrator") || normalisedRole.equals("admin")) {
+                    return Role.ADMINISTRATOR;
+                }
+                return Role.STANDARD;
+            }
+        } catch (SQLException e) {
+            throw new IllegalStateException("Unable to load user role", e);
         }
     }
 

@@ -4,6 +4,7 @@ public class authManager {
     private static final SQLiteUserDAO userDAO = new SQLiteUserDAO();
     private static boolean signedIn;
     private static String signedInUsername;
+    private static Role signedInRole;
 
     private final String username;
     private final String password;
@@ -29,13 +30,14 @@ public class authManager {
             return false;
         }
 
-        User userAccount = new User(saferUsername, password);
+        User userAccount = new User(saferUsername, password, Role.STANDARD);
         return userDAO.registerUser(userAccount);
     }
 
     public boolean authenticate() {
         signedIn = false;
         signedInUsername = null;
+        signedInRole = null;
 
         if (username == null || username.trim().isEmpty() || password == null) {
             return false;
@@ -45,6 +47,7 @@ public class authManager {
         signedIn = userDAO.authenticate(saferUsername, password);
         if (signedIn) {
             signedInUsername = saferUsername;
+            signedInRole = userDAO.getUserRole(saferUsername);
         }
         return signedIn;
     }
@@ -53,9 +56,21 @@ public class authManager {
         return signedIn;
     }
 
+    public static Role getRole() {
+        if (!signedIn) {
+            return Role.STANDARD;
+        }
+        return signedInRole;
+    }
+
+    public static boolean canManagePlants() {
+        return signedIn && signedInRole == Role.ADMINISTRATOR;
+    }
+
     public static void signOut() {
         signedIn = false;
         signedInUsername = null;
+        signedInRole = null;
     }
 
     private boolean checkUsernameExistence(String usernameToCheck) {
