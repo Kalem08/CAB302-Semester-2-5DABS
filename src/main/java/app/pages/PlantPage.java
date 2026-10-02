@@ -7,6 +7,7 @@ import app.components.Header;
 import app.model.Plant;
 import app.model.SQLitePlantDAO;
 //MARK: Imports
+import javafx.geometry.Side;
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
 import javafx.geometry.Insets;
@@ -111,34 +112,44 @@ public class PlantPage extends VBox
         returnToResultsButton.setOnAction(event ->
             HelloApplication.scene.setRoot(new ResultsPage(searchQuery)));
 
-        Button deletePlantButton = new Button("Delete plant");
-        deletePlantButton.setStyle("-fx-background-color: #d9534f; -fx-text-fill: white;");
-        deletePlantButton.setVisible(authManager.canManagePlants());
-        deletePlantButton.setManaged(authManager.canManagePlants());
-        deletePlantButton.setOnAction(event -> {
-            if (plant == null) {
-                return;
-            }
-
-            Alert confirmation = new Alert(Alert.AlertType.CONFIRMATION);
-            confirmation.setTitle("Delete plant");
-            confirmation.setHeaderText("Delete plant page?");
-            confirmation.setContentText("This will remove \"" + plant.getVernacularName() + "\" from the database.");
-
-            confirmation.showAndWait().ifPresent(response -> {
-                if (response == ButtonType.OK) {
-                    plantDAO.deletePlant(plant);
-                    HelloApplication.scene.setRoot(new ResultsPage(searchQuery));
+        Button adminActionsButton = new Button("Administrator actions");
+        adminActionsButton.setVisible(authManager.canManagePlants());
+        adminActionsButton.setManaged(authManager.canManagePlants());
+        adminActionsButton.setOnAction(event -> {
+            ContextMenu adminMenu = new ContextMenu();
+            MenuItem deletePlantItem = new MenuItem("Delete plant");
+            deletePlantItem.setOnAction(deleteEvent -> {
+                if (plant == null) {
+                    return;
                 }
+
+                Alert confirmation = new Alert(Alert.AlertType.CONFIRMATION);
+                confirmation.setTitle("Delete plant");
+                confirmation.setHeaderText("Delete plant page?");
+                confirmation.setContentText("This will remove \"" + plant.getVernacularName() + "\" from the database.");
+
+                confirmation.showAndWait().ifPresent(response -> {
+                    if (response == ButtonType.OK) {
+                        plantDAO.deletePlant(plant);
+                        HelloApplication.scene.setRoot(new ResultsPage(searchQuery));
+                    }
+                });
             });
+            adminMenu.getItems().add(deletePlantItem);
+            adminMenu.show(adminActionsButton, Side.BOTTOM, 0, 0);
         });
+
+        HBox bottomActions = new HBox();
+        bottomActions.setPadding(new Insets(0, Design.padding, Design.padding, Design.padding));
+        Region bottomActionsSpacer = new Region();
+        HBox.setHgrow(bottomActionsSpacer, Priority.ALWAYS);
+        bottomActions.getChildren().addAll(returnToResultsButton, bottomActionsSpacer, adminActionsButton);
 
         getChildren().addAll(
             header,
             hStack,
             bottomSpacer,
-            returnToResultsButton,
-            deletePlantButton,
+            bottomActions,
             editPrompt
         );
         hStack.setSpacing(Design.spacing);
