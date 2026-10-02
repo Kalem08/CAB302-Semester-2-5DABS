@@ -1,9 +1,11 @@
 package app.pages;
 
+import User.authManager;
 import app.Design;
 import app.HelloApplication;
 import app.components.Header;
 import app.model.Plant;
+import app.model.SQLitePlantDAO;
 //MARK: Imports
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
@@ -29,6 +31,7 @@ public class PlantPage extends VBox
     public PlantPage(Plant plant, String searchQuery)
     {
         Header header = new Header();
+        SQLitePlantDAO plantDAO = new SQLitePlantDAO();
 
         HBox hStack = new HBox();
         VBox rightColumn = new VBox();
@@ -108,11 +111,34 @@ public class PlantPage extends VBox
         returnToResultsButton.setOnAction(event ->
             HelloApplication.scene.setRoot(new ResultsPage(searchQuery)));
 
+        Button deletePlantButton = new Button("Delete plant");
+        deletePlantButton.setStyle("-fx-background-color: #d9534f; -fx-text-fill: white;");
+        deletePlantButton.setVisible(authManager.canManagePlants());
+        deletePlantButton.setManaged(authManager.canManagePlants());
+        deletePlantButton.setOnAction(event -> {
+            if (plant == null) {
+                return;
+            }
+
+            Alert confirmation = new Alert(Alert.AlertType.CONFIRMATION);
+            confirmation.setTitle("Delete plant");
+            confirmation.setHeaderText("Delete plant page?");
+            confirmation.setContentText("This will remove \"" + plant.getVernacularName() + "\" from the database.");
+
+            confirmation.showAndWait().ifPresent(response -> {
+                if (response == ButtonType.OK) {
+                    plantDAO.deletePlant(plant);
+                    HelloApplication.scene.setRoot(new ResultsPage(searchQuery));
+                }
+            });
+        });
+
         getChildren().addAll(
             header,
             hStack,
             bottomSpacer,
             returnToResultsButton,
+            deletePlantButton,
             editPrompt
         );
         hStack.setSpacing(Design.spacing);
