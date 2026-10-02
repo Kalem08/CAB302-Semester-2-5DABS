@@ -1,5 +1,5 @@
 package User;
-//Limited functionality as of current, further meethods for accessing User accounts & features to be added in final product
+
 public class User implements IUser {
     private final String username;
     private final String password;
@@ -24,26 +24,5 @@ public class User implements IUser {
     @Override
     public String getPassword() {
         return this.password;
-    }
-
-    @Override
-    public void changeAccountInformation() {
-    }
-
-    @Override
-    public void updateUsername() {
-    }
-
-    @Override
-    public void updatePassword() {
-    }
-
-    @Override
-    public boolean loggedIn() {
-        return authManager.isSignedIn();
-    }
-
-    @Override
-    public void logOut() {
     }
 }

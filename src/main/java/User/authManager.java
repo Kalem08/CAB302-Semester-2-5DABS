@@ -1,110 +1,73 @@
 package User;
 
-//authentication manager
-public class authManager
-{
+public class authManager {
     private static final SQLiteUserDAO userDAO = new SQLiteUserDAO();
     private static boolean signedIn;
-    private static String signedInUsername; //this string represents the user's username if they are signed in, otherwise it is null
-    
-    private String username;
-    private String password;
+    private static String signedInUsername;
+
+    private final String username;
+    private final String password;
     private String saferUsername;
-    private int passwordMinLength = 8;
-    private boolean validUsername;
-    public enum PasswordError
-    {
+    private final int passwordMinLength = 8;
+
+    public enum PasswordError {
         VALID,
         EMPTY,
         LENGTH_MIN,
         NO_SPECIAL,
         NO_CAPITAL,
         NO_LOWER
-
-
     }
 
-
-    // add private list/dictionary/map being the user database
-
-    //Constructor getting the username and password to compare with the existing user database
-    public authManager(String username, String password)
-    {
+    public authManager(String username, String password) {
         this.username = username;
         this.password = password;
     }
-    public boolean Registration()
-    {
-        validUsername = checkUsernameExistence(username);
-        if (!validUsername || checkValidPass() != PasswordError.VALID) {
+
+    public boolean Registration() {
+        if (!checkUsernameExistence(username) || checkValidPass() != PasswordError.VALID) {
             return false;
         }
 
         User userAccount = new User(saferUsername, password);
         return userDAO.registerUser(userAccount);
     }
-    public void signIN()
-    {
-        if (authenticate()) {
-            System.out.println("Logged In???");
-        } else {
-            System.out.println("Invalid username or password.");
-        }
-    }
 
-    public boolean authenticate()
-    {
+    public boolean authenticate() {
         signedIn = false;
+        signedInUsername = null;
+
         if (username == null || username.trim().isEmpty() || password == null) {
             return false;
         }
 
         saferUsername = username.trim().toLowerCase();
         signedIn = userDAO.authenticate(saferUsername, password);
-        if (signedIn)
-            signedInUsername = saferUsername; //store the username for use in displaying pages
+        if (signedIn) {
+            signedInUsername = saferUsername;
+        }
         return signedIn;
     }
 
-    //returns signedIn variable, so it can remain private
-    public static boolean isSignedIn()
-    {
+    public static boolean isSignedIn() {
         return signedIn;
     }
 
-    public static void signOut()
-    {
-        //set flag to false
+    public static void signOut() {
         signedIn = false;
-
-        //clear other variables (these are not static, hence are commented out)
-        // username = null;
-        // password = null;
-        // saferUsername = null;
-        // validUsername = false;
+        signedInUsername = null;
     }
 
-    // For registration
-    private boolean checkUsernameExistence(String Username)
-    {
-        if (Username == null || Username.trim().isEmpty()) {
+    private boolean checkUsernameExistence(String usernameToCheck) {
+        if (usernameToCheck == null || usernameToCheck.trim().isEmpty()) {
             return false;
         }
 
-        saferUsername = Username.trim().toLowerCase();
-        if(!userDAO.exists(this.saferUsername))
-        {
-            System.out.println("Valid username");
-            return true;
-        }
-        else
-        {
-            System.out.println("Username already exists.");
-            return false;
-        }
+        saferUsername = usernameToCheck.trim().toLowerCase();
+        return !userDAO.exists(saferUsername);
     }
-    private PasswordError checkValidPass()
-    {
+
+    private PasswordError checkValidPass() {
         if (this.password == null || this.password.isEmpty()) {
             return PasswordError.EMPTY;
         } else if (this.password.length() < passwordMinLength) {
@@ -112,33 +75,23 @@ public class authManager
         } else if (!this.password.matches(".*[a-z].*")) {
             return PasswordError.NO_LOWER;
         } else if (!this.password.matches(".*[A-Z].*")) {
-                return PasswordError.NO_CAPITAL;
+            return PasswordError.NO_CAPITAL;
         } else if (!this.password.matches(".*[\\W_].*")) {
-                return PasswordError.NO_SPECIAL;
+            return PasswordError.NO_SPECIAL;
         } else {
             return PasswordError.VALID;
         }
     }
 
     /**
-     * Gets the username from authManager
-     * @return username String of the signed in user
+     * Gets the username from authManager.
+     *
+     * @return the signed-in username, or an empty string when no user is signed in
      */
-    public static String getUsername()
-    {
-        if (signedIn)
+    public static String getUsername() {
+        if (signedIn) {
             return signedInUsername;
-        else
-            return "";
+        }
+        return "";
     }
-//    private boolean checkValidUsername()
-//    {
-//
-//    }
-
-    //signing in
-//    public void checkUsername()
-//    {
-//
-//    }
 }
