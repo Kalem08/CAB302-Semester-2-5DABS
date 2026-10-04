@@ -12,6 +12,7 @@ public class PlantTest {
     public void setUp() {
         plant = new Plant(
                 "Test",
+                "Test",
                 "0428",
                 "QLD",
                 "TestSci",
@@ -23,7 +24,10 @@ public class PlantTest {
                 "gen",
                 "tax",
                 "vern",
-                "spec"
+                "spec",
+                null,
+                null,
+                null
         );
     }
 
@@ -31,6 +35,27 @@ public class PlantTest {
     public void testGetId() {
         plant.setID(1);
         assertEquals(1, plant.getId());
+    }
+
+    @Test
+    public void testGetGrowthInfo() {
+        assertEquals("Test", plant.getGrowthInfo());
+    }
+    @Test
+    public void testSetGrowthInfo() {
+        plant.setGrowthInfo("GrowthTest");
+        assertEquals("GrowthTest", plant.getGrowthInfo());
+    }
+
+    @Test
+    public void testAdditionalInfoFields() {
+        plant.setEdible("yes");
+        plant.setHazardous("no");
+        plant.setSubspecies("yes");
+
+        assertEquals("yes", plant.getEdible());
+        assertEquals("no", plant.getHazardous());
+        assertEquals("yes", plant.getSubspecies());
     }
 
     @Test

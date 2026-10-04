@@ -40,6 +40,10 @@ public class PlantPage extends VBox
         String titleText = plant == null ? "Plant Name" : plant.getVernacularName();
         String scientificName = plant == null ? "Subtitle" : plant.getSciName();
         String descriptionText = plant == null ? "Description" : plant.getGeneralisedInfo();
+        String growthInfoText = plant == null || plant.getGrowthInfo() == null
+            || plant.getGrowthInfo().isBlank()
+            ? "Growth information not available."
+            : plant.getGrowthInfo();
         String location = plant == null ? "Location" : "Location: " + plant.getLocation();
         String taxonomy = plant == null
             ? ""
@@ -64,8 +68,23 @@ public class PlantPage extends VBox
 
         Region verticalSpacer = new Region();
         verticalSpacer.setPrefHeight(25);
+        Region growthSectionSpacer = new Region();
+        growthSectionSpacer.setPrefHeight(Design.spacing);
+        Region locationSectionSpacer = new Region();
+        locationSectionSpacer.setPrefHeight(Design.spacing);
+        Region taxonomySectionSpacer = new Region();
+        taxonomySectionSpacer.setPrefHeight(Design.spacing);
+        Region dropdownSpacer = new Region();
+        dropdownSpacer.setPrefHeight(Design.spacing);
 
+        Label generalInformationHeading = new Label("General Information");
+        generalInformationHeading.setFont(Font.font("Arial", FontWeight.BOLD, 16));
         Label description = new Label(descriptionText);
+        description.setWrapText(true);
+        Label growthInformationHeading = new Label("Growth Information");
+        growthInformationHeading.setFont(Font.font("Arial", FontWeight.BOLD, 16));
+        Label growthInformation = new Label(growthInfoText);
+        growthInformation.setWrapText(true);
         Label locationText = new Label(location);
         Label taxonomyText = new Label(taxonomy);
 
@@ -84,10 +103,18 @@ public class PlantPage extends VBox
             title,
             subtitle,
             verticalSpacer,
+            generalInformationHeading,
             description,
+            growthSectionSpacer,
+            growthInformationHeading,
+            growthInformation,
+            locationSectionSpacer,
             locationText,
+            taxonomySectionSpacer,
             taxonomyText,
-            createTaxonomyPane(plant)
+            createTaxonomyPane(plant),
+            dropdownSpacer,
+            createAdditionalInfoPane(plant)
         );
 
         rightColumn.getChildren().addAll(
@@ -141,6 +168,23 @@ public class PlantPage extends VBox
         taxonomyPane.setExpanded(false);
         taxonomyPane.setMaxWidth(Double.MAX_VALUE);
         return taxonomyPane;
+    }
+
+    private TitledPane createAdditionalInfoPane(Plant plant)
+    {
+        GridPane table = new GridPane();
+        table.setHgap(Design.spacing * 2);
+        table.setVgap(Design.spacing);
+        table.setPadding(new Insets(Design.padding));
+
+        addTaxonomyRow(table, 0, "Edible", plant == null ? null : plant.getEdible());
+        addTaxonomyRow(table, 1, "Hazardous", plant == null ? null : plant.getHazardous());
+        addTaxonomyRow(table, 2, "Subspecies", plant == null ? null : plant.getSubspecies());
+
+        TitledPane additionalInfoPane = new TitledPane("Additional information", table);
+        additionalInfoPane.setExpanded(false);
+        additionalInfoPane.setMaxWidth(Double.MAX_VALUE);
+        return additionalInfoPane;
     }
 
     private void addTaxonomyRow(GridPane table, int row, String field, String value)
