@@ -41,7 +41,7 @@ public class EditPage extends VBox
         //fields
         PlantEditField plantNameField = new PlantEditField("Plant name", plantName);
         PlantEditField scientificNameField = new PlantEditField("Scientific name", scientificName);
-        PlantEditField descriptionField = new PlantEditField("Description", description, true);
+        PlantEditField descriptionField = new PlantEditField("Description", description, 200, true);
 
         Region bottomSpacer = new Region();
         VBox.setVgrow(bottomSpacer, Priority.ALWAYS);

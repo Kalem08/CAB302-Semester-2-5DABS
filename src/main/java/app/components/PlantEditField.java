@@ -16,15 +16,22 @@ import javafx.scene.text.FontWeight;
 //this node is added to the EditPage for plants, and  contains a label and field for each property of a plant
 public class PlantEditField extends StackPane
 {
+    //variables
     Color backgroundColour = Color.LIGHTGREY;
+    public static float defaultHeight = 60;
 
     //MARK: Constructors
     public PlantEditField(String title, String defaultText)
     {
-        this(title, defaultText, false);
+        this(title, defaultText, defaultHeight, false);
     }
 
     public PlantEditField(String title, String defaultText, boolean multilined)
+    {
+        this(title, defaultText, defaultHeight, multilined);
+    }
+
+    public PlantEditField(String title, String defaultText, float height, boolean multilined)
     {
         //MARK: Background
         // background = new Rectangle(width, height);
@@ -71,6 +78,6 @@ public class PlantEditField extends StackPane
         );
 
         setPrefWidth(1000);
-        setPrefHeight(100);
+        setPrefHeight(height);
     }
 }
