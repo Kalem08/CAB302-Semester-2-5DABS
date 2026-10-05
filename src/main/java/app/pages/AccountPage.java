@@ -1,6 +1,6 @@
 package app.pages;
 
-//MARK: imports
+//MARK: Imports
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.*;

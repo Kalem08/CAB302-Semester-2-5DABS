@@ -1,7 +1,9 @@
 package app.pages;
 
+//MARK: Imports
 import app.Design;
-import app.HelloApplication;
+// import app.HelloApplication;
+import app.Navigation;
 import app.components.Header;
 import app.components.SearchResult;
 import app.model.Plant;
@@ -85,7 +87,7 @@ public class ResultsPage extends VBox
         for (Plant plant : results)
         {
             SearchResult result = new SearchResult(plant);
-            result.setOnMouseClicked(event -> openPlantPage(plant, query));
+            result.setOnMouseClicked(event -> Navigation.openPlantPage(plant, query));
             list.getChildren().add(result);
         }
 
@@ -96,9 +98,8 @@ public class ResultsPage extends VBox
         return scrollPane;
     }
 
-    void openPlantPage(Plant plant, String query)
-    {
-        HelloApplication.scene.setRoot(new PlantPage(plant, query));
-    }
-
+    // void openPlantPage(Plant plant, String query)
+    // {
+    //     HelloApplication.scene.setRoot(new PlantPage(plant, query));
+    // }
 }
