@@ -37,11 +37,18 @@ public class EditPage extends VBox
         String plantName = plant == null ? "Plant Name" : plant.getVernacularName();
         String scientificName = plant == null ? "Subtitle" : plant.getSciName();
         String description = plant == null ? "Description" : plant.getGeneralisedInfo();
+        String growthInfo = (plant == null || plant.getGrowthInfo() == null || plant.getGrowthInfo().isBlank()) ? "" : plant.getGrowthInfo();
+        String location = plant == null ? "" : plant.getLocation();
 
         //fields
         PlantEditField plantNameField = new PlantEditField("Plant name", plantName);
         PlantEditField scientificNameField = new PlantEditField("Scientific name", scientificName);
-        PlantEditField descriptionField = new PlantEditField("Description", description, 200, true);
+        PlantEditField descriptionField = new PlantEditField("Description", description, 150, true);
+        PlantEditField growthInfoField = new PlantEditField("Growth info", growthInfo, 150, true);
+        PlantEditField locationField = new PlantEditField("Location", location);
+        PlantEditField familyField = new PlantEditField("Family", plant.getFamily());
+        PlantEditField genusField = new PlantEditField("Genus", plant.getGenus());
+        PlantEditField speciesField = new PlantEditField("Species", plant.getSpecies());
 
         Region bottomSpacer = new Region();
         VBox.setVgrow(bottomSpacer, Priority.ALWAYS);
@@ -49,14 +56,14 @@ public class EditPage extends VBox
         //MARK: Bottom buttons
         CustomButton backButton = new CustomButton("Quit without saving", buttonWidth, buttonHeight);
         backButton.setTextColour(Design.white);
-        backButton.setTextHoverColour(Design.grey90);
+        backButton.setTextHoverColour(Design.grey95);
         backButton.setBackgroundColor(Design.red);
         backButton.setBackgroundHoverColor(Design.darkRed);
         backButton.setOnMouseClicked(event -> Navigation.openPlantPage(plant));
 
         CustomButton saveButton = new CustomButton("Submit changes", buttonWidth, buttonHeight);
         saveButton.setTextColour(Design.white);
-        saveButton.setTextHoverColour(Design.grey80);
+        saveButton.setTextHoverColour(Design.grey95);
         saveButton.setBackgroundColor(Design.softGreen);
         saveButton.setBackgroundHoverColor(Design.darkSoftGreen);
         saveButton.setOnMouseClicked(event -> saveEdits());
@@ -73,6 +80,11 @@ public class EditPage extends VBox
             plantNameField,
             scientificNameField,
             descriptionField,
+            growthInfoField,
+            locationField,
+            familyField,
+            genusField,
+            speciesField,
 
             bottomSpacer,
             bottomRow
