@@ -6,8 +6,8 @@ import javafx.geometry.Insets;
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
 // import javafx.scene.paint.Color;
-// import javafx.scene.text.Font;
-// import javafx.scene.text.FontWeight;
+import javafx.scene.text.Font;
+import javafx.scene.text.FontWeight;
 
 import app.Design;
 import app.Navigation;
@@ -21,12 +21,34 @@ public class EditPage extends VBox
     int buttonWidth = 150;
     int buttonHeight = 40;
 
-    //constructor
+    int textfieldWidth = 400;
+    int textAreaWidth = 800;
+
+    //MARK: Constructor
     public EditPage(Plant plant)
     {
         Header header = new Header();
-        Label testLabel = new Label("Text");
-        Label label2 = new Label("Text2");
+
+        //MARK: Body
+        Label titleLabel = new Label("Edit Plant Page");
+        titleLabel.setFont(Font.font("Arial", FontWeight.BOLD, 24));
+
+        String plantName = plant == null ? "Plant Name" : plant.getVernacularName();
+        String scientificName = plant == null ? "Subtitle" : plant.getSciName();
+        String description = plant == null ? "Description" : plant.getGeneralisedInfo();
+
+        Label plantNameLabel = new Label("Plant name");
+        TextField plantNameTextField = new TextField(plantName);
+        plantNameTextField.setPrefWidth(textfieldWidth);
+
+        Label scientificNameLabel = new Label("Scientific name");
+        TextField scientificNameTextfield = new TextField(scientificName);
+        scientificNameTextfield.setPrefWidth(textfieldWidth);
+
+        Label descriptionLabel = new Label("Description");
+        TextArea descriptionTextfield = new TextArea(description);
+        descriptionTextfield.setPrefWidth(textAreaWidth);
+        descriptionTextfield.setWrapText(true);
 
         Region bottomSpacer = new Region();
         VBox.setVgrow(bottomSpacer, Priority.ALWAYS);
@@ -53,13 +75,22 @@ public class EditPage extends VBox
         bottomRow.setSpacing(Design.spacing);
 
         VBox content = new VBox(
-            testLabel,
-            label2,
+            titleLabel,
+
+            plantNameLabel,
+            plantNameTextField,
+            
+            scientificNameLabel,
+            scientificNameTextfield,
+
+            descriptionLabel,
+            descriptionTextfield,
+
             bottomSpacer,
             bottomRow
         );
         content.setPadding(new Insets(Design.padding));
-        content.setFillWidth(false); //stop nodes in this container from stetching to their maximum horizontally
+        content.setFillWidth(false); //stop nodes in this container from stetching to their maximum horizontal size
         VBox.setVgrow(content, Priority.ALWAYS);
 
         getChildren().addAll(
@@ -69,6 +100,7 @@ public class EditPage extends VBox
         );
     }
 
+    //MARK: Methods
     void saveEdits()
     {
 
