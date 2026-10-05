@@ -8,13 +8,12 @@ import javafx.geometry.Pos;
 import javafx.scene.paint.Color;
 import javafx.scene.image.*;
 
-import User.authManager;
 import app.Design;
 import app.Navigation;
-import app.HelloApplication;
 import app.components.CustomButton;
 import app.components.CustomTextfield;
 import app.components.ImageButton;
+import User.authManager;
 
 //the entry page when the user first opens the app
 public class EntryPage extends VBox
@@ -129,12 +128,7 @@ public class EntryPage extends VBox
     //MARK: Methods
     void search()
     {
-        openResultsPage(searchTextfield.getText());
-    }
-
-    void openResultsPage(String query)
-    {
-        HelloApplication.setPage(new ResultsPage(query));
+        Navigation.openResultsPage(searchTextfield.getText());
     }
 
     //toggles visibility of buttons

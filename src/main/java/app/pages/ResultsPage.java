@@ -15,7 +15,7 @@ import app.model.SQLitePlantDAO;
 
 public class ResultsPage extends VBox
 {
-    //variables
+    //MARK: Variables
     private static final int PAGE_SIZE = 20;
     private final SQLitePlantDAO plantDAO = new SQLitePlantDAO();
     private final String query;
@@ -48,7 +48,7 @@ public class ResultsPage extends VBox
         refreshResults();
     }
 
-    //MARK: Components
+    //MARK: Create filter
     private ComboBox<String> createFilter(String prompt, String column)
     {
         ComboBox<String> filter = new ComboBox<>();
@@ -59,6 +59,7 @@ public class ResultsPage extends VBox
         return filter;
     }
 
+    //MARK: Refresh results
     private void refreshResults()
     {
         int resultCount = plantDAO.count(query, selectedValue(locationFilter),
@@ -79,6 +80,7 @@ public class ResultsPage extends VBox
         return value == null || value.startsWith("All ") ? "" : value;
     }
 
+    //MARK: Create page
     private ScrollPane createPage(int pageIndex)
     {
         VBox list = new VBox(Design.spacing);

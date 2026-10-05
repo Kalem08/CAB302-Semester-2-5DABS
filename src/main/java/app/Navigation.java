@@ -9,6 +9,8 @@ import app.pages.ResultsPage;
 import app.AuthenticationPanel.AuthMode;
 import app.model.Plant;
 
+//MARK: Class
+//this class standardises a bunch of functions across the project for navigation and loading different pages
 public class Navigation
 {
     public static void openEntryPage()
@@ -19,6 +21,11 @@ public class Navigation
     public static void openResultsPage(String query)
     {
         HelloApplication.setPage(new ResultsPage(query));
+    }
+    
+    public static void openPlantPage(Plant plant, String searchQuery)
+    {
+        HelloApplication.setPage(new PlantPage(plant, searchQuery));
     }
 
     public static void openPlantPage(Plant plant)

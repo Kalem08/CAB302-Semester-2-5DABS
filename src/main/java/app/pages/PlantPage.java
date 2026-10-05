@@ -24,11 +24,13 @@ public class PlantPage extends VBox
         this(null);
     }
 
+    //partial constructor
     public PlantPage(Plant plant)
     {
         this(plant, "");
     }
 
+    //full constructor
     public PlantPage(Plant plant, String searchQuery)
     {
         Header header = new Header();
@@ -150,6 +152,7 @@ public class PlantPage extends VBox
         );
     }
 
+    //MARK: Taxonomy Pane
     private TitledPane createTaxonomyPane(Plant plant)
     {
         GridPane table = new GridPane();

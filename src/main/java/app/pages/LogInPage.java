@@ -3,9 +3,6 @@ package app.pages;
 //MARK: Imports
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
-import app.AuthenticationPanel;
-import app.Design;
-import app.AuthenticationPanel.AuthMode;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.paint.Color;
@@ -13,6 +10,10 @@ import javafx.scene.shape.Rectangle;
 import javafx.scene.text.*;
 import javafx.scene.image.*;
 import javafx.scene.effect.*; //for image colouring
+
+import app.Design;
+import app.components.AuthenticationPanel;
+import app.components.AuthenticationPanel.AuthMode;
 
 //could also be called 'AccountPanel' or 'AuthenticationPanel', as this encompasses both log in AND registration
 public class LogInPage extends StackPane
