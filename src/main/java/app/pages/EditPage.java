@@ -24,18 +24,6 @@ public class EditPage extends VBox
     int buttonWidth = 150;
     int buttonHeight = 40;
 
-    int textfieldWidth = 400;
-    int textAreaWidth = 800;
-
-    PlantEditField plantNameField;
-    PlantEditField scientificNameField;
-    PlantEditField descriptionField;
-    PlantEditField growthInfoField;
-    PlantEditField locationField;
-    PlantEditField familyField;
-    PlantEditField genusField;
-    PlantEditField speciesField;
-
     //MARK: Constructor
     public EditPage(Plant plant)
     {
@@ -52,16 +40,16 @@ public class EditPage extends VBox
         String location = plant == null ? "" : plant.getLocation();
 
         //fields
-        plantNameField = new PlantEditField("Plant name", plantName);
-        scientificNameField = new PlantEditField("Scientific name", scientificName);
-        descriptionField = new PlantEditField("Description", description, 150, true);
-        growthInfoField = new PlantEditField("Growth info", growthInfo, 150, true);
-        locationField = new PlantEditField("Location", location);
-        familyField = new PlantEditField("Family", plant.getFamily());
-        genusField = new PlantEditField("Genus", plant.getGenus());
-        speciesField = new PlantEditField("Species", plant.getSpecies());
+        PlantEditField plantNameField = new PlantEditField("Plant name", plantName);
+        PlantEditField scientificNameField = new PlantEditField("Scientific name", scientificName);
+        PlantEditField descriptionField = new PlantEditField("Description", description, 150, true);
+        PlantEditField growthInfoField = new PlantEditField("Growth info", growthInfo, 150, true);
+        PlantEditField locationField = new PlantEditField("Location", location);
+        PlantEditField familyField = new PlantEditField("Family", plant.getFamily());
+        PlantEditField genusField = new PlantEditField("Genus", plant.getGenus());
+        PlantEditField speciesField = new PlantEditField("Species", plant.getSpecies());
 
-        ScrollPane scrollArea = createScrollNode();
+        // ScrollPane scrollArea = createScrollNode();
 
         Region bottomSpacer = new Region();
         VBox.setVgrow(bottomSpacer, Priority.ALWAYS);
@@ -89,7 +77,17 @@ public class EditPage extends VBox
 
         VBox content = new VBox(
             titleLabel,
-            scrollArea,
+
+            // scrollArea,
+            plantNameField,
+            scientificNameField,
+            descriptionField,
+            growthInfoField,
+            locationField,
+            familyField,
+            genusField,
+            speciesField,
+
             bottomSpacer,
             bottomRow
         );
@@ -98,42 +96,26 @@ public class EditPage extends VBox
         content.setFillWidth(false); //stop nodes in this container from stetching to their maximum horizontal size
         VBox.setVgrow(content, Priority.ALWAYS);
 
-        getChildren().addAll(
+        VBox page = new VBox(
             header,
-            // testLabel
             content
         );
-    }
+        page.setFillWidth(true);
 
-    //MARK: Scroll pane
-    private ScrollPane createScrollNode()
-    {
-        VBox list = new VBox(Design.spacing);
-        list.setPadding(new Insets(Design.padding));
-
-        // List<Plant> results = plantDAO.search(query, selectedValue(locationFilter),
-        //     selectedValue(familyFilter), selectedValue(genusFilter), PAGE_SIZE, pageIndex * PAGE_SIZE);
-        // for (Plant plant : results)
-        // {
-        //     SearchResult result = new SearchResult(plant);
-        //     result.setOnMouseClicked(event -> Navigation.openPlantPage(plant, query));
-        //     list.getChildren().add(result);
-        // }
-
-        list.getChildren().add(plantNameField);
-        list.getChildren().add(scientificNameField);
-        list.getChildren().add(descriptionField);
-        list.getChildren().add(growthInfoField);
-        list.getChildren().add(locationField);
-        list.getChildren().add(familyField);
-        list.getChildren().add(genusField);
-        list.getChildren().add(speciesField);
-
-        ScrollPane scrollPane = new ScrollPane(list);
-        scrollPane.setFitToWidth(true);
+        ScrollPane scrollPane = new ScrollPane(
+            page
+        );
+        scrollPane.setFitToWidth(true); //this allows the header to stretch to the maximum
+        // scrollPane.setFitToHeight(false); //when false, allows the ScrollPane to shorten it's height when the window shrinks in height 
         scrollPane.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
         scrollPane.setVbarPolicy(ScrollPane.ScrollBarPolicy.AS_NEEDED);
-        return scrollPane;
+
+        getChildren().addAll(
+            // header,
+            // content
+
+            scrollPane
+        );
     }
 
     //MARK: Methods

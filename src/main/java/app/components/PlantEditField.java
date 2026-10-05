@@ -77,7 +77,7 @@ public class PlantEditField extends StackPane
             body
         );
 
-        setPrefWidth(1000);
+        // setPrefWidth(1000);
         setPrefHeight(height);
     }
 }
