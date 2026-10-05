@@ -13,6 +13,7 @@ import app.Design;
 import app.Navigation;
 import app.components.CustomButton;
 import app.components.Header;
+import app.components.PlantEditField;
 import app.model.Plant;
 
 //this page allows users to make a request to change details of a Plant entry
@@ -37,18 +38,10 @@ public class EditPage extends VBox
         String scientificName = plant == null ? "Subtitle" : plant.getSciName();
         String description = plant == null ? "Description" : plant.getGeneralisedInfo();
 
-        Label plantNameLabel = new Label("Plant name");
-        TextField plantNameTextField = new TextField(plantName);
-        plantNameTextField.setPrefWidth(textfieldWidth);
-
-        Label scientificNameLabel = new Label("Scientific name");
-        TextField scientificNameTextfield = new TextField(scientificName);
-        scientificNameTextfield.setPrefWidth(textfieldWidth);
-
-        Label descriptionLabel = new Label("Description");
-        TextArea descriptionTextfield = new TextArea(description);
-        descriptionTextfield.setPrefWidth(textAreaWidth);
-        descriptionTextfield.setWrapText(true);
+        //fields
+        PlantEditField plantNameField = new PlantEditField("Plant name", plantName);
+        PlantEditField scientificNameField = new PlantEditField("Scientific name", scientificName);
+        PlantEditField descriptionField = new PlantEditField("Description", description, true);
 
         Region bottomSpacer = new Region();
         VBox.setVgrow(bottomSpacer, Priority.ALWAYS);
@@ -77,18 +70,14 @@ public class EditPage extends VBox
         VBox content = new VBox(
             titleLabel,
 
-            plantNameLabel,
-            plantNameTextField,
-            
-            scientificNameLabel,
-            scientificNameTextfield,
-
-            descriptionLabel,
-            descriptionTextfield,
+            plantNameField,
+            scientificNameField,
+            descriptionField,
 
             bottomSpacer,
             bottomRow
         );
+        content.setSpacing(Design.spacing);
         content.setPadding(new Insets(Design.padding));
         content.setFillWidth(false); //stop nodes in this container from stetching to their maximum horizontal size
         VBox.setVgrow(content, Priority.ALWAYS);
