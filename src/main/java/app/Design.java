@@ -43,8 +43,8 @@ public class Design
     public static Color lightGreen = Color.web("#0fff0f");
     public static Color mediumGreen = Color.web("#008000"); //50%
     public static Color darkGreen = Color.web("#007000");
-    public static Color softGreen = Color.LIMEGREEN;
-    public static Color darkSoftGreen = Color.web("#32b432");
+    public static Color softGreen = Color.LIMEGREEN; //used for button colour
+    public static Color darkSoftGreen = Color.web("#32b432"); //used for button hover colour
 
     //misc colours
     public static Color hyperlinkColour = Color.web("#0066CC");

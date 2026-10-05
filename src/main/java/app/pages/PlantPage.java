@@ -37,7 +37,6 @@ public class PlantPage extends VBox
         HBox.setHgrow(horizontalSpacer, Priority.ALWAYS);
 
         //MARK: Left column
-        
         String titleText = plant == null ? "Plant Name" : plant.getVernacularName();
         String scientificName = plant == null ? "Subtitle" : plant.getSciName();
         String descriptionText = plant == null ? "Description" : plant.getGeneralisedInfo();
@@ -118,7 +117,6 @@ public class PlantPage extends VBox
             returnToResultsButton,
             editPrompt
         );
-        // VBox.setVgrow(leftColumn, Priority.ALWAYS);
 
         //MARK: Right column
         ImageView imageView = new ImageView();
