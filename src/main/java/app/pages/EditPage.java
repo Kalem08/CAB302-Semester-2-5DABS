@@ -8,6 +8,8 @@ import javafx.scene.layout.*;
 // import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
+import javafx.scene.control.ScrollPane.ScrollBarPolicy;
+import java.util.List;
 
 import app.Design;
 import app.Navigation;
@@ -25,13 +27,22 @@ public class EditPage extends VBox
     int textfieldWidth = 400;
     int textAreaWidth = 800;
 
+    PlantEditField plantNameField;
+    PlantEditField scientificNameField;
+    PlantEditField descriptionField;
+    PlantEditField growthInfoField;
+    PlantEditField locationField;
+    PlantEditField familyField;
+    PlantEditField genusField;
+    PlantEditField speciesField;
+
     //MARK: Constructor
     public EditPage(Plant plant)
     {
         Header header = new Header();
 
         //MARK: Body
-        Label titleLabel = new Label("Edit Plant Page");
+        Label titleLabel = new Label("Edit Plant");
         titleLabel.setFont(Font.font("Arial", FontWeight.BOLD, 24));
 
         String plantName = plant == null ? "Plant Name" : plant.getVernacularName();
@@ -41,14 +52,16 @@ public class EditPage extends VBox
         String location = plant == null ? "" : plant.getLocation();
 
         //fields
-        PlantEditField plantNameField = new PlantEditField("Plant name", plantName);
-        PlantEditField scientificNameField = new PlantEditField("Scientific name", scientificName);
-        PlantEditField descriptionField = new PlantEditField("Description", description, 150, true);
-        PlantEditField growthInfoField = new PlantEditField("Growth info", growthInfo, 150, true);
-        PlantEditField locationField = new PlantEditField("Location", location);
-        PlantEditField familyField = new PlantEditField("Family", plant.getFamily());
-        PlantEditField genusField = new PlantEditField("Genus", plant.getGenus());
-        PlantEditField speciesField = new PlantEditField("Species", plant.getSpecies());
+        plantNameField = new PlantEditField("Plant name", plantName);
+        scientificNameField = new PlantEditField("Scientific name", scientificName);
+        descriptionField = new PlantEditField("Description", description, 150, true);
+        growthInfoField = new PlantEditField("Growth info", growthInfo, 150, true);
+        locationField = new PlantEditField("Location", location);
+        familyField = new PlantEditField("Family", plant.getFamily());
+        genusField = new PlantEditField("Genus", plant.getGenus());
+        speciesField = new PlantEditField("Species", plant.getSpecies());
+
+        ScrollPane scrollArea = createScrollNode();
 
         Region bottomSpacer = new Region();
         VBox.setVgrow(bottomSpacer, Priority.ALWAYS);
@@ -76,16 +89,7 @@ public class EditPage extends VBox
 
         VBox content = new VBox(
             titleLabel,
-
-            plantNameField,
-            scientificNameField,
-            descriptionField,
-            growthInfoField,
-            locationField,
-            familyField,
-            genusField,
-            speciesField,
-
+            scrollArea,
             bottomSpacer,
             bottomRow
         );
@@ -99,6 +103,37 @@ public class EditPage extends VBox
             // testLabel
             content
         );
+    }
+
+    //MARK: Scroll pane
+    private ScrollPane createScrollNode()
+    {
+        VBox list = new VBox(Design.spacing);
+        list.setPadding(new Insets(Design.padding));
+
+        // List<Plant> results = plantDAO.search(query, selectedValue(locationFilter),
+        //     selectedValue(familyFilter), selectedValue(genusFilter), PAGE_SIZE, pageIndex * PAGE_SIZE);
+        // for (Plant plant : results)
+        // {
+        //     SearchResult result = new SearchResult(plant);
+        //     result.setOnMouseClicked(event -> Navigation.openPlantPage(plant, query));
+        //     list.getChildren().add(result);
+        // }
+
+        list.getChildren().add(plantNameField);
+        list.getChildren().add(scientificNameField);
+        list.getChildren().add(descriptionField);
+        list.getChildren().add(growthInfoField);
+        list.getChildren().add(locationField);
+        list.getChildren().add(familyField);
+        list.getChildren().add(genusField);
+        list.getChildren().add(speciesField);
+
+        ScrollPane scrollPane = new ScrollPane(list);
+        scrollPane.setFitToWidth(true);
+        scrollPane.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
+        scrollPane.setVbarPolicy(ScrollPane.ScrollBarPolicy.AS_NEEDED);
+        return scrollPane;
     }
 
     //MARK: Methods

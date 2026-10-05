@@ -1,21 +1,21 @@
 package app.pages;
 
 //MARK: Imports
+import javafx.geometry.Insets;
+import javafx.scene.control.*;
+import javafx.scene.layout.*;
+import java.util.List;
+
 import app.Design;
-// import app.HelloApplication;
 import app.Navigation;
 import app.components.Header;
 import app.components.SearchResult;
 import app.model.Plant;
 import app.model.SQLitePlantDAO;
 
-import java.util.List;
-import javafx.geometry.Insets;
-import javafx.scene.control.*;
-import javafx.scene.layout.*;
-
 public class ResultsPage extends VBox
 {
+    //variables
     private static final int PAGE_SIZE = 20;
     private final SQLitePlantDAO plantDAO = new SQLitePlantDAO();
     private final String query;
@@ -25,6 +25,7 @@ public class ResultsPage extends VBox
     private final Label resultLabel = new Label();
     private final Pagination pagination = new Pagination();
 
+    //MARK: Constructors
     public ResultsPage()
     {
         this("");
@@ -47,6 +48,7 @@ public class ResultsPage extends VBox
         refreshResults();
     }
 
+    //MARK: Components
     private ComboBox<String> createFilter(String prompt, String column)
     {
         ComboBox<String> filter = new ComboBox<>();
@@ -97,9 +99,4 @@ public class ResultsPage extends VBox
         scrollPane.setVbarPolicy(ScrollPane.ScrollBarPolicy.AS_NEEDED);
         return scrollPane;
     }
-
-    // void openPlantPage(Plant plant, String query)
-    // {
-    //     HelloApplication.scene.setRoot(new PlantPage(plant, query));
-    // }
 }
