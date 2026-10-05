@@ -102,18 +102,19 @@ public class SQLitePlantDAO implements IPlantDAO {
              PreparedStatement statement = connection.prepareStatement(sql)) {
 
             statement.setString(1, plant.getGeneralisedInfo());
-            statement.setString(2, plant.getImage());
-            statement.setString(3, plant.getLocation());
-            statement.setString(4, plant.getSciName());
-            statement.setString(5, plant.getKingdom());
-            statement.setString(6, plant.getPhylum());
-            statement.setString(7, plant.getPclass());
-            statement.setString(8, plant.getOrder());
-            statement.setString(9, plant.getFamily());
-            statement.setString(10, plant.getGenus());
-            statement.setString(11, plant.getTaxonRank());
-            statement.setString(12, plant.getVernacularName());
-            statement.setString(13, plant.getSpecies());
+            statement.setString(2, plant.getGrowthInfo());
+            statement.setString(3, plant.getImage());
+            statement.setString(4, plant.getLocation());
+            statement.setString(5, plant.getSciName());
+            statement.setString(6, plant.getKingdom());
+            statement.setString(7, plant.getPhylum());
+            statement.setString(8, plant.getPclass());
+            statement.setString(9, plant.getOrder());
+            statement.setString(10, plant.getFamily());
+            statement.setString(11, plant.getGenus());
+            statement.setString(12, plant.getTaxonRank());
+            statement.setString(13, plant.getVernacularName());
+            statement.setString(14, plant.getSpecies());
             statement.setString(15, additionalInfoValue(plant.getEdible()));
             statement.setString(16, additionalInfoValue(plant.getHazardous()));
             statement.setString(17, additionalInfoValue(plant.getSubspecies()));
