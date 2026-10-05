@@ -1,5 +1,3 @@
-package app.model;
-
 // Import required modules and connections
 import database.DatabaseConnection;
 import org.junit.jupiter.api.AfterEach;
