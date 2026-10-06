@@ -4,6 +4,7 @@ package app.pages;
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
 import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
@@ -14,6 +15,8 @@ import app.HelloApplication;
 import app.Navigation;
 import app.components.Header;
 import app.model.Plant;
+import app.model.SQLitePlantDAO;
+import User.authManager;
 
 //this is the page that contains all of the details/content about a plant
 public class PlantPage extends VBox
@@ -135,6 +138,20 @@ public class PlantPage extends VBox
             imageView,
             imageSubtitle
         );
+        if (plant != null && authManager.canManagePlants())
+        {
+            Region adminActionsSpacer = new Region();
+            VBox.setVgrow(adminActionsSpacer, Priority.ALWAYS);
+
+            MenuButton adminActions = new MenuButton("Administrator actions");
+            MenuItem deletePlant = new MenuItem("Delete plant");
+            deletePlant.setOnAction(event -> confirmPlantDeletion(plant, searchQuery));
+            adminActions.getItems().add(deletePlant);
+
+            HBox adminActionsRow = new HBox(adminActions);
+            adminActionsRow.setAlignment(Pos.CENTER_RIGHT);
+            rightColumn.getChildren().addAll(adminActionsSpacer, adminActionsRow);
+        }
 
         //MARK: Horizontal
         HBox content = new HBox(
@@ -199,5 +216,38 @@ public class PlantPage extends VBox
         fieldLabel.setStyle("-fx-font-weight: bold;");
         table.add(fieldLabel, 0, row);
         table.add(new Label(value == null || value.isBlank() ? "Not available" : value), 1, row);
+    }
+
+    private void confirmPlantDeletion(Plant plant, String searchQuery)
+    {
+        if (!authManager.canManagePlants())
+        {
+            return;
+        }
+
+        Alert confirmation = new Alert(Alert.AlertType.CONFIRMATION);
+        confirmation.setTitle("Delete plant");
+        confirmation.setHeaderText("Delete " + plant.getVernacularName() + "?");
+        confirmation.setContentText("This will permanently remove this plant entry.");
+        confirmation.getButtonTypes().setAll(ButtonType.YES, ButtonType.NO);
+
+        if (confirmation.showAndWait().orElse(ButtonType.NO) != ButtonType.YES)
+        {
+            return;
+        }
+
+        try
+        {
+            new SQLitePlantDAO().deletePlant(plant);
+            Navigation.openResultsPage(searchQuery);
+        }
+        catch (RuntimeException exception)
+        {
+            Alert error = new Alert(Alert.AlertType.ERROR);
+            error.setTitle("Unable to delete plant");
+            error.setHeaderText("The plant entry could not be deleted.");
+            error.setContentText(exception.getMessage());
+            error.showAndWait();
+        }
     }
 }
