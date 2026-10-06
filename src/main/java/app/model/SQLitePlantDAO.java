@@ -18,6 +18,7 @@ public class SQLitePlantDAO implements IPlantDAO {
         String sql = """
             INSERT INTO PlantsData (
                 Generalised_info,
+                growthInfo,
                 images,
                 stateProvince,
                 scientificName,
@@ -29,28 +30,35 @@ public class SQLitePlantDAO implements IPlantDAO {
                 genus,
                 taxonRank,
                 vernacularName,
-                species
+                species,
+                Edible,
+                Hazardous,
+                Subspecies
             )
-            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
             """;
 
         try (Connection connection = DatabaseConnection.getConnection();
-             PreparedStatement statement =
-                     connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
+            PreparedStatement statement =
+                    connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
 
             statement.setString(1, plant.getGeneralisedInfo());
-            statement.setString(2, plant.getImage());
-            statement.setString(3, plant.getLocation());
-            statement.setString(4, plant.getSciName());
-            statement.setString(5, plant.getKingdom());
-            statement.setString(6, plant.getPhylum());
-            statement.setString(7, plant.getPclass());
-            statement.setString(8, plant.getOrder());
-            statement.setString(9, plant.getFamily());
-            statement.setString(10, plant.getGenus());
-            statement.setString(11, plant.getTaxonRank());
-            statement.setString(12, plant.getVernacularName());
-            statement.setString(13, plant.getSpecies());
+            statement.setString(2, plant.getGrowthInfo());
+            statement.setString(3, plant.getImage());
+            statement.setString(4, plant.getLocation());
+            statement.setString(5, plant.getSciName());
+            statement.setString(6, plant.getKingdom());
+            statement.setString(7, plant.getPhylum());
+            statement.setString(8, plant.getPclass());
+            statement.setString(9, plant.getOrder());
+            statement.setString(10, plant.getFamily());
+            statement.setString(11, plant.getGenus());
+            statement.setString(12, plant.getTaxonRank());
+            statement.setString(13, plant.getVernacularName());
+            statement.setString(14, plant.getSpecies());
+            statement.setString(15, additionalInfoValue(plant.getEdible()));
+            statement.setString(16, additionalInfoValue(plant.getHazardous()));
+            statement.setString(17, additionalInfoValue(plant.getSubspecies()));
 
             statement.executeUpdate();
 
@@ -71,6 +79,7 @@ public class SQLitePlantDAO implements IPlantDAO {
         String sql = """
             UPDATE PlantsData
             SET Generalised_info = ?,
+                growthInfo = ?,
                 images = ?,
                 stateProvince = ?,
                 scientificName = ?,
@@ -82,7 +91,10 @@ public class SQLitePlantDAO implements IPlantDAO {
                 genus = ?,
                 taxonRank = ?,
                 vernacularName = ?,
-                species = ?
+                species = ?,
+                Edible = ?,
+                Hazardous = ?,
+                Subspecies = ?
             WHERE PlantID = ?
             """;
 
@@ -90,20 +102,24 @@ public class SQLitePlantDAO implements IPlantDAO {
              PreparedStatement statement = connection.prepareStatement(sql)) {
 
             statement.setString(1, plant.getGeneralisedInfo());
-            statement.setString(2, plant.getImage());
-            statement.setString(3, plant.getLocation());
-            statement.setString(4, plant.getSciName());
-            statement.setString(5, plant.getKingdom());
-            statement.setString(6, plant.getPhylum());
-            statement.setString(7, plant.getPclass());
-            statement.setString(8, plant.getOrder());
-            statement.setString(9, plant.getFamily());
-            statement.setString(10, plant.getGenus());
-            statement.setString(11, plant.getTaxonRank());
-            statement.setString(12, plant.getVernacularName());
-            statement.setString(13, plant.getSpecies());
+            statement.setString(2, plant.getGrowthInfo());
+            statement.setString(3, plant.getImage());
+            statement.setString(4, plant.getLocation());
+            statement.setString(5, plant.getSciName());
+            statement.setString(6, plant.getKingdom());
+            statement.setString(7, plant.getPhylum());
+            statement.setString(8, plant.getPclass());
+            statement.setString(9, plant.getOrder());
+            statement.setString(10, plant.getFamily());
+            statement.setString(11, plant.getGenus());
+            statement.setString(12, plant.getTaxonRank());
+            statement.setString(13, plant.getVernacularName());
+            statement.setString(14, plant.getSpecies());
+            statement.setString(15, additionalInfoValue(plant.getEdible()));
+            statement.setString(16, additionalInfoValue(plant.getHazardous()));
+            statement.setString(17, additionalInfoValue(plant.getSubspecies()));
 
-            statement.setInt(14, plant.getId());
+            statement.setInt(18, plant.getId());
 
             statement.executeUpdate();
 
@@ -135,11 +151,7 @@ public class SQLitePlantDAO implements IPlantDAO {
     @Override
     public Plant getPlant(int id) {
 
-        String sql = """
-            SELECT *
-            FROM PlantsData
-            WHERE PlantID = ?
-            """;
+        String sql = "SELECT * FROM PlantsData WHERE PlantID = ?";
 
         try (Connection connection = DatabaseConnection.getConnection();
              PreparedStatement statement =
@@ -153,6 +165,7 @@ public class SQLitePlantDAO implements IPlantDAO {
 
                     Plant plant = new Plant(
                             resultSet.getString("Generalised_info"),
+                            resultSet.getString("growthInfo"),
                             resultSet.getString("images"),
                             resultSet.getString("stateProvince"),
                             resultSet.getString("scientificName"),
@@ -164,7 +177,10 @@ public class SQLitePlantDAO implements IPlantDAO {
                             resultSet.getString("genus"),
                             resultSet.getString("taxonRank"),
                             resultSet.getString("vernacularName"),
-                            resultSet.getString("species")
+                            resultSet.getString("species"),
+                            resultSet.getString("Edible"),
+                            resultSet.getString("Hazardous"),
+                            resultSet.getString("Subspecies")
                     );
 
                     plant.setID(resultSet.getInt("PlantID"));
@@ -188,10 +204,7 @@ public class SQLitePlantDAO implements IPlantDAO {
 
         List<Plant> plants = new ArrayList<>();
 
-        String sql = """
-            SELECT *
-            FROM PlantsData
-            """;
+        String sql = "SELECT * FROM PlantsData";
 
         try (Connection connection = DatabaseConnection.getConnection();
              PreparedStatement statement = connection.prepareStatement(sql);
@@ -201,6 +214,7 @@ public class SQLitePlantDAO implements IPlantDAO {
 
                 Plant plant = new Plant(
                         resultSet.getString("Generalised_info"),
+                        resultSet.getString("growthInfo"),
                         resultSet.getString("images"),
                         resultSet.getString("stateProvince"),
                         resultSet.getString("scientificName"),
@@ -212,7 +226,10 @@ public class SQLitePlantDAO implements IPlantDAO {
                         resultSet.getString("genus"),
                         resultSet.getString("taxonRank"),
                         resultSet.getString("vernacularName"),
-                        resultSet.getString("species")
+                        resultSet.getString("species"),
+                        resultSet.getString("Edible"),
+                        resultSet.getString("Hazardous"),
+                        resultSet.getString("Subspecies")
                 );
 
                 plant.setID(resultSet.getInt("PlantID"));
@@ -247,10 +264,10 @@ public class SQLitePlantDAO implements IPlantDAO {
 
         List<Plant> plants = new ArrayList<>();
         String sql = """
-            SELECT *
-            FROM PlantsData
+            SELECT p.*
+            FROM PlantsData p
             %s
-            ORDER BY PlantID
+            ORDER BY p.PlantID
             LIMIT ? OFFSET ?
             """;
         boolean hasQuery = query != null && !query.trim().isEmpty();
@@ -283,6 +300,7 @@ public class SQLitePlantDAO implements IPlantDAO {
                 while (resultSet.next()) {
                     Plant plant = new Plant(
                             resultSet.getString("Generalised_info"),
+                            resultSet.getString("growthInfo"),
                             resultSet.getString("images"),
                             resultSet.getString("stateProvince"),
                             resultSet.getString("scientificName"),
@@ -294,7 +312,10 @@ public class SQLitePlantDAO implements IPlantDAO {
                             resultSet.getString("genus"),
                             resultSet.getString("taxonRank"),
                             resultSet.getString("vernacularName"),
-                            resultSet.getString("species")
+                            resultSet.getString("species"),
+                            resultSet.getString("Edible"),
+                            resultSet.getString("Hazardous"),
+                            resultSet.getString("Subspecies")
                     );
 
                     plant.setID(resultSet.getInt("PlantID"));
@@ -375,6 +396,10 @@ public class SQLitePlantDAO implements IPlantDAO {
         }
 
         return values;
+    }
+
+    private String additionalInfoValue(String value) {
+        return value == null || value.isBlank() ? "N/a" : value;
     }
 
     private void addFilterCondition(List<String> conditions, String value, String column) {

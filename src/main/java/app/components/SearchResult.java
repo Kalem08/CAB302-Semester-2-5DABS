@@ -1,8 +1,6 @@
 package app.components;
 
-import app.Design;
 //MARK: Imports
-import app.model.Plant;
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
@@ -11,6 +9,10 @@ import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+
+import app.model.Plant;
+
+import app.Design;
 
 //this file creates a UI element for each search result
 public class SearchResult extends StackPane

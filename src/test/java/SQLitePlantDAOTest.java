@@ -6,9 +6,13 @@ import org.junit.jupiter.api.BeforeEach;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.Statement;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import app.model.Plant;
 import app.model.SQLitePlantDAO;
 import org.junit.jupiter.api.Test;
@@ -37,6 +41,7 @@ public class SQLitePlantDAOTest {
                 CREATE TABLE PlantsData (
                     PlantID INTEGER PRIMARY KEY AUTOINCREMENT,
                     Generalised_info VARCHAR(512),
+                    growthInfo VARCHAR(512),
                     images VARCHAR(512),
                     stateProvince VARCHAR(512),
                     scientificName VARCHAR(512),
@@ -48,7 +53,10 @@ public class SQLitePlantDAOTest {
                     genus VARCHAR(512),
                     taxonRank VARCHAR(512),
                     vernacularName VARCHAR(512),
-                    species VARCHAR(512)
+                    species VARCHAR(512),
+                    Edible TEXT NOT NULL DEFAULT 'N/a',
+                    Hazardous TEXT NOT NULL DEFAULT 'N/a',
+                    Subspecies TEXT NOT NULL DEFAULT 'N/a'
                 )
                 """);
             // Seed the temporary database with three known Plant records
@@ -129,6 +137,31 @@ public class SQLitePlantDAOTest {
         Files.deleteIfExists(testDatabasePath);
     }
 
+    @Test
+    void additionalInfoFieldsAreColumnsOnPlantsData() throws Exception {
+        try (Connection connection = DatabaseConnection.getConnection();
+             Statement statement = connection.createStatement();
+             ResultSet columns = statement.executeQuery("PRAGMA table_info(PlantsData)")) {
+            Set<String> columnNames = new HashSet<>();
+            while (columns.next()) {
+                columnNames.add(columns.getString("name"));
+            }
+
+            assertTrue(columnNames.containsAll(
+                    Set.of("Edible", "Hazardous", "Subspecies")));
+        }
+
+        try (Connection connection = DatabaseConnection.getConnection();
+             PreparedStatement statement = connection.prepareStatement("""
+                 SELECT COUNT(*) FROM sqlite_master
+                 WHERE type = 'table' AND name = 'AdditionalInfo'
+                 """);
+             ResultSet resultSet = statement.executeQuery()) {
+            assertTrue(resultSet.next());
+            assertEquals(0, resultSet.getInt(1));
+        }
+    }
+
     // DAO Retrieval Test - Checks that an existing Plant can be retrieved by ID
     // and that key Plant fields are correctly reconstructed from the database.
     @Test
@@ -142,6 +175,9 @@ public class SQLitePlantDAOTest {
         assertEquals(1, plant.getId());
         assertEquals("Gungurru", plant.getVernacularName());
         assertEquals("Eucalyptus testus", plant.getSciName());
+        assertEquals("N/a", plant.getEdible());
+        assertEquals("N/a", plant.getHazardous());
+        assertEquals("N/a", plant.getSubspecies());
     }
 
     // DAO Retrieval Edge Case - Checks that requesting a Plant ID that does not
@@ -169,6 +205,36 @@ public class SQLitePlantDAOTest {
         assertEquals(3, plants.size());
     }
 
+    @Test
+    void getAllPlantsAndSearchShouldReadAdditionalInfoColumns() throws Exception {
+        try (Connection connection = DatabaseConnection.getConnection();
+             PreparedStatement statement = connection.prepareStatement("""
+                 UPDATE PlantsData
+                 SET Edible = ?, Hazardous = ?, Subspecies = ?
+                 WHERE PlantID = ?
+                 """)) {
+            statement.setString(1, "yes");
+            statement.setString(2, "no");
+            statement.setString(3, "yes");
+            statement.setInt(4, 2);
+            assertEquals(1, statement.executeUpdate());
+        }
+
+        SQLitePlantDAO dao = new SQLitePlantDAO();
+        Plant fromSearch = dao.search("Acacia testus", 10, 0).get(0);
+        Plant fromAllPlants = dao.getAllPlants().stream()
+                .filter(plant -> plant.getId() == 2)
+                .findFirst()
+                .orElseThrow();
+
+        assertEquals("yes", fromSearch.getEdible());
+        assertEquals("no", fromSearch.getHazardous());
+        assertEquals("yes", fromSearch.getSubspecies());
+        assertEquals("yes", fromAllPlants.getEdible());
+        assertEquals("no", fromAllPlants.getHazardous());
+        assertEquals("yes", fromAllPlants.getSubspecies());
+    }
+
     // DAO Create Test - Checks that addPlant() persists a new Plant to SQLite,
     // assigns it a database ID, and makes the saved Plant retrievable.
     @Test
@@ -178,6 +244,7 @@ public class SQLitePlantDAOTest {
 
         Plant newPlant = new Plant(
                 "TDD test plant for SQLite persistence",
+                "Shrub to 2 m; full sun; well-drained soil.",
                 "",
                 "Queensland",
                 "Testus plantus",
@@ -189,9 +256,11 @@ public class SQLitePlantDAOTest {
                 "Testus",
                 "species",
                 "TDD Test Plant",
-                "Testus plantus"
+                "Testus plantus",
+                "yes",
+                "no",
+                "no"
         );
-
         dao.addPlant(newPlant);
 
         assertTrue(newPlant.getId() > 0);
@@ -205,6 +274,13 @@ public class SQLitePlantDAOTest {
                 );
 
         assertEquals(true, found);
+        assertEquals(
+                "Shrub to 2 m; full sun; well-drained soil.",
+                dao.getPlant(newPlant.getId()).getGrowthInfo()
+        );
+        assertEquals("yes", dao.getPlant(newPlant.getId()).getEdible());
+        assertEquals("no", dao.getPlant(newPlant.getId()).getHazardous());
+        assertEquals("no", dao.getPlant(newPlant.getId()).getSubspecies());
     }
 
     // DAO Update Test - Checks that changes made to an existing Plant object
@@ -219,8 +295,10 @@ public class SQLitePlantDAOTest {
         assertNotNull(plant);
 
         String originalName = plant.getVernacularName();
+        String originalGrowthInfo = plant.getGrowthInfo();
 
         plant.setVernacularName("Updated TDD Plant");
+        plant.setGrowthInfo("Updated growth requirements and traits.");
 
         dao.updatePlant(plant);
 
@@ -228,10 +306,52 @@ public class SQLitePlantDAOTest {
 
         assertNotNull(updatedPlant);
         assertEquals("Updated TDD Plant", updatedPlant.getVernacularName());
+        assertEquals(
+                "Updated growth requirements and traits.",
+                updatedPlant.getGrowthInfo()
+        );
 
         // Restore original database value after test
         plant.setVernacularName(originalName);
+        plant.setGrowthInfo(originalGrowthInfo);
         dao.updatePlant(plant);
+    }
+
+    @Test
+    void updatePlantShouldPersistAdditionalInfoFields() {
+        SQLitePlantDAO dao = new SQLitePlantDAO();
+        Plant plant = dao.getPlant(1);
+
+        assertNotNull(plant);
+        plant.setEdible("yes");
+        plant.setHazardous("no");
+        plant.setSubspecies("yes");
+
+        dao.updatePlant(plant);
+
+        Plant updatedPlant = dao.getPlant(1);
+        assertNotNull(updatedPlant);
+        assertEquals("yes", updatedPlant.getEdible());
+        assertEquals("no", updatedPlant.getHazardous());
+        assertEquals("yes", updatedPlant.getSubspecies());
+    }
+
+    @Test
+    void updatePlantShouldNormalizeBlankAdditionalInfoFields() {
+        SQLitePlantDAO dao = new SQLitePlantDAO();
+        Plant plant = dao.getPlant(1);
+        assertNotNull(plant);
+
+        plant.setEdible(null);
+        plant.setHazardous(" ");
+        plant.setSubspecies("");
+        dao.updatePlant(plant);
+
+        Plant updatedPlant = dao.getPlant(1);
+        assertNotNull(updatedPlant);
+        assertEquals("N/a", updatedPlant.getEdible());
+        assertEquals("N/a", updatedPlant.getHazardous());
+        assertEquals("N/a", updatedPlant.getSubspecies());
     }
 
     // DAO Update Edge Case - Checks that attempting to update a Plant with an
@@ -244,6 +364,7 @@ public class SQLitePlantDAOTest {
         // Arrange
         Plant plant = new Plant(
                 "Non-existent update plant",
+                null,
                 "",
                 "Queensland",
                 "Nonexistent update plantus",
@@ -255,7 +376,10 @@ public class SQLitePlantDAOTest {
                 "TestGenus",
                 "species",
                 "Missing Update Plant",
-                "Nonexistent species"
+                "Nonexistent species",
+                null,
+                null,
+                null
         );
 
         plant.setID(999);
@@ -282,6 +406,7 @@ public class SQLitePlantDAOTest {
         // Arrange
         Plant plant = new Plant(
                 "Plant with no image",
+                null,
                 "",
                 "Queensland",
                 "Eucalyptus testus",
@@ -293,7 +418,10 @@ public class SQLitePlantDAOTest {
                 "Eucalyptus",
                 "species",
                 "No Image Test Plant",
-                "Eucalyptus testus"
+                "Eucalyptus testus",
+                null,
+                null,
+                null
         );
 
         // Act
@@ -307,6 +435,9 @@ public class SQLitePlantDAOTest {
         assertNotNull(savedPlant);
         assertEquals("", savedPlant.getImage());
         assertEquals("No Image Test Plant", savedPlant.getVernacularName());
+        assertEquals("N/a", savedPlant.getEdible());
+        assertEquals("N/a", savedPlant.getHazardous());
+        assertEquals("N/a", savedPlant.getSubspecies());
 
         // Clean Up
         dao.deletePlant(plant);
@@ -315,13 +446,14 @@ public class SQLitePlantDAOTest {
     // DAO Delete Test - Checks that deletePlant() removes an existing Plant
     // record so that it can no longer be retrieved from the database.
     @Test
-    void deletePlantShouldRemovePlantFromDatabase() {
+    void deletePlantShouldRemovePlantFromDatabase() throws Exception {
 
         SQLitePlantDAO dao = new SQLitePlantDAO();
 
         // Arrange
         Plant plant = new Plant(
                 "Plant to be deleted",
+                null,
                 "delete-test.jpg",
                 "Queensland",
                 "Delete test scientific name",
@@ -333,7 +465,10 @@ public class SQLitePlantDAOTest {
                 "Eucalyptus",
                 "species",
                 "Delete Test Plant",
-                "deleteSpecies"
+                "deleteSpecies",
+                null,
+                null,
+                null
         );
 
         dao.addPlant(plant);
@@ -345,6 +480,15 @@ public class SQLitePlantDAOTest {
         Plant deletedPlant = dao.getPlant(plant.getId());
 
         assertNull(deletedPlant);
+        try (Connection connection = DatabaseConnection.getConnection();
+             PreparedStatement statement = connection.prepareStatement(
+                     "SELECT COUNT(*) FROM PlantsData WHERE PlantID = ?")) {
+            statement.setInt(1, plant.getId());
+            try (ResultSet resultSet = statement.executeQuery()) {
+                assertTrue(resultSet.next());
+                assertEquals(0, resultSet.getInt(1));
+            }
+        }
     }
 
     // DAO Delete Edge Case - Checks that attempting to delete a Plant with an
@@ -357,6 +501,7 @@ public class SQLitePlantDAOTest {
         // Arrange
         Plant plant = new Plant(
                 "Non-existent test plant",
+                null,
                 "",
                 "Queensland",
                 "Nonexistent plantus",
@@ -368,7 +513,10 @@ public class SQLitePlantDAOTest {
                 "TestGenus",
                 "species",
                 "Missing Plant",
-                "Nonexistent species"
+                "Nonexistent species",
+                null,
+                null,
+                null
         );
 
         plant.setID(999);
@@ -417,6 +565,7 @@ public class SQLitePlantDAOTest {
         // Arrange
         Plant plant = new Plant(
                 "Native Australian tree with distinctive red flowers",
+                null,
                 "eucalyptus_test.jpg",
                 "Queensland",
                 "Eucalyptus tereticornis",
@@ -428,7 +577,10 @@ public class SQLitePlantDAOTest {
                 "Eucalyptus",
                 "species",
                 "Forest Red Gum",
-                "Eucalyptus tereticornis"
+                "Eucalyptus tereticornis",
+                "no",
+                "no",
+                "no"
         );
 
         // Act
@@ -440,6 +592,10 @@ public class SQLitePlantDAOTest {
         assertNotNull(savedPlant);
 
         assertEquals(plant.getGeneralisedInfo(), savedPlant.getGeneralisedInfo());
+        assertEquals(plant.getGrowthInfo(), savedPlant.getGrowthInfo());
+        assertEquals(plant.getEdible(), savedPlant.getEdible());
+        assertEquals(plant.getHazardous(), savedPlant.getHazardous());
+        assertEquals(plant.getSubspecies(), savedPlant.getSubspecies());
         assertEquals(plant.getImage(), savedPlant.getImage());
         assertEquals(plant.getLocation(), savedPlant.getLocation());
         assertEquals(plant.getSciName(), savedPlant.getSciName());
@@ -467,6 +623,7 @@ public class SQLitePlantDAOTest {
         // Arrange
         Plant plantOne = new Plant(
                 "Native Australian eucalyptus tree",
+                null,
                 "eucalyptus.jpg",
                 "Queensland",
                 "Eucalyptus tereticornis",
@@ -478,11 +635,15 @@ public class SQLitePlantDAOTest {
                 "Eucalyptus",
                 "species",
                 "Forest Red Gum",
-                "Eucalyptus tereticornis"
+                "Eucalyptus tereticornis",
+                null,
+                null,
+                null
         );
 
         Plant plantTwo = new Plant(
                 "Native Australian flowering tree",
+                null,
                 "bottlebrush.jpg",
                 "New South Wales",
                 "Callistemon citrinus",
@@ -494,7 +655,10 @@ public class SQLitePlantDAOTest {
                 "Callistemon",
                 "species",
                 "Crimson Bottlebrush",
-                "Callistemon citrinus"
+                "Callistemon citrinus",
+                null,
+                null,
+                null
         );
 
         // Act
@@ -530,6 +694,7 @@ public class SQLitePlantDAOTest {
         // Arrange
         Plant plantOne = new Plant(
                 "Native Australian eucalyptus tree",
+                null,
                 "eucalyptus.jpg",
                 "Queensland",
                 "Eucalyptus tereticornis",
@@ -541,11 +706,15 @@ public class SQLitePlantDAOTest {
                 "Eucalyptus",
                 "species",
                 "Forest Red Gum",
-                "Eucalyptus tereticornis"
+                "Eucalyptus tereticornis",
+                null,
+                null,
+                null
         );
 
         Plant plantTwo = new Plant(
                 "Native Australian flowering tree",
+                null,
                 "bottlebrush.jpg",
                 "New South Wales",
                 "Callistemon citrinus",
@@ -557,7 +726,10 @@ public class SQLitePlantDAOTest {
                 "Callistemon",
                 "species",
                 "Crimson Bottlebrush",
-                "Callistemon citrinus"
+                "Callistemon citrinus",
+                null,
+                null,
+                null
         );
 
         dao.addPlant(plantOne);
@@ -598,6 +770,7 @@ public class SQLitePlantDAOTest {
         // Arrange
         Plant plantOne = new Plant(
                 "Native Australian eucalyptus tree",
+                null,
                 "eucalyptus.jpg",
                 "Queensland",
                 "Eucalyptus tereticornis",
@@ -609,11 +782,15 @@ public class SQLitePlantDAOTest {
                 "Eucalyptus",
                 "species",
                 "Forest Red Gum",
-                "Eucalyptus tereticornis"
+                "Eucalyptus tereticornis",
+                null,
+                null,
+                null
         );
 
         Plant plantTwo = new Plant(
                 "Native Australian flowering tree",
+                null,
                 "bottlebrush.jpg",
                 "New South Wales",
                 "Callistemon citrinus",
@@ -625,7 +802,10 @@ public class SQLitePlantDAOTest {
                 "Callistemon",
                 "species",
                 "Crimson Bottlebrush",
-                "Callistemon citrinus"
+                "Callistemon citrinus",
+                null,
+                null,
+                null
         );
 
         dao.addPlant(plantOne);
@@ -664,6 +844,7 @@ public class SQLitePlantDAOTest {
         // Arrange
         Plant plant = new Plant(
                 "Native plant that's commonly found in wet, shaded areas.",
+                null,
                 "bird's-nest-fern.jpg",
                 "Queensland, Australia",
                 "Asplenium australasicum",
@@ -675,7 +856,10 @@ public class SQLitePlantDAOTest {
                 "Asplenium",
                 "species",
                 "Bird's Nest Fern",
-                "Asplenium australasicum"
+                "Asplenium australasicum",
+                null,
+                null,
+                null
         );
 
         // Act
@@ -716,6 +900,7 @@ public class SQLitePlantDAOTest {
         for (int i = 4; i <= 25; i++) {
             Plant plant = new Plant(
                     "Pagination test plant " + i,
+                    null,
                     "",
                     "Queensland",
                     "Scientific name " + i,
@@ -727,7 +912,10 @@ public class SQLitePlantDAOTest {
                     "Test genus",
                     "species",
                     "Test Plant " + i,
-                    "Test species " + i
+                    "Test species " + i,
+                    null,
+                    null,
+                    null
             );
 
             dao.addPlant(plant);

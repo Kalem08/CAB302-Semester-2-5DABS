@@ -1,16 +1,19 @@
 package app.pages;
 
-//MARK: imports
+//MARK: Imports
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
+import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 
 import app.Design;
 import app.HelloApplication;
+import app.Navigation;
 import app.components.*;
 import User.*;
 
@@ -131,11 +134,6 @@ public class AccountPage extends VBox
     void logout()
     {
         authManager.signOut();
-        HelloApplication.setPage(new EntryPage());
+        Navigation.openEntryPage();
     }
-    
-    // void openAccountSettingsPage()
-    // {
-    //     HelloApplication.scene.setRoot(new AccountSettingsPage());
-    // }
 }
