@@ -16,27 +16,6 @@ public class EditPageLogic
             return;
         }
 
-        // Plant updatedPlant = new Plant(
-        //     descriptionField.getText(),
-        //     growthInfoField.getText(),
-        //     plant.getImage(),
-        //     locationField.getText(),
-        //     scientificNameField.getText(),
-        //     plant.getKingdom(),
-        //     plant.getPhylum(),
-        //     plant.getPclass(),
-        //     plant.getOrder(),
-        //     familyField.getText(),
-        //     genusField.getText(),
-        //     plant.getTaxonRank(),
-        //     plantNameField.getText(),
-        //     speciesField.getText(),
-        //     plant.getEdible(),
-        //     plant.getHazardous(),
-        //     plant.getSubspecies()
-        // );
-        // updatedPlant.setID(plant.getId());
-
         try
         {
             new SQLitePlantDAO().updatePlant(updatedPlant);
