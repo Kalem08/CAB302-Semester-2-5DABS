@@ -6,7 +6,7 @@ import app.pages.EntryPage;
 import app.pages.LogInPage;
 import app.pages.PlantPage;
 import app.pages.ResultsPage;
-import app.AuthenticationPanel.AuthMode;
+import app.components.AuthenticationPanel.AuthMode;
 import app.model.Plant;
 
 //MARK: Class
