@@ -8,8 +8,6 @@ import javafx.scene.layout.*;
 // import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
-import javafx.scene.control.ScrollPane.ScrollBarPolicy;
-import java.util.List;
 
 import app.Design;
 import app.Navigation;
@@ -17,37 +15,53 @@ import app.components.CustomButton;
 import app.components.Header;
 import app.components.PlantEditField;
 import app.model.Plant;
+import app.model.SQLitePlantDAO;
 
-//this page allows users to make a request to change details of a Plant entry
 public class EditPage extends VBox
 {
     int buttonWidth = 150;
     int buttonHeight = 40;
+    private final Plant plant;
+    private final String searchQuery;
+    private final PlantEditField plantNameField;
+    private final PlantEditField scientificNameField;
+    private final PlantEditField descriptionField;
+    private final PlantEditField growthInfoField;
+    private final PlantEditField locationField;
+    private final PlantEditField familyField;
+    private final PlantEditField genusField;
+    private final PlantEditField speciesField;
 
     //MARK: Constructor
     public EditPage(Plant plant)
     {
+        this(plant, "");
+    }
+
+    public EditPage(Plant plant, String searchQuery)
+    {
+        this.plant = plant;
+        this.searchQuery = searchQuery == null ? "" : searchQuery;
         Header header = new Header();
 
         //MARK: Body
         Label titleLabel = new Label("Edit Plant");
         titleLabel.setFont(Font.font("Arial", FontWeight.BOLD, 24));
 
-        String plantName = plant == null ? "Plant Name" : plant.getVernacularName();
-        String scientificName = plant == null ? "Subtitle" : plant.getSciName();
-        String description = plant == null ? "Description" : plant.getGeneralisedInfo();
-        String growthInfo = (plant == null || plant.getGrowthInfo() == null || plant.getGrowthInfo().isBlank()) ? "" : plant.getGrowthInfo();
+        String plantName = plant == null ? "" : plant.getVernacularName();
+        String scientificName = plant == null ? "" : plant.getSciName();
+        String description = plant == null ? "" : plant.getGeneralisedInfo();
+        String growthInfo = plant == null || plant.getGrowthInfo() == null ? "" : plant.getGrowthInfo();
         String location = plant == null ? "" : plant.getLocation();
 
-        //fields
-        PlantEditField plantNameField = new PlantEditField("Plant name", plantName);
-        PlantEditField scientificNameField = new PlantEditField("Scientific name", scientificName);
-        PlantEditField descriptionField = new PlantEditField("Description", description, 150, true);
-        PlantEditField growthInfoField = new PlantEditField("Growth info", growthInfo, 150, true);
-        PlantEditField locationField = new PlantEditField("Location", location);
-        PlantEditField familyField = new PlantEditField("Family", plant.getFamily());
-        PlantEditField genusField = new PlantEditField("Genus", plant.getGenus());
-        PlantEditField speciesField = new PlantEditField("Species", plant.getSpecies());
+        plantNameField = new PlantEditField("Plant name", plantName);
+        scientificNameField = new PlantEditField("Scientific name", scientificName);
+        descriptionField = new PlantEditField("Description", description, 150, true);
+        growthInfoField = new PlantEditField("Growth info", growthInfo, 150, true);
+        locationField = new PlantEditField("Location", location);
+        familyField = new PlantEditField("Family", plant == null ? "" : plant.getFamily());
+        genusField = new PlantEditField("Genus", plant == null ? "" : plant.getGenus());
+        speciesField = new PlantEditField("Species", plant == null ? "" : plant.getSpecies());
 
         // ScrollPane scrollArea = createScrollNode();
 
@@ -60,7 +74,7 @@ public class EditPage extends VBox
         backButton.setTextHoverColour(Design.grey95);
         backButton.setBackgroundColor(Design.red);
         backButton.setBackgroundHoverColor(Design.darkRed);
-        backButton.setOnMouseClicked(event -> Navigation.openPlantPage(plant));
+        backButton.setOnMouseClicked(event -> Navigation.openPlantPage(plant, this.searchQuery));
 
         CustomButton saveButton = new CustomButton("Submit changes", buttonWidth, buttonHeight);
         saveButton.setTextColour(Design.white);
@@ -121,6 +135,50 @@ public class EditPage extends VBox
     //MARK: Methods
     void saveEdits()
     {
+        if (plant == null)
+        {
+            showError("No plant entry is available to update.");
+            return;
+        }
 
+        Plant updatedPlant = new Plant(
+            descriptionField.getText(),
+            growthInfoField.getText(),
+            plant.getImage(),
+            locationField.getText(),
+            scientificNameField.getText(),
+            plant.getKingdom(),
+            plant.getPhylum(),
+            plant.getPclass(),
+            plant.getOrder(),
+            familyField.getText(),
+            genusField.getText(),
+            plant.getTaxonRank(),
+            plantNameField.getText(),
+            speciesField.getText(),
+            plant.getEdible(),
+            plant.getHazardous(),
+            plant.getSubspecies()
+        );
+        updatedPlant.setID(plant.getId());
+
+        try
+        {
+            new SQLitePlantDAO().updatePlant(updatedPlant);
+            Navigation.openPlantPage(updatedPlant, searchQuery);
+        }
+        catch (RuntimeException exception)
+        {
+            showError("The plant entry could not be updated: " + exception.getMessage());
+        }
+    }
+
+    private void showError(String message)
+    {
+        Alert error = new Alert(Alert.AlertType.ERROR);
+        error.setTitle("Unable to update plant");
+        error.setHeaderText("The plant entry could not be saved.");
+        error.setContentText(message);
+        error.showAndWait();
     }
 }

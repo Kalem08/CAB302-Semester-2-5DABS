@@ -19,6 +19,7 @@ public class PlantEditField extends StackPane
     //variables
     Color backgroundColour = Color.LIGHTGREY;
     public static float defaultHeight = 60;
+    private final TextInputControl input;
 
     //MARK: Constructors
     public PlantEditField(String title, String defaultText)
@@ -48,26 +49,25 @@ public class PlantEditField extends StackPane
         label.setFont(Font.font("Arial", FontWeight.BOLD, 16));
         
         //use either a TextField or TextArea
-        TextInputControl field;
         if (multilined)
         {
-            field = new TextArea(defaultText);
-            field.setPrefWidth(800);
+            input = new TextArea(defaultText);
+            input.setPrefWidth(800);
 
-            if (field instanceof TextArea textArea) {
+            if (input instanceof TextArea textArea) {
                 textArea.setWrapText(true);
             }
         }
         else
         {
-            field = new TextField(defaultText);
-            field.setPrefWidth(400);
+            input = new TextField(defaultText);
+            input.setPrefWidth(400);
         }
         // field.setPrefWidth(400);
         
         VBox body = new VBox(
             label,
-            field
+            input
         );
         body.setPadding(new Insets(Design.padding));
         body.setFillWidth(false);
@@ -79,5 +79,10 @@ public class PlantEditField extends StackPane
 
         // setPrefWidth(1000);
         setPrefHeight(height);
+    }
+
+    public String getText()
+    {
+        return input.getText();
     }
 }

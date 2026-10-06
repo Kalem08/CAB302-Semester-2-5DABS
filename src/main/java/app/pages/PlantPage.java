@@ -5,7 +5,6 @@ import javafx.scene.control.*;
 import javafx.scene.layout.*;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
-import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.image.*;
@@ -59,19 +58,6 @@ public class PlantPage extends VBox
         title.setFont(Font.font("Arial", FontWeight.BOLD, 24));
         Label subtitle = new Label(scientificName);
 
-        //edit prompt
-        Label editPrompt = new Label("Want to suggest a change? Click here.");
-        editPrompt.setTextFill(Design.hyperlinkColour);
-        editPrompt.setUnderline(true);
-        editPrompt.setOnMouseClicked(event -> Navigation.openEditPage(plant));
-
-        editPrompt.setOnMouseEntered(event -> {
-            editPrompt.setTextFill(Color.BLUE);
-        });
-        editPrompt.setOnMouseExited(event -> {
-            editPrompt.setTextFill(Design.hyperlinkColour);
-        });
-
         Region verticalSpacer = new Region();
         verticalSpacer.setPrefHeight(25);
         Region growthSectionSpacer = new Region();
@@ -119,8 +105,7 @@ public class PlantPage extends VBox
             createAdditionalInfoPane(plant),
 
             bottomSpacer,
-            returnToResultsButton,
-            editPrompt
+            returnToResultsButton
         );
 
         //MARK: Right column
@@ -144,9 +129,11 @@ public class PlantPage extends VBox
             VBox.setVgrow(adminActionsSpacer, Priority.ALWAYS);
 
             MenuButton adminActions = new MenuButton("Administrator actions");
+            MenuItem editPlant = new MenuItem("Edit plant");
+            editPlant.setOnAction(event -> Navigation.openEditPage(plant, searchQuery));
             MenuItem deletePlant = new MenuItem("Delete plant");
             deletePlant.setOnAction(event -> confirmPlantDeletion(plant, searchQuery));
-            adminActions.getItems().add(deletePlant);
+            adminActions.getItems().addAll(editPlant, deletePlant);
 
             HBox adminActionsRow = new HBox(adminActions);
             adminActionsRow.setAlignment(Pos.CENTER_RIGHT);

@@ -38,6 +38,11 @@ public class Navigation
         HelloApplication.setPage(new EditPage(plant));
     }
 
+    public static void openEditPage(Plant plant, String searchQuery)
+    {
+        HelloApplication.setPage(new EditPage(plant, searchQuery));
+    }
+
     public static void openAccountPage()
     {
         HelloApplication.setPage(new AccountPage());
