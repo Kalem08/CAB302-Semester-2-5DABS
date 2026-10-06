@@ -1,13 +1,6 @@
 package app.pages;
 
-import User.authManager;
-import app.Design;
-import app.HelloApplication;
-import app.components.Header;
-import app.model.Plant;
-import app.model.SQLitePlantDAO;
 //MARK: Imports
-import javafx.geometry.Side;
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
 import javafx.geometry.Insets;
@@ -16,34 +9,43 @@ import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.image.*;
 
+import app.Design;
+import app.HelloApplication;
+import app.Navigation;
+import app.components.Header;
+import app.model.Plant;
+
 //this is the page that contains all of the details/content about a plant
 public class PlantPage extends VBox
 {
+    //MARK: Constructors
     public PlantPage()
     {
         this(null);
     }
 
+    //partial constructor
     public PlantPage(Plant plant)
     {
         this(plant, "");
     }
 
+    //full constructor
     public PlantPage(Plant plant, String searchQuery)
     {
         Header header = new Header();
-        SQLitePlantDAO plantDAO = new SQLitePlantDAO();
-
-        HBox hStack = new HBox();
-        VBox rightColumn = new VBox();
-        VBox leftColumn = new VBox();
 
         Region horizontalSpacer = new Region();
         HBox.setHgrow(horizontalSpacer, Priority.ALWAYS);
-        
+
+        //MARK: Left column
         String titleText = plant == null ? "Plant Name" : plant.getVernacularName();
         String scientificName = plant == null ? "Subtitle" : plant.getSciName();
         String descriptionText = plant == null ? "Description" : plant.getGeneralisedInfo();
+        String growthInfoText = plant == null || plant.getGrowthInfo() == null
+            || plant.getGrowthInfo().isBlank()
+            ? "Growth information not available."
+            : plant.getGrowthInfo();
         String location = plant == null ? "Location" : "Location: " + plant.getLocation();
         String taxonomy = plant == null
             ? ""
@@ -58,6 +60,7 @@ public class PlantPage extends VBox
         Label editPrompt = new Label("Want to suggest a change? Click here.");
         editPrompt.setTextFill(Design.hyperlinkColour);
         editPrompt.setUnderline(true);
+        editPrompt.setOnMouseClicked(event -> Navigation.openEditPage(plant));
 
         editPrompt.setOnMouseEntered(event -> {
             editPrompt.setTextFill(Color.BLUE);
@@ -68,12 +71,56 @@ public class PlantPage extends VBox
 
         Region verticalSpacer = new Region();
         verticalSpacer.setPrefHeight(25);
+        Region growthSectionSpacer = new Region();
+        growthSectionSpacer.setPrefHeight(Design.spacing);
+        Region locationSectionSpacer = new Region();
+        locationSectionSpacer.setPrefHeight(Design.spacing);
+        Region taxonomySectionSpacer = new Region();
+        taxonomySectionSpacer.setPrefHeight(Design.spacing);
+        Region dropdownSpacer = new Region();
+        dropdownSpacer.setPrefHeight(Design.spacing);
 
+        Label generalInformationHeading = new Label("General Information");
+        generalInformationHeading.setFont(Font.font("Arial", FontWeight.BOLD, 16));
         Label description = new Label(descriptionText);
+        description.setWrapText(true);
+        Label growthInformationHeading = new Label("Growth Information");
+        growthInformationHeading.setFont(Font.font("Arial", FontWeight.BOLD, 16));
+        Label growthInformation = new Label(growthInfoText);
+        growthInformation.setWrapText(true);
         Label locationText = new Label(location);
         Label taxonomyText = new Label(taxonomy);
 
-        //MARK: Image
+        Region bottomSpacer = new Region();
+        VBox.setVgrow(bottomSpacer, Priority.ALWAYS);
+
+        Button returnToResultsButton = new Button("Return to search results");
+        returnToResultsButton.setOnAction(event ->
+            HelloApplication.scene.setRoot(new ResultsPage(searchQuery)));
+
+        VBox leftColumn = new VBox(
+            title,
+            subtitle,
+            verticalSpacer,
+            generalInformationHeading,
+            description,
+            growthSectionSpacer,
+            growthInformationHeading,
+            growthInformation,
+            locationSectionSpacer,
+            locationText,
+            taxonomySectionSpacer,
+            taxonomyText,
+            createTaxonomyPane(plant),
+            dropdownSpacer,
+            createAdditionalInfoPane(plant),
+
+            bottomSpacer,
+            returnToResultsButton,
+            editPrompt
+        );
+
+        //MARK: Right column
         ImageView imageView = new ImageView();
         imageView.setFitWidth(200);
         imageView.setPreserveRatio(true);
@@ -84,79 +131,28 @@ public class PlantPage extends VBox
 
         Label imageSubtitle = new Label("Image from the Atlas of Living Australia.");
 
-        leftColumn.getChildren().addAll(
-            title,
-            subtitle,
-            verticalSpacer,
-            description,
-            locationText,
-            taxonomyText,
-            createTaxonomyPane(plant)
-        );
-
-        rightColumn.getChildren().addAll(
+        VBox rightColumn = new VBox(
             imageView,
             imageSubtitle
         );
 
-        hStack.getChildren().addAll(
+        //MARK: Horizontal
+        HBox content = new HBox(
             leftColumn,
             horizontalSpacer,
             rightColumn
         );
-
-        Region bottomSpacer = new Region();
-        VBox.setVgrow(bottomSpacer, Priority.ALWAYS);
-
-        Button returnToResultsButton = new Button("Return to search results");
-        returnToResultsButton.setOnAction(event ->
-            HelloApplication.scene.setRoot(new ResultsPage(searchQuery)));
-
-        Button adminActionsButton = new Button("Administrator actions");
-        adminActionsButton.setVisible(authManager.canManagePlants());
-        adminActionsButton.setManaged(authManager.canManagePlants());
-        adminActionsButton.setOnAction(event -> {
-            ContextMenu adminMenu = new ContextMenu();
-            MenuItem deletePlantItem = new MenuItem("Delete plant");
-            deletePlantItem.setOnAction(deleteEvent -> {
-                if (plant == null) {
-                    return;
-                }
-
-                Alert confirmation = new Alert(Alert.AlertType.CONFIRMATION);
-                confirmation.setTitle("Delete plant");
-                confirmation.setHeaderText("Delete plant page?");
-                confirmation.setContentText("This will remove \"" + plant.getVernacularName() + "\" from the database.");
-
-                confirmation.showAndWait().ifPresent(response -> {
-                    if (response == ButtonType.OK) {
-                        plantDAO.deletePlant(plant);
-                        HelloApplication.scene.setRoot(new ResultsPage(searchQuery));
-                    }
-                });
-            });
-            adminMenu.getItems().add(deletePlantItem);
-            adminMenu.show(adminActionsButton, Side.BOTTOM, 0, 0);
-        });
-
-        HBox bottomActions = new HBox();
-        bottomActions.setPadding(new Insets(0, Design.padding, Design.padding, Design.padding));
-        Region bottomActionsSpacer = new Region();
-        HBox.setHgrow(bottomActionsSpacer, Priority.ALWAYS);
-        bottomActions.getChildren().addAll(returnToResultsButton, bottomActionsSpacer, adminActionsButton);
+        content.setSpacing(Design.spacing);
+        content.setPadding(new Insets(Design.padding));
+        VBox.setVgrow(content, Priority.ALWAYS);
 
         getChildren().addAll(
             header,
-            hStack,
-            bottomSpacer,
-            bottomActions,
-            editPrompt
+            content
         );
-        hStack.setSpacing(Design.spacing);
-        hStack.setPadding(new Insets(Design.padding));
-        editPrompt.setPadding(new Insets(0, Design.padding, Design.padding, Design.padding));
     }
 
+    //MARK: Taxonomy Pane
     private TitledPane createTaxonomyPane(Plant plant)
     {
         GridPane table = new GridPane();
@@ -178,6 +174,23 @@ public class PlantPage extends VBox
         taxonomyPane.setExpanded(false);
         taxonomyPane.setMaxWidth(Double.MAX_VALUE);
         return taxonomyPane;
+    }
+
+    private TitledPane createAdditionalInfoPane(Plant plant)
+    {
+        GridPane table = new GridPane();
+        table.setHgap(Design.spacing * 2);
+        table.setVgap(Design.spacing);
+        table.setPadding(new Insets(Design.padding));
+
+        addTaxonomyRow(table, 0, "Edible", plant == null ? null : plant.getEdible());
+        addTaxonomyRow(table, 1, "Hazardous", plant == null ? null : plant.getHazardous());
+        addTaxonomyRow(table, 2, "Subspecies", plant == null ? null : plant.getSubspecies());
+
+        TitledPane additionalInfoPane = new TitledPane("Additional information", table);
+        additionalInfoPane.setExpanded(false);
+        additionalInfoPane.setMaxWidth(Double.MAX_VALUE);
+        return additionalInfoPane;
     }
 
     private void addTaxonomyRow(GridPane table, int row, String field, String value)

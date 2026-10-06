@@ -1,19 +1,21 @@
 package app.pages;
 
+//MARK: Imports
+import javafx.geometry.Insets;
+import javafx.scene.control.*;
+import javafx.scene.layout.*;
+import java.util.List;
+
 import app.Design;
-import app.HelloApplication;
+import app.Navigation;
 import app.components.Header;
 import app.components.SearchResult;
 import app.model.Plant;
 import app.model.SQLitePlantDAO;
 
-import java.util.List;
-import javafx.geometry.Insets;
-import javafx.scene.control.*;
-import javafx.scene.layout.*;
-
 public class ResultsPage extends VBox
 {
+    //MARK: Variables
     private static final int PAGE_SIZE = 20;
     private final SQLitePlantDAO plantDAO = new SQLitePlantDAO();
     private final String query;
@@ -23,6 +25,7 @@ public class ResultsPage extends VBox
     private final Label resultLabel = new Label();
     private final Pagination pagination = new Pagination();
 
+    //MARK: Constructors
     public ResultsPage()
     {
         this("");
@@ -45,6 +48,7 @@ public class ResultsPage extends VBox
         refreshResults();
     }
 
+    //MARK: Create filter
     private ComboBox<String> createFilter(String prompt, String column)
     {
         ComboBox<String> filter = new ComboBox<>();
@@ -55,6 +59,7 @@ public class ResultsPage extends VBox
         return filter;
     }
 
+    //MARK: Refresh results
     private void refreshResults()
     {
         int resultCount = plantDAO.count(query, selectedValue(locationFilter),
@@ -75,6 +80,7 @@ public class ResultsPage extends VBox
         return value == null || value.startsWith("All ") ? "" : value;
     }
 
+    //MARK: Create page
     private ScrollPane createPage(int pageIndex)
     {
         VBox list = new VBox(Design.spacing);
@@ -85,7 +91,7 @@ public class ResultsPage extends VBox
         for (Plant plant : results)
         {
             SearchResult result = new SearchResult(plant);
-            result.setOnMouseClicked(event -> openPlantPage(plant, query));
+            result.setOnMouseClicked(event -> Navigation.openPlantPage(plant, query));
             list.getChildren().add(result);
         }
 
@@ -95,10 +101,4 @@ public class ResultsPage extends VBox
         scrollPane.setVbarPolicy(ScrollPane.ScrollBarPolicy.AS_NEEDED);
         return scrollPane;
     }
-
-    void openPlantPage(Plant plant, String query)
-    {
-        HelloApplication.scene.setRoot(new PlantPage(plant, query));
-    }
-
 }

@@ -1,7 +1,6 @@
 package app.components;
 
 //MARK: Imports
-import app.Design;
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
 // import javafx.geometry.Insets;
@@ -10,6 +9,8 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 // import javafx.scene.text.FontWeight;
+
+import app.Design;
 
 public class CustomButton extends StackPane
 {

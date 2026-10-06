@@ -7,6 +7,7 @@ public class Plant {
 
     private int id;
     private String generalisedInfo;
+    private String growthInfo;
     private String images;
     private String stateProvince;
     private String scientificName;
@@ -19,8 +20,12 @@ public class Plant {
     private String taxonRank;
     private String vernacularName;
     private String species;
+    private String edible;
+    private String hazardous;
+    private String subspecies;
 
     public Plant (String generalisedInfo,
+                  String growthInfo,
                   String images,
                   String stateProvince,
                   String scientificName,
@@ -32,9 +37,13 @@ public class Plant {
                   String genus,
                   String taxonRank,
                   String vernacularName,
-                  String species)
+                  String species,
+                  String edible,
+                  String hazardous,
+                  String subspecies)
     {
         this.generalisedInfo = generalisedInfo;
+        this.growthInfo = growthInfo;
         this.images = images;
         this.stateProvince = stateProvince;
         this.scientificName = scientificName;
@@ -47,6 +56,9 @@ public class Plant {
         this.taxonRank = taxonRank;
         this.vernacularName = vernacularName;
         this.species = species;
+        this.edible = edible;
+        this.hazardous = hazardous;
+        this.subspecies = subspecies;
     }
 
     public int getId() {
@@ -63,6 +75,14 @@ public class Plant {
 
     public void setGeneralisedInfo(String generalisedInfo) {
         this.generalisedInfo = generalisedInfo;
+    }
+
+    public String getGrowthInfo() {
+        return growthInfo;
+    }
+
+    public void setGrowthInfo(String growthInfo) {
+        this.growthInfo = growthInfo;
     }
 
     public String getImage() {
@@ -167,5 +187,29 @@ public class Plant {
 
     public void setSpecies(String species) {
         this.species = species;
+    }
+
+    public String getEdible() {
+        return edible;
+    }
+
+    public void setEdible(String edible) {
+        this.edible = edible;
+    }
+
+    public String getHazardous() {
+        return hazardous;
+    }
+
+    public void setHazardous(String hazardous) {
+        this.hazardous = hazardous;
+    }
+
+    public String getSubspecies() {
+        return subspecies;
+    }
+
+    public void setSubspecies(String subspecies) {
+        this.subspecies = subspecies;
     }
 }
