@@ -60,6 +60,26 @@ public class SQLiteUserDAO {
             throw new IllegalStateException("Unable to authenticate user", e);
         }
     }
+    public int getUserId(String username) {
+        String sql = "SELECT UserId FROM Users WHERE Username = ?";
+
+        try (Connection connection = DatabaseConnection.getConnection();
+             PreparedStatement statement = connection.prepareStatement(sql)) {
+
+            statement.setString(1, username);
+
+            try (ResultSet resultSet = statement.executeQuery()) {
+                if (resultSet.next()) {
+                    return resultSet.getInt("UserId");
+                }
+            }
+
+        } catch (SQLException e) {
+            throw new IllegalStateException("Unable to retrieve user ID", e);
+        }
+
+        return -1;
+    }
 
     private String hashPassword(String password) {
         try {
