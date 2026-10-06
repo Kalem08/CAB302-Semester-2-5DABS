@@ -10,6 +10,7 @@ import javafx.scene.text.FontWeight;
 import javafx.scene.image.*;
 
 import app.Design;
+import app.HelloApplication;
 import app.Navigation;
 import app.components.Header;
 import app.model.Plant;
@@ -17,7 +18,7 @@ import app.model.Plant;
 //this is the page that contains all of the details/content about a plant
 public class PlantPage extends VBox
 {
-    //empty constructor
+    //MARK: Constructors
     public PlantPage()
     {
         this(null);
@@ -34,13 +35,10 @@ public class PlantPage extends VBox
     {
         Header header = new Header();
 
-        HBox hStack = new HBox();
-        VBox rightColumn = new VBox();
-        VBox leftColumn = new VBox();
-
         Region horizontalSpacer = new Region();
         HBox.setHgrow(horizontalSpacer, Priority.ALWAYS);
-        
+
+        //MARK: Left column
         String titleText = plant == null ? "Plant Name" : plant.getVernacularName();
         String scientificName = plant == null ? "Subtitle" : plant.getSciName();
         String descriptionText = plant == null ? "Description" : plant.getGeneralisedInfo();
@@ -62,6 +60,7 @@ public class PlantPage extends VBox
         Label editPrompt = new Label("Want to suggest a change? Click here.");
         editPrompt.setTextFill(Design.hyperlinkColour);
         editPrompt.setUnderline(true);
+        editPrompt.setOnMouseClicked(event -> Navigation.openEditPage(plant));
 
         editPrompt.setOnMouseEntered(event -> {
             editPrompt.setTextFill(Color.BLUE);
@@ -92,17 +91,14 @@ public class PlantPage extends VBox
         Label locationText = new Label(location);
         Label taxonomyText = new Label(taxonomy);
 
-        ImageView imageView = new ImageView();
-        imageView.setFitWidth(200);
-        imageView.setPreserveRatio(true);
+        Region bottomSpacer = new Region();
+        VBox.setVgrow(bottomSpacer, Priority.ALWAYS);
 
-        if (plant != null && plant.getImageUrl() != null) {
-            imageView.setImage(new Image(plant.getImageUrl(), true));
-        }
+        Button returnToResultsButton = new Button("Return to search results");
+        returnToResultsButton.setOnAction(event ->
+            HelloApplication.scene.setRoot(new ResultsPage(searchQuery)));
 
-        Label imageSubtitle = new Label("Image from the Atlas of Living Australia.");
-
-        leftColumn.getChildren().addAll(
+        VBox leftColumn = new VBox(
             title,
             subtitle,
             verticalSpacer,
@@ -117,37 +113,43 @@ public class PlantPage extends VBox
             taxonomyText,
             createTaxonomyPane(plant),
             dropdownSpacer,
-            createAdditionalInfoPane(plant)
-        );
+            createAdditionalInfoPane(plant),
 
-        rightColumn.getChildren().addAll(
-            imageView,
-            imageSubtitle
-        );
-
-        hStack.getChildren().addAll(
-            leftColumn,
-            horizontalSpacer,
-            rightColumn
-        );
-
-        Region bottomSpacer = new Region();
-        VBox.setVgrow(bottomSpacer, Priority.ALWAYS);
-
-        Button returnToResultsButton = new Button("Return to search results");
-        returnToResultsButton.setOnAction(event ->
-            Navigation.openResultsPage(searchQuery));
-
-        getChildren().addAll(
-            header,
-            hStack,
             bottomSpacer,
             returnToResultsButton,
             editPrompt
         );
-        hStack.setSpacing(Design.spacing);
-        hStack.setPadding(new Insets(Design.padding));
-        editPrompt.setPadding(new Insets(0, Design.padding, Design.padding, Design.padding));
+
+        //MARK: Right column
+        ImageView imageView = new ImageView();
+        imageView.setFitWidth(200);
+        imageView.setPreserveRatio(true);
+
+        if (plant != null && plant.getImageUrl() != null) {
+            imageView.setImage(new Image(plant.getImageUrl(), true));
+        }
+
+        Label imageSubtitle = new Label("Image from the Atlas of Living Australia.");
+
+        VBox rightColumn = new VBox(
+            imageView,
+            imageSubtitle
+        );
+
+        //MARK: Horizontal
+        HBox content = new HBox(
+            leftColumn,
+            horizontalSpacer,
+            rightColumn
+        );
+        content.setSpacing(Design.spacing);
+        content.setPadding(new Insets(Design.padding));
+        VBox.setVgrow(content, Priority.ALWAYS);
+
+        getChildren().addAll(
+            header,
+            content
+        );
     }
 
     //MARK: Taxonomy Pane

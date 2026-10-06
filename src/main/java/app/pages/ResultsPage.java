@@ -1,9 +1,9 @@
 package app.pages;
 
 //MARK: Imports
+import javafx.geometry.Insets;
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
-import javafx.geometry.Insets;
 import java.util.List;
 
 import app.Design;
@@ -25,6 +25,7 @@ public class ResultsPage extends VBox
     private final Label resultLabel = new Label();
     private final Pagination pagination = new Pagination();
 
+    //MARK: Constructors
     public ResultsPage()
     {
         this("");
