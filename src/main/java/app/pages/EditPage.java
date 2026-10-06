@@ -16,11 +16,13 @@ import app.components.Header;
 import app.components.PlantEditField;
 import app.model.Plant;
 import app.model.SQLitePlantDAO;
+import app.page_logic.EditPageLogic;
 
 public class EditPage extends VBox
 {
     int buttonWidth = 150;
     int buttonHeight = 40;
+    
     private final Plant plant;
     private final String searchQuery;
     private final PlantEditField plantNameField;
@@ -81,7 +83,10 @@ public class EditPage extends VBox
         saveButton.setTextHoverColour(Design.grey95);
         saveButton.setBackgroundColor(Design.softGreen);
         saveButton.setBackgroundHoverColor(Design.darkSoftGreen);
-        saveButton.setOnMouseClicked(event -> saveEdits());
+        // saveButton.setOnMouseClicked(event -> saveEdits());
+        saveButton.setOnMouseClicked(event ->
+            EditPageLogic.saveEdits(formPlantFromTextfields(), searchQuery)
+        );
 
         HBox bottomRow = new HBox(
             backButton,
@@ -133,14 +138,8 @@ public class EditPage extends VBox
     }
 
     //MARK: Methods
-    void saveEdits()
+    Plant formPlantFromTextfields()
     {
-        if (plant == null)
-        {
-            showError("No plant entry is available to update.");
-            return;
-        }
-
         Plant updatedPlant = new Plant(
             descriptionField.getText(),
             growthInfoField.getText(),
@@ -161,24 +160,6 @@ public class EditPage extends VBox
             plant.getSubspecies()
         );
         updatedPlant.setID(plant.getId());
-
-        try
-        {
-            new SQLitePlantDAO().updatePlant(updatedPlant);
-            Navigation.openPlantPage(updatedPlant, searchQuery);
-        }
-        catch (RuntimeException exception)
-        {
-            showError("The plant entry could not be updated: " + exception.getMessage());
-        }
-    }
-
-    private void showError(String message)
-    {
-        Alert error = new Alert(Alert.AlertType.ERROR);
-        error.setTitle("Unable to update plant");
-        error.setHeaderText("The plant entry could not be saved.");
-        error.setContentText(message);
-        error.showAndWait();
+        return updatedPlant;
     }
 }
