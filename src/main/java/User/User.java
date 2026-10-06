@@ -1,49 +1,43 @@
 package User;
-//Limited functionality as of current, further meethods for accessing User accounts & features to be added in final product
-public class User implements IUser {
+
+public class User {
     private final String username;
     private final String password;
+    private final Role role;
 
     public User(String username, String password) {
+        this(username, password, Role.STANDARD);
+    }
+
+    public User(String username, String password, Role role) {
         if (username == null || username.trim().isEmpty()) {
             throw new IllegalArgumentException("Username cannot be empty");
         }
         if (password == null || password.isEmpty()) {
             throw new IllegalArgumentException("Password cannot be empty");
         }
+        if (role == null) {
+            throw new IllegalArgumentException("Role cannot be null");
+        }
 
         this.username = username;
         this.password = password;
+        this.role = role;
     }
 
-    @Override
     public String getUsername() {
         return this.username;
     }
 
-    @Override
     public String getPassword() {
         return this.password;
     }
 
-    @Override
-    public void changeAccountInformation() {
+    public Role getRole() {
+        return role;
     }
 
-    @Override
-    public void updateUsername() {
-    }
-
-    @Override
-    public void updatePassword() {
-    }
-
-    @Override
-    public boolean loggedIn() {
-        return authManager.isSignedIn();
-    }
-
-    @Override
-    public void logOut() {
+    public boolean isAdmin() {
+        return role == Role.ADMINISTRATOR;
     }
 }
