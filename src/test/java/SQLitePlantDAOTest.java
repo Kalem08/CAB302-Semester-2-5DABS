@@ -10,7 +10,9 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Statement;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import app.model.Plant;
 import app.model.SQLitePlantDAO;
 import org.junit.jupiter.api.Test;
@@ -51,7 +53,10 @@ public class SQLitePlantDAOTest {
                     genus VARCHAR(512),
                     taxonRank VARCHAR(512),
                     vernacularName VARCHAR(512),
-                    species VARCHAR(512)
+                    species VARCHAR(512),
+                    Edible TEXT NOT NULL DEFAULT 'N/a',
+                    Hazardous TEXT NOT NULL DEFAULT 'N/a',
+                    Subspecies TEXT NOT NULL DEFAULT 'N/a'
                 )
                 """);
             // Seed the temporary database with three known Plant records
@@ -119,19 +124,6 @@ public class SQLitePlantDAOTest {
             'Banksia testus'
         )
         """);
-            statement.execute("""
-                CREATE TABLE AdditionalInfo (
-                    PlantID INTEGER PRIMARY KEY,
-                    Edible TEXT NOT NULL DEFAULT 'N/a',
-                    Hazardous TEXT NOT NULL DEFAULT 'N/a',
-                    Subspecies TEXT NOT NULL DEFAULT 'N/a',
-                    FOREIGN KEY (PlantID) REFERENCES PlantsData (PlantID)
-                )
-                """);
-            statement.execute("""
-                INSERT INTO AdditionalInfo (PlantID)
-                SELECT PlantID FROM PlantsData
-                """);
         }
     }
 
@@ -143,6 +135,31 @@ public class SQLitePlantDAOTest {
         DatabaseConnection.resetDatabaseUrl();
         // Remove the temporary test database file
         Files.deleteIfExists(testDatabasePath);
+    }
+
+    @Test
+    void additionalInfoFieldsAreColumnsOnPlantsData() throws Exception {
+        try (Connection connection = DatabaseConnection.getConnection();
+             Statement statement = connection.createStatement();
+             ResultSet columns = statement.executeQuery("PRAGMA table_info(PlantsData)")) {
+            Set<String> columnNames = new HashSet<>();
+            while (columns.next()) {
+                columnNames.add(columns.getString("name"));
+            }
+
+            assertTrue(columnNames.containsAll(
+                    Set.of("Edible", "Hazardous", "Subspecies")));
+        }
+
+        try (Connection connection = DatabaseConnection.getConnection();
+             PreparedStatement statement = connection.prepareStatement("""
+                 SELECT COUNT(*) FROM sqlite_master
+                 WHERE type = 'table' AND name = 'AdditionalInfo'
+                 """);
+             ResultSet resultSet = statement.executeQuery()) {
+            assertTrue(resultSet.next());
+            assertEquals(0, resultSet.getInt(1));
+        }
     }
 
     // DAO Retrieval Test - Checks that an existing Plant can be retrieved by ID
@@ -189,10 +206,10 @@ public class SQLitePlantDAOTest {
     }
 
     @Test
-    void getAllPlantsAndSearchShouldIncludeAdditionalInfo() throws Exception {
+    void getAllPlantsAndSearchShouldReadAdditionalInfoColumns() throws Exception {
         try (Connection connection = DatabaseConnection.getConnection();
              PreparedStatement statement = connection.prepareStatement("""
-                 UPDATE AdditionalInfo
+                 UPDATE PlantsData
                  SET Edible = ?, Hazardous = ?, Subspecies = ?
                  WHERE PlantID = ?
                  """)) {
@@ -320,32 +337,21 @@ public class SQLitePlantDAOTest {
     }
 
     @Test
-    void updatePlantShouldCreateMissingAdditionalInfoRow() throws Exception {
-        try (Connection connection = DatabaseConnection.getConnection();
-             PreparedStatement statement = connection.prepareStatement(
-                     "DELETE FROM AdditionalInfo WHERE PlantID = ?")) {
-            statement.setInt(1, 1);
-            assertEquals(1, statement.executeUpdate());
-        }
-
+    void updatePlantShouldNormalizeBlankAdditionalInfoFields() {
         SQLitePlantDAO dao = new SQLitePlantDAO();
         Plant plant = dao.getPlant(1);
         assertNotNull(plant);
-        assertEquals("N/a", plant.getEdible());
 
-        plant.setEdible("yes");
+        plant.setEdible(null);
+        plant.setHazardous(" ");
+        plant.setSubspecies("");
         dao.updatePlant(plant);
 
-        assertEquals("yes", dao.getPlant(1).getEdible());
-        try (Connection connection = DatabaseConnection.getConnection();
-             PreparedStatement statement = connection.prepareStatement(
-                     "SELECT COUNT(*) FROM AdditionalInfo WHERE PlantID = ?")) {
-            statement.setInt(1, 1);
-            try (ResultSet resultSet = statement.executeQuery()) {
-                assertTrue(resultSet.next());
-                assertEquals(1, resultSet.getInt(1));
-            }
-        }
+        Plant updatedPlant = dao.getPlant(1);
+        assertNotNull(updatedPlant);
+        assertEquals("N/a", updatedPlant.getEdible());
+        assertEquals("N/a", updatedPlant.getHazardous());
+        assertEquals("N/a", updatedPlant.getSubspecies());
     }
 
     // DAO Update Edge Case - Checks that attempting to update a Plant with an
@@ -476,7 +482,7 @@ public class SQLitePlantDAOTest {
         assertNull(deletedPlant);
         try (Connection connection = DatabaseConnection.getConnection();
              PreparedStatement statement = connection.prepareStatement(
-                     "SELECT COUNT(*) FROM AdditionalInfo WHERE PlantID = ?")) {
+                     "SELECT COUNT(*) FROM PlantsData WHERE PlantID = ?")) {
             statement.setInt(1, plant.getId());
             try (ResultSet resultSet = statement.executeQuery()) {
                 assertTrue(resultSet.next());

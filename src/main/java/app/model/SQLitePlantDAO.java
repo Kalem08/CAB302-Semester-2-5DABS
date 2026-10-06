@@ -30,41 +30,44 @@ public class SQLitePlantDAO implements IPlantDAO {
                 genus,
                 taxonRank,
                 vernacularName,
-                species
+                species,
+                Edible,
+                Hazardous,
+                Subspecies
             )
-            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
             """;
 
-        try (Connection connection = DatabaseConnection.getConnection()) {
-            connection.setAutoCommit(false);
-            try (PreparedStatement statement =
-                         connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
+        try (Connection connection = DatabaseConnection.getConnection();
+            PreparedStatement statement =
+                    connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
 
-                statement.setString(1, plant.getGeneralisedInfo());
-                statement.setString(2, plant.getGrowthInfo());
-                statement.setString(3, plant.getImage());
-                statement.setString(4, plant.getLocation());
-                statement.setString(5, plant.getSciName());
-                statement.setString(6, plant.getKingdom());
-                statement.setString(7, plant.getPhylum());
-                statement.setString(8, plant.getPclass());
-                statement.setString(9, plant.getOrder());
-                statement.setString(10, plant.getFamily());
-                statement.setString(11, plant.getGenus());
-                statement.setString(12, plant.getTaxonRank());
-                statement.setString(13, plant.getVernacularName());
-                statement.setString(14, plant.getSpecies());
+            statement.setString(1, plant.getGeneralisedInfo());
+            statement.setString(2, plant.getGrowthInfo());
+            statement.setString(3, plant.getImage());
+            statement.setString(4, plant.getLocation());
+            statement.setString(5, plant.getSciName());
+            statement.setString(6, plant.getKingdom());
+            statement.setString(7, plant.getPhylum());
+            statement.setString(8, plant.getPclass());
+            statement.setString(9, plant.getOrder());
+            statement.setString(10, plant.getFamily());
+            statement.setString(11, plant.getGenus());
+            statement.setString(12, plant.getTaxonRank());
+            statement.setString(13, plant.getVernacularName());
+            statement.setString(14, plant.getSpecies());
+            statement.setString(15, additionalInfoValue(plant.getEdible()));
+            statement.setString(16, additionalInfoValue(plant.getHazardous()));
+            statement.setString(17, additionalInfoValue(plant.getSubspecies()));
 
-                statement.executeUpdate();
+            statement.executeUpdate();
 
-                try (ResultSet generatedKeys = statement.getGeneratedKeys()) {
-                    if (generatedKeys.next()) {
-                        plant.setID(generatedKeys.getInt(1));
-                    }
+            try (ResultSet generatedKeys = statement.getGeneratedKeys()) {
+                if (generatedKeys.next()) {
+                    plant.setID(generatedKeys.getInt(1));
                 }
             }
-            saveAdditionalInfo(connection, plant);
-            connection.commit();
+
         } catch (SQLException e) {
             throw new RuntimeException("Failed to add plant to database", e);
         }
@@ -88,38 +91,38 @@ public class SQLitePlantDAO implements IPlantDAO {
                 genus = ?,
                 taxonRank = ?,
                 vernacularName = ?,
-                species = ?
+                species = ?,
+                Edible = ?,
+                Hazardous = ?,
+                Subspecies = ?
             WHERE PlantID = ?
             """;
 
-        try (Connection connection = DatabaseConnection.getConnection()) {
-            connection.setAutoCommit(false);
-            try (PreparedStatement statement = connection.prepareStatement(sql)) {
+        try (Connection connection = DatabaseConnection.getConnection();
+             PreparedStatement statement = connection.prepareStatement(sql)) {
 
-                statement.setString(1, plant.getGeneralisedInfo());
-                statement.setString(2, plant.getGrowthInfo());
-                statement.setString(3, plant.getImage());
-                statement.setString(4, plant.getLocation());
-                statement.setString(5, plant.getSciName());
-                statement.setString(6, plant.getKingdom());
-                statement.setString(7, plant.getPhylum());
-                statement.setString(8, plant.getPclass());
-                statement.setString(9, plant.getOrder());
-                statement.setString(10, plant.getFamily());
-                statement.setString(11, plant.getGenus());
-                statement.setString(12, plant.getTaxonRank());
-                statement.setString(13, plant.getVernacularName());
-                statement.setString(14, plant.getSpecies());
+            statement.setString(1, plant.getGeneralisedInfo());
+            statement.setString(2, plant.getGrowthInfo());
+            statement.setString(3, plant.getImage());
+            statement.setString(4, plant.getLocation());
+            statement.setString(5, plant.getSciName());
+            statement.setString(6, plant.getKingdom());
+            statement.setString(7, plant.getPhylum());
+            statement.setString(8, plant.getPclass());
+            statement.setString(9, plant.getOrder());
+            statement.setString(10, plant.getFamily());
+            statement.setString(11, plant.getGenus());
+            statement.setString(12, plant.getTaxonRank());
+            statement.setString(13, plant.getVernacularName());
+            statement.setString(14, plant.getSpecies());
+            statement.setString(15, additionalInfoValue(plant.getEdible()));
+            statement.setString(16, additionalInfoValue(plant.getHazardous()));
+            statement.setString(17, additionalInfoValue(plant.getSubspecies()));
 
-                statement.setInt(15, plant.getId());
+            statement.setInt(18, plant.getId());
 
-                if (statement.executeUpdate() == 0) {
-                    connection.rollback();
-                    return;
-                }
-            }
-            saveAdditionalInfo(connection, plant);
-            connection.commit();
+            statement.executeUpdate();
+
         } catch (SQLException e) {
             throw new RuntimeException("Failed to update plant in database", e);
         }
@@ -128,19 +131,18 @@ public class SQLitePlantDAO implements IPlantDAO {
     @Override
     public void deletePlant(Plant plant) {
 
-        try (Connection connection = DatabaseConnection.getConnection()) {
-            connection.setAutoCommit(false);
-            try (PreparedStatement statement = connection.prepareStatement(
-                    "DELETE FROM AdditionalInfo WHERE PlantID = ?")) {
-                statement.setInt(1, plant.getId());
-                statement.executeUpdate();
-            }
-            try (PreparedStatement statement = connection.prepareStatement(
-                    "DELETE FROM PlantsData WHERE PlantID = ?")) {
-                statement.setInt(1, plant.getId());
-                statement.executeUpdate();
-            }
-            connection.commit();
+        String sql = """
+            DELETE FROM PlantsData
+            WHERE PlantID = ?
+            """;
+
+        try (Connection connection = DatabaseConnection.getConnection();
+             PreparedStatement statement = connection.prepareStatement(sql)) {
+
+            statement.setInt(1, plant.getId());
+
+            statement.executeUpdate();
+
         } catch (SQLException e) {
             throw new RuntimeException("Failed to delete plant from database", e);
         }
@@ -149,15 +151,7 @@ public class SQLitePlantDAO implements IPlantDAO {
     @Override
     public Plant getPlant(int id) {
 
-        String sql = """
-            SELECT p.*,
-                   COALESCE(a.Edible, 'N/a') AS Edible,
-                   COALESCE(a.Hazardous, 'N/a') AS Hazardous,
-                   COALESCE(a.Subspecies, 'N/a') AS Subspecies
-            FROM PlantsData p
-            LEFT JOIN AdditionalInfo a ON a.PlantID = p.PlantID
-            WHERE p.PlantID = ?
-            """;
+        String sql = "SELECT * FROM PlantsData WHERE PlantID = ?";
 
         try (Connection connection = DatabaseConnection.getConnection();
              PreparedStatement statement =
@@ -210,14 +204,7 @@ public class SQLitePlantDAO implements IPlantDAO {
 
         List<Plant> plants = new ArrayList<>();
 
-        String sql = """
-            SELECT p.*,
-                   COALESCE(a.Edible, 'N/a') AS Edible,
-                   COALESCE(a.Hazardous, 'N/a') AS Hazardous,
-                   COALESCE(a.Subspecies, 'N/a') AS Subspecies
-            FROM PlantsData p
-            LEFT JOIN AdditionalInfo a ON a.PlantID = p.PlantID
-            """;
+        String sql = "SELECT * FROM PlantsData";
 
         try (Connection connection = DatabaseConnection.getConnection();
              PreparedStatement statement = connection.prepareStatement(sql);
@@ -277,12 +264,8 @@ public class SQLitePlantDAO implements IPlantDAO {
 
         List<Plant> plants = new ArrayList<>();
         String sql = """
-            SELECT p.*,
-                   COALESCE(a.Edible, 'N/a') AS Edible,
-                   COALESCE(a.Hazardous, 'N/a') AS Hazardous,
-                   COALESCE(a.Subspecies, 'N/a') AS Subspecies
+            SELECT p.*
             FROM PlantsData p
-            LEFT JOIN AdditionalInfo a ON a.PlantID = p.PlantID
             %s
             ORDER BY p.PlantID
             LIMIT ? OFFSET ?
@@ -413,35 +396,6 @@ public class SQLitePlantDAO implements IPlantDAO {
         }
 
         return values;
-    }
-
-    private void saveAdditionalInfo(Connection connection, Plant plant) throws SQLException {
-        String updateSql = """
-            UPDATE AdditionalInfo
-            SET Edible = ?, Hazardous = ?, Subspecies = ?
-            WHERE PlantID = ?
-            """;
-        try (PreparedStatement statement = connection.prepareStatement(updateSql)) {
-            statement.setString(1, additionalInfoValue(plant.getEdible()));
-            statement.setString(2, additionalInfoValue(plant.getHazardous()));
-            statement.setString(3, additionalInfoValue(plant.getSubspecies()));
-            statement.setInt(4, plant.getId());
-            if (statement.executeUpdate() > 0) {
-                return;
-            }
-        }
-
-        String insertSql = """
-            INSERT INTO AdditionalInfo (PlantID, Edible, Hazardous, Subspecies)
-            VALUES (?, ?, ?, ?)
-            """;
-        try (PreparedStatement statement = connection.prepareStatement(insertSql)) {
-            statement.setInt(1, plant.getId());
-            statement.setString(2, additionalInfoValue(plant.getEdible()));
-            statement.setString(3, additionalInfoValue(plant.getHazardous()));
-            statement.setString(4, additionalInfoValue(plant.getSubspecies()));
-            statement.executeUpdate();
-        }
     }
 
     private String additionalInfoValue(String value) {
