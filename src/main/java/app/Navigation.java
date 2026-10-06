@@ -32,11 +32,6 @@ public class Navigation
     {
         HelloApplication.setPage(new PlantPage(plant));
     }
-    //override with 2nd parameter
-    public static void openPlantPage(Plant plant, String query)
-    {
-        HelloApplication.setPage(new PlantPage(plant, query));
-    }
 
     public static void openEditPage(Plant plant)
     {
