@@ -1,0 +1,59 @@
+package app.page_logic;
+
+import app.Navigation;
+import app.model.Plant;
+import app.model.SQLitePlantDAO;
+import javafx.scene.control.Alert;
+
+public class EditPageLogic
+{
+    //MARK: Methods
+    public static void saveEdits(Plant updatedPlant, String searchQuery) //addPlant method won't have the query paramater
+    {
+        if (updatedPlant == null)
+        {
+            showError("No plant entry is available to update.");
+            return;
+        }
+
+        // Plant updatedPlant = new Plant(
+        //     descriptionField.getText(),
+        //     growthInfoField.getText(),
+        //     plant.getImage(),
+        //     locationField.getText(),
+        //     scientificNameField.getText(),
+        //     plant.getKingdom(),
+        //     plant.getPhylum(),
+        //     plant.getPclass(),
+        //     plant.getOrder(),
+        //     familyField.getText(),
+        //     genusField.getText(),
+        //     plant.getTaxonRank(),
+        //     plantNameField.getText(),
+        //     speciesField.getText(),
+        //     plant.getEdible(),
+        //     plant.getHazardous(),
+        //     plant.getSubspecies()
+        // );
+        // updatedPlant.setID(plant.getId());
+
+        try
+        {
+            new SQLitePlantDAO().updatePlant(updatedPlant);
+            Navigation.openPlantPage(updatedPlant, searchQuery);
+        }
+        catch (RuntimeException exception)
+        {
+            showError("The plant entry could not be updated: " + exception.getMessage());
+        }
+    }
+
+    private static void showError(String message)
+    {
+        Alert error = new Alert(Alert.AlertType.ERROR);
+        error.setTitle("Unable to update plant");
+        error.setHeaderText("The plant entry could not be saved.");
+        error.setContentText(message);
+        error.showAndWait();
+    }    
+}
