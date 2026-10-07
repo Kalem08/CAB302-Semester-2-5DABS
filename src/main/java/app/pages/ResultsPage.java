@@ -13,6 +13,9 @@ import app.components.SearchResult;
 import app.model.Plant;
 import app.model.SQLitePlantDAO;
 
+/**
+ * A page that displays the results of a given search.
+ */
 public class ResultsPage extends VBox
 {
     //MARK: Variables
@@ -26,11 +29,18 @@ public class ResultsPage extends VBox
     private final Pagination pagination = new Pagination();
 
     //MARK: Constructors
+    /**
+     * Creates a page with the results of a search with no query specified.
+     */
     public ResultsPage()
     {
         this("");
     }
 
+    /**
+     * Creates a page with the results of a search with the specified query.
+     * @param query The string to use when searching the database by plant name
+     */
     public ResultsPage(String query)
     {
         this.query = query == null ? "" : query;
@@ -49,6 +59,12 @@ public class ResultsPage extends VBox
     }
 
     //MARK: Create filter
+    /**
+     * Creates a drop-down option for each of the distince values listed in a particular column of the plant database.
+     * @param prompt The text shown when the drop-down is collapsed
+     * @param column The name of the column in the database to retrieve distinct values from
+     * @return A drop-down [ComboBox]
+     */
     private ComboBox<String> createFilter(String prompt, String column)
     {
         ComboBox<String> filter = new ComboBox<>();
@@ -60,6 +76,9 @@ public class ResultsPage extends VBox
     }
 
     //MARK: Refresh results
+    /**
+     * Switches page in the pagination element, and updates the 'results' count at the top of the page.
+     */
     private void refreshResults()
     {
         int resultCount = plantDAO.count(query, selectedValue(locationFilter),
@@ -74,13 +93,24 @@ public class ResultsPage extends VBox
         pagination.setPageFactory(this::createPage);
     }
 
+    //MARK: Selected value
+    /**
+     * Returns a string based on the filter selected in the ComboBox drop-down.
+     * @param filter The ComboBox/drop-down to filter with
+     * @return The value selected from the filter [String]
+     */
     private String selectedValue(ComboBox<String> filter)
     {
         String value = filter.getValue();
-        return value == null || value.startsWith("All ") ? "" : value;
+        return (value == null || value.startsWith("All ")) ? "" : value;
     }
 
     //MARK: Create page
+    /**
+     * Creates a scrolling page with the search results, based on the filters selected.
+     * @param pageIndex The index of the current page in the pagination
+     * @return A ScrollPane with the results
+     */
     private ScrollPane createPage(int pageIndex)
     {
         VBox list = new VBox(Design.spacing);

@@ -1,5 +1,8 @@
 package app.model;
 
+/**
+ * Plant is a custom type that contains all of the details of a plant.
+ */
 public class Plant {
     private static final String IMAGE_URL_PREFIX =
             "https://images-assets.ala.org.au/store/4/8/9/f/";
@@ -24,6 +27,7 @@ public class Plant {
     private String hazardous;
     private String subspecies;
 
+    //MARK: Constructor
     public Plant (String generalisedInfo,
                   String growthInfo,
                   String images,
@@ -61,18 +65,34 @@ public class Plant {
         this.subspecies = subspecies;
     }
 
+    /**
+     * Gets the ID value of this plant.
+     * @return ID integer
+     */
     public int getId() {
         return id;
     }
 
+    /**
+     * Sets the ID value of this plant.
+     * @param id The new ID
+     */
     public void setID(int id) {
         this.id = id;
     }
 
+    /**
+     * Returns the description of this plant.
+     * @return The description
+     */
     public String getGeneralisedInfo() {
         return generalisedInfo;
     } 
 
+    /**
+     * Sets the description of this plant.
+     * @param generalisedInfo The new description
+     */
     public void setGeneralisedInfo(String generalisedInfo) {
         this.generalisedInfo = generalisedInfo;
     }

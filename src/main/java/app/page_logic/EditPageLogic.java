@@ -7,8 +7,13 @@ import javafx.scene.control.Alert;
 
 public class EditPageLogic
 {
-    //MARK: Methods
-    public static void saveEdits(Plant updatedPlant, String searchQuery) //addPlant method won't have the query paramater
+    //MARK: Save edits
+    /**
+     * Save the changes made to a plant to the database.
+     * @param updatedPlant The new plant object to insert into the database
+     * @param searchQuery The term to use when returning to the PlantPage
+     */
+    public static void saveEdits(Plant updatedPlant, String searchQuery) //note: addPlant method won't have the query paramater
     {
         if (updatedPlant == null)
         {
@@ -27,6 +32,11 @@ public class EditPageLogic
         }
     }
 
+    //MARK: Show error
+    /**
+     * Shows an error message.
+     * @param message The message to display.
+     */
     private static void showError(String message)
     {
         Alert error = new Alert(Alert.AlertType.ERROR);

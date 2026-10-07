@@ -5,8 +5,6 @@ import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
-import javafx.geometry.Insets;
-import javafx.geometry.Pos;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
@@ -17,6 +15,9 @@ import app.Navigation;
 import app.components.*;
 import User.*;
 
+/**
+ * A page for users to see their account details.
+ */
 public class AccountPage extends VBox
 {
     int textfieldWidth = 200;
@@ -54,16 +55,6 @@ public class AccountPage extends VBox
         usernameRow.setSpacing(Design.spacing);
         usernameRow.setAlignment(Pos.CENTER_LEFT);
 
-        //password
-        // Label passwordLabel = new Label("Password:");
-        // CustomTextfield passwordTextField = new CustomTextfield("Password...", textfieldWidth, textfieldHeight);
-        // HBox passwordRow = new HBox(
-        //     passwordLabel,
-        //     passwordTextField
-        // );
-        // passwordRow.setSpacing(Design.spacing);
-        // passwordRow.setAlignment(Pos.CENTER_LEFT);
-
         // CustomButton saveButton = new CustomButton("Save changes", buttonWidth, textfieldHeight);
         // saveButton.setBackgroundColor(Design.grey80);
         // saveButton.setBackgroundHoverColor(Design.grey70);
@@ -84,7 +75,6 @@ public class AccountPage extends VBox
             titleLabel,
             // displayNameRow,
             usernameRow,
-            // passwordRow,
             // saveButton,
             verticalSpacer,
             logoutButton
@@ -124,13 +114,19 @@ public class AccountPage extends VBox
         VBox.setVgrow(horizontalStack, Priority.ALWAYS);
     }
 
-    //MARK: Methods
+    //MARK: Save details
+    /**
+     * Save the changes made on this page to the user's account.
+     */
     void saveAccountDetails()
     {
         HelloApplication.print("saveAccountDetails is not implemented yet.");
     }
 
-    //sign out and load new page
+    //MARK: Logout
+    /**
+     * Sign out and load the entry page.
+     */
     void logout()
     {
         authManager.signOut();

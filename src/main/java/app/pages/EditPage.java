@@ -2,10 +2,8 @@ package app.pages;
 
 //MARK: Imports
 import javafx.geometry.Insets;
-// import javafx.geometry.Pos;
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
-// import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 
@@ -15,9 +13,11 @@ import app.components.CustomButton;
 import app.components.Header;
 import app.components.PlantEditField;
 import app.model.Plant;
-import app.model.SQLitePlantDAO;
 import app.page_logic.EditPageLogic;
 
+/**
+ * A page that allows a user to edit the details of a given plant.
+ */
 public class EditPage extends VBox
 {
     int buttonWidth = 150;
@@ -35,11 +35,20 @@ public class EditPage extends VBox
     private final PlantEditField speciesField;
 
     //MARK: Constructor
+    /**
+     * A page for editing and suggesting changes to the properties of a plant.
+     * @param plant The plant to be edited
+     */
     public EditPage(Plant plant)
     {
         this(plant, "");
     }
 
+    /**
+     * A page for editing and suggesting changes to the properties of a plant.
+     * @param plant The plant to be edited
+     * @param searchQuery The search term to return to when exiting the page
+     */
     public EditPage(Plant plant, String searchQuery)
     {
         this.plant = plant;
@@ -65,8 +74,6 @@ public class EditPage extends VBox
         genusField = new PlantEditField("Genus", plant == null ? "" : plant.getGenus());
         speciesField = new PlantEditField("Species", plant == null ? "" : plant.getSpecies());
 
-        // ScrollPane scrollArea = createScrollNode();
-
         Region bottomSpacer = new Region();
         VBox.setVgrow(bottomSpacer, Priority.ALWAYS);
 
@@ -83,7 +90,6 @@ public class EditPage extends VBox
         saveButton.setTextHoverColour(Design.grey95);
         saveButton.setBackgroundColor(Design.softGreen);
         saveButton.setBackgroundHoverColor(Design.darkSoftGreen);
-        // saveButton.setOnMouseClicked(event -> saveEdits());
         saveButton.setOnMouseClicked(event ->
             EditPageLogic.saveEdits(formPlantFromTextfields(), searchQuery)
         );
@@ -97,7 +103,6 @@ public class EditPage extends VBox
         VBox content = new VBox(
             titleLabel,
 
-            // scrollArea,
             plantNameField,
             scientificNameField,
             descriptionField,
@@ -130,14 +135,15 @@ public class EditPage extends VBox
         scrollPane.setVbarPolicy(ScrollPane.ScrollBarPolicy.AS_NEEDED);
 
         getChildren().addAll(
-            // header,
-            // content
-
             scrollPane
         );
     }
 
-    //MARK: Methods
+    //MARK: Plant from textfields
+    /**
+     * Returns a Plant object based on all the values from the textfields present in this page.
+     * @return A Plant type
+     */
     Plant formPlantFromTextfields()
     {
         Plant updatedPlant = new Plant(

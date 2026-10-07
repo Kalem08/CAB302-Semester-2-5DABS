@@ -8,18 +8,19 @@ import javafx.geometry.Pos;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 
-// import app.HelloApplication;
 import app.Design;
 import app.Navigation;
 import User.authManager;
-import app.components.AuthenticationPanel.AuthMode;
+// import app.components.AuthenticationPanel.AuthMode;
 // import app.pages.AccountPage;
 // import app.pages.EntryPage;
 // import app.pages.LogInPage;
 // import app.pages.ResultsPage;
 
 //MARK: Class
-//the header with logo, search bar and account button at the top of most pages
+/**
+ * The header element with a logo, search bar and account buttons. Present at the top of most pages.
+ */
 public class Header extends StackPane
 {
     int searchElementHeight = 30;
@@ -118,13 +119,19 @@ public class Header extends StackPane
         updateAccountButtonsVisibility();
     }
 
-    //MARK: Methods
+    //MARK: Search
+    /**
+     * Uses the value in the search textfield to load the results page.
+     */
     void search()
     {
         Navigation.openResultsPage(searchTextfield.getText());
     }
 
-    //toggles visibility of buttons
+    //MARK: Toggle button
+    /**
+     * Toggles visibility of buttons dependeing on if the user is signed in or not.
+     */
     private void updateAccountButtonsVisibility()
     {
         Boolean isSignedIn = authManager.isSignedIn();
