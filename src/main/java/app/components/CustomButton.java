@@ -12,6 +12,9 @@ import javafx.scene.text.Font;
 
 import app.Design;
 
+/**
+ * A custom button element that includes a background. Has methods for changing the colour when the mouse is hovering over.
+ */
 public class CustomButton extends StackPane
 {
     public HoverState shouldUnderlineLabel = HoverState.never;
@@ -24,10 +27,12 @@ public class CustomButton extends StackPane
     public Label label;
     public Rectangle background;
 
-    //default values
-    // int width = 100;
-    // int height = 40;
-
+    /**
+     * Creates a custom button with a background.
+     * @param text The text on the button
+     * @param width The width of the button/background
+     * @param height The height of the button/background
+     */
     public CustomButton(String text, int width, int height)
     {
         //a red frame to show the size of the button's true area
@@ -63,52 +68,92 @@ public class CustomButton extends StackPane
         setPrefHeight(height);
     }
 
-    //MARK: Methods
+    //MARK: Set corner radius
+    /**
+     * Sets both the arc-width and arc-height of the button's corners.
+     * @param radius The radius of the corners (in pixels)
+     */
     public void setCornerRadius(int radius)
     {
         background.setArcWidth(radius);
         background.setArcHeight(radius);
     }
 
-    //text properties
+    //MARK: Text properties
+    /**
+     * Sets the text of the button.
+     * @param text The text on the button
+     */
     public void setText(String text)
     {
         label.setText(text);
     }
+
+    /**
+     * Sets the text size of the button.
+     * @param size The text size of the button
+     */
     public void setTextSize(int size)
     {
         label.setFont(Font.font(size));
     }
+
+    /**
+     * Sets the default colour of the text when the cursor is not over the button.
+     * @param colourParameter The text colour 
+     */
     public void setTextColour(Color colourParameter)
     {
         textColour = colourParameter;
         updateHoverColours();
         label.setTextFill(colourParameter);
     }
+
+    /**
+     * Sets the colour of the text when the cursor is hovering over the button.
+     * @param colourParameter The text colour
+     */
     public void setTextHoverColour(Color colourParameter)
     {
         textHoverColor = colourParameter;
         updateHoverColours();
     }
 
-    //background properties
+    //MARK: Background properties
+    /**
+     * Sets the default colour of the background when the cursor is not over the button.
+     * @param colourParameter The background colour 
+     */
     public void setBackgroundColor(Color colourParameter)
     {
         frameColour = colourParameter;
         updateHoverColours();
         background.setFill(colourParameter);
     }
+
+    /**
+     * Sets the colour of the background when the cursor is hovering over the button.
+     * @param colourParameter The background colour 
+     */
     public void setBackgroundHoverColor(Color colourParameter)
     {
         frameHoverColour = colourParameter;
         updateHoverColours();
     }
+
+    /**
+     * Sets whether the background of the button is visible.
+     * @param state When true, the background is visible. 
+     */
     public void setBackgroundVisibility(Boolean state)
     {
         background.setVisible(state);
+        //might need 'background.setManaged(state);' here
     }
 
-    //update the methods that are called when the mouse enters/exits the Node 
+    /**
+     * Update the methods that are called when the mouse enters/exits the custom button.
+     */
     void updateHoverColours()
     {
         //mouse over
@@ -127,6 +172,9 @@ public class CustomButton extends StackPane
     }
 
     //MARK: Enum
+    /**
+     * HoverState describes the conditions under which graphical details should be present. An example is text should only be underlined when it is set to 'onHover'.
+     */
     public enum HoverState
     {
         never,

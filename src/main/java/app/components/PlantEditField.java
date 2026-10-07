@@ -3,39 +3,57 @@ package app.components;
 //MARK: Imports
 import app.Design;
 import javafx.geometry.Insets;
+// import javafx.geometry.Pos;
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
-// import javafx.geometry.Insets;
-// import javafx.geometry.Pos;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
-// import javafx.scene.text.FontWeight;
 import javafx.scene.text.FontWeight;
 
-//this node is added to the EditPage for plants, and  contains a label and field for each property of a plant
+/**
+ * A label and textfield for each property of a plant, in the edit page of plants. 
+ */
 public class PlantEditField extends StackPane
 {
-    //variables
+    //MARK: Variables
     Color backgroundColour = Color.LIGHTGREY;
     public static float defaultHeight = 60;
-    private final TextInputControl input;
+    private final TextInputControl inputField;
 
     //MARK: Constructors
+
+    /**
+     * Creates an element for one of properties of a plant.
+     * @param title The title of the element
+     * @param defaultText The inital text in the textfield
+     */
     public PlantEditField(String title, String defaultText)
     {
         this(title, defaultText, defaultHeight, false);
     }
 
+    /**
+     * Creates an element for one of properties of a plant.
+     * @param title The title of the element
+     * @param defaultText The inital text in the textfield
+     * @param multilined If true, the element will use a TextArea rather than a TextField
+     */
     public PlantEditField(String title, String defaultText, boolean multilined)
     {
         this(title, defaultText, defaultHeight, multilined);
     }
 
+    /**
+     * Creates an element for one of properties of a plant.
+     * @param title The title of the element
+     * @param defaultText The inital text in the textfield
+     * @param height The height of the element
+     * @param multilined If true, the element will use a TextArea rather than a TextField
+     */
     public PlantEditField(String title, String defaultText, float height, boolean multilined)
     {
         //MARK: Background
-        // background = new Rectangle(width, height);
         Rectangle background = new Rectangle();
         background.setFill(backgroundColour);
         background.setArcWidth(Design.cornerRadius);
@@ -51,23 +69,23 @@ public class PlantEditField extends StackPane
         //use either a TextField or TextArea
         if (multilined)
         {
-            input = new TextArea(defaultText);
-            input.setPrefWidth(800);
+            inputField = new TextArea(defaultText);
+            inputField.setPrefWidth(800);
 
-            if (input instanceof TextArea textArea) {
+            if (inputField instanceof TextArea textArea) {
                 textArea.setWrapText(true);
             }
         }
         else
         {
-            input = new TextField(defaultText);
-            input.setPrefWidth(400);
+            inputField = new TextField(defaultText);
+            inputField.setPrefWidth(400);
         }
         // field.setPrefWidth(400);
         
         VBox body = new VBox(
             label,
-            input
+            inputField
         );
         body.setPadding(new Insets(Design.padding));
         body.setFillWidth(false);
@@ -81,8 +99,13 @@ public class PlantEditField extends StackPane
         setPrefHeight(height);
     }
 
+    //MARK: Get Text
+    /**
+     * Gets the value from the internal textfield variable.
+     * @return String value from the textfield element
+     */
     public String getText()
     {
-        return input.getText();
+        return inputField.getText();
     }
 }

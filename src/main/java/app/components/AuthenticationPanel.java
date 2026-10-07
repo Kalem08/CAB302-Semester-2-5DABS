@@ -38,6 +38,7 @@ public class AuthenticationPanel extends VBox
 
     //MARK: Constructors
     //empty constructor
+    //this can probably be deleted! The code should always specify whether 'log in' or 'register' is shown
     public AuthenticationPanel()
     {
         // this(false); //default to 'log in' mode
@@ -161,7 +162,7 @@ public class AuthenticationPanel extends VBox
         Region bottomSpacer2 = new Region();
         VBox.setVgrow(bottomSpacer2, Priority.ALWAYS);
         
-        //MARK: VBox
+        //MARK: Body
         VBox content = new VBox(
             titleLabel,
             topSpacer2,
@@ -193,8 +194,7 @@ public class AuthenticationPanel extends VBox
         updateMode();
     }
 
-    //MARK: Methods
-
+    //MARK: Switch mode
     /**
      * Toggles the authentication mode between 'Login' and 'Register'.
      */
@@ -205,6 +205,7 @@ public class AuthenticationPanel extends VBox
         updateMode();
     }
 
+    //MARK: Submit
     /**
      * Uses values from the username and password textfields to attempt to login or register, depending on the authentication mode.
      */
@@ -239,15 +240,7 @@ public class AuthenticationPanel extends VBox
         }
     }
 
-    /** 
-     * Used to load a page/panel for resetting the user's password.
-    */
-    void forgotPassword()
-    {
-        //not implemented yet
-        System.out.println("forgotPassword not implemented yet");
-    }
-
+    //MARK: Update mode elements
     /**
      * updates labels and buttons to correctly represent the current authentication mode.
      */
@@ -262,6 +255,16 @@ public class AuthenticationPanel extends VBox
             forgotPasswordButton.setVisible(!inRegisterMode()); //show or hide
             forgotPasswordButton.setManaged(!inRegisterMode()); //when false, tells the parent layout container to ignore the button during its automatic layout and sizing calculations
         }
+    }
+
+    //MARK: Forgot password
+    /** 
+     * Used to load a page/panel for resetting the user's password.
+    */
+    void forgotPassword()
+    {
+        //not implemented yet
+        System.out.println("forgotPassword not implemented yet");
     }
 
     /**
