@@ -17,9 +17,9 @@ public class SQLiteUserDAO {
 
         try (Connection connection = DatabaseConnection.getConnection();
              PreparedStatement statement = connection.prepareStatement(sql)) {
-            statement.setString(1, user.getUsername());
-            statement.setString(2, hashPassword(user.getPassword()));
-            statement.setString(3, user.getRole().name());
+            statement.setString(1, user.username());
+            statement.setString(2, hashPassword(user.password()));
+            statement.setString(3, user.role().name());
             statement.executeUpdate();
             return true;
         } catch (SQLException e) {
