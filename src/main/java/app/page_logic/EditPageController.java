@@ -5,7 +5,7 @@ import app.model.Plant;
 import app.model.SQLitePlantDAO;
 import javafx.scene.control.Alert;
 
-public class EditPageLogic
+public class EditPageController
 {
     //MARK: Save edits
     /**

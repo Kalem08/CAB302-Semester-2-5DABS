@@ -13,7 +13,7 @@ import app.components.CustomButton;
 import app.components.Header;
 import app.components.PlantEditField;
 import app.model.Plant;
-import app.page_logic.EditPageLogic;
+import app.page_logic.EditPageController;
 
 /**
  * A page that allows a user to edit the details of a given plant.
@@ -91,7 +91,7 @@ public class EditPage extends VBox
         saveButton.setBackgroundColor(Design.softGreen);
         saveButton.setBackgroundHoverColor(Design.darkSoftGreen);
         saveButton.setOnMouseClicked(event ->
-            EditPageLogic.saveEdits(formPlantFromTextfields(), searchQuery)
+            EditPageController.saveEdits(formPlantFromTextfields(), searchQuery)
         );
 
         HBox bottomRow = new HBox(
