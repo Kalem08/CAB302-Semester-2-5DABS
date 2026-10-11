@@ -17,6 +17,13 @@ import app.Navigation;
 import app.components.*;
 import User.*;
 
+import User.SQLiteUserDAO;
+import User.SQLiteBookmarkDAO;
+import java.util.List;
+
+import app.model.Plant;
+import app.model.SQLitePlantDAO;
+
 public class AccountPage extends VBox
 {
     int textfieldWidth = 200;
@@ -77,18 +84,61 @@ public class AccountPage extends VBox
         logoutButton.setBackgroundHoverColor(Design.darkRed);
         logoutButton.setOnMouseClicked(event -> logout());
 
+        // My Bookmarks section
+        Label bookmarksTitle = new Label("My Bookmarks");
+        bookmarksTitle.setFont(Font.font("Arial", FontWeight.BOLD, 18));
+
+        // Retrieve the logged-in user's ID
+        SQLiteUserDAO userDAO = new SQLiteUserDAO();
+        String username = authManager.getUsername();
+        int userId = userDAO.getUserId(username);
+
+        // Retrieve the user's bookmarked plant IDs
+        SQLiteBookmarkDAO bookmarkDAO = new SQLiteBookmarkDAO();
+        List<Integer> bookmarkedPlantIds = bookmarkDAO.getBookmarks(userId);
+
+        // Create a container to display bookmarked plants
+        VBox bookmarksBox = new VBox(8);
+
+        // Access the plant database
+        SQLitePlantDAO plantDAO = new SQLitePlantDAO();
+
+        // Display each bookmarked plant
+        for (int plantId : bookmarkedPlantIds) {
+
+            Plant plant = plantDAO.getPlant(plantId);
+
+            if (plant != null) {
+                Label plantLabel = new Label(
+                        plant.getVernacularName() + " (" + plant.getSciName() + ")"
+                );
+
+                bookmarksBox.getChildren().add(plantLabel);
+            }
+        }
+
+        // Display a message when there are no bookmarks
+        if (bookmarkedPlantIds.isEmpty()) {
+            bookmarksBox.getChildren().add(
+                    new Label("You have no bookmarked plants yet.")
+            );
+        }
+
         Region verticalSpacer = new Region();
         VBox.setVgrow(verticalSpacer, Priority.ALWAYS);
 
         VBox leftColumn = new VBox(
-            titleLabel,
-            // displayNameRow,
-            usernameRow,
-            // passwordRow,
-            // saveButton,
-            verticalSpacer,
-            logoutButton
+                titleLabel,
+                // displayNameRow,
+                usernameRow,
+                bookmarksTitle,
+                bookmarksBox,
+                // passwordRow,
+                // saveButton,
+                verticalSpacer,
+                logoutButton
         );
+
         leftColumn.setSpacing(Design.spacing);
         leftColumn.setAlignment(Pos.TOP_LEFT);
         // content.setPrefWidth(400);
