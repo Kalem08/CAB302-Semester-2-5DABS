@@ -19,6 +19,7 @@ import User.authManager;
 
 import User.SQLiteBookmarkDAO;
 import User.SQLiteUserDAO;
+import User.SQLiteHistoryDAO;
 
 //this is the page that contains all of the details/content about a plant
 public class PlantPage extends VBox
@@ -38,6 +39,21 @@ public class PlantPage extends VBox
     //full constructor
     public PlantPage(Plant plant, String searchQuery)
     {
+        // Automatically record plant viewing history for signed-in users
+        if (plant != null && authManager.isSignedIn()) {
+            String username = authManager.getUsername();
+
+            SQLiteUserDAO userDAO = new SQLiteUserDAO();
+            int userId = userDAO.getUserId(username);
+
+            int plantId = plant.getId();
+
+            if (userId > 0) {
+                SQLiteHistoryDAO historyDAO = new SQLiteHistoryDAO();
+                historyDAO.recordView(userId, plantId);
+            }
+        }
+
         Header header = new Header();
 
         Region horizontalSpacer = new Region();

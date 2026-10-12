@@ -20,9 +20,12 @@ import User.*;
 import User.SQLiteUserDAO;
 import User.SQLiteBookmarkDAO;
 import java.util.List;
+import User.History;
+import User.SQLiteHistoryDAO;
 
 import app.model.Plant;
 import app.model.SQLitePlantDAO;
+import javafx.scene.input.MouseEvent;
 
 public class AccountPage extends VBox
 {
@@ -109,10 +112,25 @@ public class AccountPage extends VBox
             Plant plant = plantDAO.getPlant(plantId);
 
             if (plant != null) {
+
+                // Display the bookmarked plant's name
                 Label plantLabel = new Label(
                         plant.getVernacularName() + " (" + plant.getSciName() + ")"
                 );
 
+                // Style the bookmark as a clickable link
+                plantLabel.setStyle(
+                        "-fx-text-fill: #006400;" +
+                                "-fx-underline: true;" +
+                                "-fx-cursor: hand;"
+                );
+
+                // Open the bookmarked plant when clicked
+                plantLabel.setOnMouseClicked((MouseEvent event) -> {
+                    Navigation.openPlantPage(plant);
+                });
+
+                // Add the clickable bookmark to the Account Page
                 bookmarksBox.getChildren().add(plantLabel);
             }
         }
@@ -121,6 +139,56 @@ public class AccountPage extends VBox
         if (bookmarkedPlantIds.isEmpty()) {
             bookmarksBox.getChildren().add(
                     new Label("You have no bookmarked plants yet.")
+            );
+        }
+
+        // My Viewing History section
+        Label historyTitle = new Label("Recently Viewed Plants");
+        historyTitle.setFont(Font.font("Arial", FontWeight.BOLD, 18));
+
+        // Retrieve viewing history for the signed-in user
+        SQLiteHistoryDAO historyDAO = new SQLiteHistoryDAO();
+        List<History> viewingHistory = historyDAO.getHistory(userId);
+
+        // Container for recently viewed plants
+        VBox historyBox = new VBox(8);
+
+        // Display each previously viewed plant
+        for (History history : viewingHistory) {
+
+            Plant viewedPlant = plantDAO.getPlant(history.getPlantId());
+
+            if (viewedPlant != null) {
+
+
+
+                Label plantLabel = new Label(
+                        viewedPlant.getVernacularName()
+                                + " (" + viewedPlant.getSciName() + ")"
+                );
+
+        // Style the plant name as a clickable link
+                plantLabel.setStyle(
+                        "-fx-text-fill: #006400;" +
+                                "-fx-underline: true;" +
+                                "-fx-cursor: hand;"
+                );
+
+        // Open the selected plant's details page when clicked
+                plantLabel.setOnMouseClicked(event -> {
+                    Navigation.openPlantPage(viewedPlant);
+                });
+
+        // Add the clickable label to the viewing history section
+                historyBox.getChildren().add(plantLabel);
+
+            }
+        }
+
+        // Display a message when there is no viewing history
+        if (viewingHistory.isEmpty()) {
+            historyBox.getChildren().add(
+                    new Label("You have not viewed any plants yet.")
             );
         }
 
@@ -133,6 +201,8 @@ public class AccountPage extends VBox
                 usernameRow,
                 bookmarksTitle,
                 bookmarksBox,
+                historyTitle,
+                historyBox,
                 // passwordRow,
                 // saveButton,
                 verticalSpacer,
