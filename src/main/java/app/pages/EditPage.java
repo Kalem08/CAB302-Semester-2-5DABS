@@ -2,10 +2,8 @@ package app.pages;
 
 //MARK: Imports
 import javafx.geometry.Insets;
-// import javafx.geometry.Pos;
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
-// import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 
@@ -15,7 +13,7 @@ import app.components.CustomButton;
 import app.components.Header;
 import app.components.PlantEditField;
 import app.model.Plant;
-import app.model.SQLitePlantDAO;
+// import app.model.SQLitePlantDAO;
 import app.page_logic.EditPageLogic;
 
 public class EditPage extends VBox
@@ -25,14 +23,26 @@ public class EditPage extends VBox
     
     private final Plant plant;
     private final String searchQuery;
+
+    //fields
     private final PlantEditField plantNameField;
     private final PlantEditField scientificNameField;
     private final PlantEditField descriptionField;
     private final PlantEditField growthInfoField;
     private final PlantEditField locationField;
+
+    private final PlantEditField kingdomField;
+    private final PlantEditField phylumField;
+    private final PlantEditField classField;
+    private final PlantEditField orderField;
     private final PlantEditField familyField;
     private final PlantEditField genusField;
     private final PlantEditField speciesField;
+    private final PlantEditField taxonRankField;
+
+    private final PlantEditField edibleField;
+    private final PlantEditField hazardousField;
+    private final PlantEditField subspeciesField;
 
     //MARK: Constructor
     public EditPage(Plant plant)
@@ -61,11 +71,55 @@ public class EditPage extends VBox
         descriptionField = new PlantEditField("Description", description, 150, true);
         growthInfoField = new PlantEditField("Growth info", growthInfo, 150, true);
         locationField = new PlantEditField("Location", location);
+
+        kingdomField = new PlantEditField("Kingdom", plant == null ? "" : plant.getKingdom());
+        phylumField = new PlantEditField("Phylum", plant == null ? "" : plant.getPhylum());
+        classField = new PlantEditField("Class", plant == null ? "" : plant.getPclass());
+        orderField = new PlantEditField("Order", plant == null ? "" : plant.getOrder());
         familyField = new PlantEditField("Family", plant == null ? "" : plant.getFamily());
         genusField = new PlantEditField("Genus", plant == null ? "" : plant.getGenus());
         speciesField = new PlantEditField("Species", plant == null ? "" : plant.getSpecies());
+        taxonRankField = new PlantEditField("Taxon Rank", plant == null ? "" : plant.getTaxonRank());
 
-        // ScrollPane scrollArea = createScrollNode();
+        edibleField = new PlantEditField("Edible", plant == null ? "" : plant.getEdible());
+        hazardousField = new PlantEditField("Hazardous", plant == null ? "" : plant.getHazardous());
+        subspeciesField = new PlantEditField("Subspecies", plant == null ? "" : plant.getSubspecies());
+
+        VBox leftColumn = new VBox(
+            plantNameField,
+            scientificNameField,
+            descriptionField,
+            growthInfoField,
+            locationField,
+
+            edibleField,
+            hazardousField,
+            subspeciesField
+        );
+        leftColumn.setSpacing(Design.spacing);
+        leftColumn.setFillWidth(false); //stop smaller fields from stretching their width to match the wider fields in the same column
+
+        VBox rightColumn = new VBox(
+            kingdomField,
+            phylumField,
+            classField,
+            orderField,
+            familyField,
+            genusField,
+            speciesField,
+            taxonRankField
+        );
+        rightColumn.setSpacing(Design.spacing);
+        rightColumn.setFillWidth(false);
+
+        Region columnSpacer = new Region();
+        HBox.setHgrow(columnSpacer, Priority.ALWAYS);
+
+        HBox columns = new HBox(
+            leftColumn,
+            columnSpacer,
+            rightColumn
+        );
 
         Region bottomSpacer = new Region();
         VBox.setVgrow(bottomSpacer, Priority.ALWAYS);
@@ -94,25 +148,17 @@ public class EditPage extends VBox
         );
         bottomRow.setSpacing(Design.spacing);
 
+        //MARK: Body
         VBox content = new VBox(
             titleLabel,
-
-            // scrollArea,
-            plantNameField,
-            scientificNameField,
-            descriptionField,
-            growthInfoField,
-            locationField,
-            familyField,
-            genusField,
-            speciesField,
-
+            columns,
             bottomSpacer,
             bottomRow
         );
         content.setSpacing(Design.spacing);
         content.setPadding(new Insets(Design.padding));
-        content.setFillWidth(false); //stop nodes in this container from stetching to their maximum horizontal size
+        // content.setFillWidth(false); //stop nodes in this container from stetching to their maximum horizontal size
+        content.setFillWidth(true); //tell nodes to stetch to their maximum horizontal size
         VBox.setVgrow(content, Priority.ALWAYS);
 
         VBox page = new VBox(
