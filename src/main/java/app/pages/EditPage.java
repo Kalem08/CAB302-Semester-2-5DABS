@@ -27,6 +27,7 @@ public class EditPage extends VBox
     //fields
     private final PlantEditField plantNameField;
     private final PlantEditField scientificNameField;
+    private final PlantEditField imageField;
     private final PlantEditField descriptionField;
     private final PlantEditField growthInfoField;
     private final PlantEditField locationField;
@@ -70,9 +71,11 @@ public class EditPage extends VBox
         String description = plant == null ? "" : plant.getGeneralisedInfo();
         String growthInfo = plant == null || plant.getGrowthInfo() == null ? "" : plant.getGrowthInfo();
         String location = plant == null ? "" : plant.getLocation();
+        String imageString = plant == null ? "" : plant.getImage();
 
         plantNameField = new PlantEditField("Plant name", plantName);
         scientificNameField = new PlantEditField("Scientific name", scientificName);
+        imageField = new PlantEditField("Image URL", imageString);
         descriptionField = new PlantEditField("Description", description, 150, true);
         growthInfoField = new PlantEditField("Growth info", growthInfo, 150, true);
         locationField = new PlantEditField("Location", location);
@@ -93,6 +96,7 @@ public class EditPage extends VBox
         VBox leftColumn = new VBox(
             plantNameField,
             scientificNameField,
+            imageField,
             descriptionField,
             growthInfoField,
             locationField,
