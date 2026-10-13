@@ -80,7 +80,7 @@ public class SQLitePlantDAOTest {
         VALUES
         (
             'Test plant one',
-            '',
+            'https://images.ala.org.au/image/proxyImage?imageId=test-image-id',
             'Queensland',
             'Eucalyptus testus',
             'Plantae',
@@ -175,6 +175,10 @@ public class SQLitePlantDAOTest {
         assertEquals(1, plant.getId());
         assertEquals("Gungurru", plant.getVernacularName());
         assertEquals("Eucalyptus testus", plant.getSciName());
+        assertEquals(
+            "https://images.ala.org.au/image/proxyImage?imageId=test-image-id",
+            plant.getImage()
+        );
         assertEquals("N/a", plant.getEdible());
         assertEquals("N/a", plant.getHazardous());
         assertEquals("N/a", plant.getSubspecies());
