@@ -113,8 +113,8 @@ public class PlantPage extends VBox
         imageView.setFitWidth(200);
         imageView.setPreserveRatio(true);
 
-        if (plant != null && plant.getImageUrl() != null) {
-            imageView.setImage(new Image(plant.getImageUrl(), true));
+        if (plant != null && plant.getImage() != null && !plant.getImage().isBlank()) {
+            imageView.setImage(new Image(plant.getImage(), true));
         }
 
         Label imageSubtitle = new Label("Image from the Atlas of Living Australia.");

@@ -13,7 +13,7 @@ public class PlantTest {
         plant = new Plant(
                 "Test",
                 "Test",
-                "0428",
+                "https://images.ala.org.au/image/proxyImage?imageId=0428",
                 "QLD",
                 "TestSci",
                 "King",
@@ -69,28 +69,20 @@ public class PlantTest {
     }
 
     @Test
-    public void testGetImage() {
-        assertEquals("0428", plant.getImage());
-    }
-
-    @Test
-    public void testGetImageUrl() {
+    public void testGetImageReturnsStoredUrl() {
         assertEquals(
-                "https://images-assets.ala.org.au/store/4/8/9/f/0428/original",
-                plant.getImageUrl()
+                "https://images.ala.org.au/image/proxyImage?imageId=0428",
+                plant.getImage()
         );
     }
 
     @Test
-    public void testGetImageUrlReturnsNullForBlankCode() {
-        plant.setImage(" ");
-        assertNull(plant.getImageUrl());
-    }
-
-    @Test
     public void testSetImage() {
-        plant.setImage("ImageTest");
-        assertEquals("ImageTest", plant.getImage());
+        plant.setImage("https://images.ala.org.au/image/proxyImage?imageId=test");
+        assertEquals(
+            "https://images.ala.org.au/image/proxyImage?imageId=test",
+            plant.getImage()
+        );
     }
 
     @Test
