@@ -6,6 +6,8 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.List;
+import java.util.ArrayList;
 
 public class SQLiteBookmarkDAO implements IBookmarkDAO {
 
@@ -60,5 +62,29 @@ public class SQLiteBookmarkDAO implements IBookmarkDAO {
         } catch (SQLException e) {
             throw new RuntimeException("Failed to check bookmark", e);
         }
+    }
+
+    @Override
+    public List<Integer> getBookmarks(int userId) {
+        List<Integer> bookmarks = new ArrayList<>();
+
+        String sql = "SELECT PlantId FROM Bookmarks WHERE UserId = ?";
+
+        try (Connection connection = DatabaseConnection.getConnection();
+             PreparedStatement statement = connection.prepareStatement(sql)) {
+
+            statement.setInt(1, userId);
+
+            try (ResultSet resultSet = statement.executeQuery()) {
+                while (resultSet.next()) {
+                    bookmarks.add(resultSet.getInt("PlantId"));
+                }
+            }
+
+        } catch (SQLException e) {
+            throw new RuntimeException("Failed to retrieve bookmarks", e);
+        }
+
+        return bookmarks;
     }
 }

@@ -46,8 +46,8 @@ public class SearchResult extends StackPane
         imageView.setPreserveRatio(true);
         imageView.setSmooth(true);
 
-        if (plant != null && plant.getImageUrl() != null) {
-            imageView.setImage(new Image(plant.getImageUrl(), true));
+        if (plant != null && plant.getImage() != null && !plant.getImage().isBlank()) {
+            imageView.setImage(new Image(plant.getImage(), true));
         }
 
         StackPane imagePane = new StackPane(imageBackground, imageView);
