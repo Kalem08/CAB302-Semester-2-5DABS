@@ -208,7 +208,7 @@ public class EditPage extends VBox
         Plant updatedPlant = new Plant(
             descriptionField.getText(),
             growthInfoField.getText(),
-            (isAdding ? "" : plant.getImage()), //avoid trying to get an image if this is a new plant, as 'plant' is null and getImage() will give an error
+            (isAdding ? imageField.getText() : plant.getImage()), //avoid trying to get an image if this is a new plant, as 'plant' is null and getImage() will give an error
             locationField.getText(),
             scientificNameField.getText(),
             kingdomField.getText(),
