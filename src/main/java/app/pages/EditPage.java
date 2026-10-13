@@ -44,13 +44,18 @@ public class EditPage extends VBox
     private final PlantEditField hazardousField;
     private final PlantEditField subspeciesField;
 
-    //MARK: Constructor
-    public EditPage(Plant plant)
+    //MARK: Constructors
+    // public EditPage(Plant plant)
+    // {
+    //     this(plant, "", false);
+    // }
+
+    public EditPage(Plant plant, boolean isAddPage)
     {
-        this(plant, "");
+        this(plant, "", isAddPage);
     }
 
-    public EditPage(Plant plant, String searchQuery)
+    public EditPage(Plant plant, String searchQuery, boolean isAddPage)
     {
         this.plant = plant;
         this.searchQuery = searchQuery == null ? "" : searchQuery;
@@ -137,10 +142,7 @@ public class EditPage extends VBox
         saveButton.setTextHoverColour(Design.grey95);
         saveButton.setBackgroundColor(Design.softGreen);
         saveButton.setBackgroundHoverColor(Design.darkSoftGreen);
-        // saveButton.setOnMouseClicked(event -> saveEdits());
-        saveButton.setOnMouseClicked(event ->
-            EditPageLogic.saveEdits(formPlantFromTextfields(), searchQuery)
-        );
+        saveButton.setOnMouseClicked(event -> submit(isAddPage));
 
         HBox bottomRow = new HBox(
             backButton,
@@ -157,8 +159,7 @@ public class EditPage extends VBox
         );
         content.setSpacing(Design.spacing);
         content.setPadding(new Insets(Design.padding));
-        // content.setFillWidth(false); //stop nodes in this container from stetching to their maximum horizontal size
-        content.setFillWidth(true); //tell nodes to stetch to their maximum horizontal size
+        content.setFillWidth(true); //tell nodes in this container to stetch to their maximum horizontal size (stetches horizontal spacer between the columns)
         VBox.setVgrow(content, Priority.ALWAYS);
 
         VBox page = new VBox(
@@ -171,19 +172,31 @@ public class EditPage extends VBox
             page
         );
         scrollPane.setFitToWidth(true); //this allows the header to stretch to the maximum
-        // scrollPane.setFitToHeight(false); //when false, allows the ScrollPane to shorten it's height when the window shrinks in height 
+        // scrollPane.setFitToHeight(false); //when false, allows the ScrollPane to shorten it's height when the window shrinks in height  (false by default, hence commented out)
         scrollPane.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
         scrollPane.setVbarPolicy(ScrollPane.ScrollBarPolicy.AS_NEEDED);
 
         getChildren().addAll(
-            // header,
-            // content
-
             scrollPane
         );
     }
 
-    //MARK: Methods
+    /**
+     * Tell the EditPage logic to either create and save a new plant, or save the edits to an existing plant.
+     */
+    void submit(boolean isAdding)
+    {
+        if (isAdding)
+            EditPageLogic.addPlant(formPlantFromTextfields(), searchQuery);
+        else
+            EditPageLogic.saveEdits(formPlantFromTextfields(), searchQuery);
+    }
+
+    //MARK: Form plant
+    /**
+     * Uses the textfields from the EditPage to form a plant class instance.
+     * @return A new plant object
+     */
     Plant formPlantFromTextfields()
     {
         Plant updatedPlant = new Plant(
@@ -192,18 +205,18 @@ public class EditPage extends VBox
             plant.getImage(),
             locationField.getText(),
             scientificNameField.getText(),
-            plant.getKingdom(),
-            plant.getPhylum(),
-            plant.getPclass(),
-            plant.getOrder(),
+            kingdomField.getText(),
+            phylumField.getText(),
+            classField.getText(),
+            orderField.getText(),
             familyField.getText(),
             genusField.getText(),
-            plant.getTaxonRank(),
+            taxonRankField.getText(),
             plantNameField.getText(),
             speciesField.getText(),
-            plant.getEdible(),
-            plant.getHazardous(),
-            plant.getSubspecies()
+            edibleField.getText(),
+            hazardousField.getText(),
+            subspeciesField.getText()
         );
         updatedPlant.setID(plant.getId());
         return updatedPlant;
