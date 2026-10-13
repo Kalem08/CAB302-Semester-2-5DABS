@@ -46,11 +46,6 @@ public class EditPage extends VBox
     private final PlantEditField subspeciesField;
 
     //MARK: Constructors
-    // public EditPage(Plant plant)
-    // {
-    //     this(plant, "", false);
-    // }
-
     public EditPage(Plant plant, boolean isAddPage)
     {
         this(plant, "", isAddPage);
@@ -63,7 +58,7 @@ public class EditPage extends VBox
         Header header = new Header();
 
         //MARK: Body
-        Label titleLabel = new Label("Edit Plant");
+        Label titleLabel = new Label(isAddPage ? "Add Plant" : "Edit Plant");
         titleLabel.setFont(Font.font("Arial", FontWeight.BOLD, 24));
 
         String plantName = plant == null ? "" : plant.getVernacularName();
@@ -141,16 +136,16 @@ public class EditPage extends VBox
         backButton.setBackgroundHoverColor(Design.darkRed);
         backButton.setOnMouseClicked(event -> Navigation.openPlantPage(plant, this.searchQuery));
 
-        CustomButton saveButton = new CustomButton("Submit changes", buttonWidth, buttonHeight);
-        saveButton.setTextColour(Design.white);
-        saveButton.setTextHoverColour(Design.grey95);
-        saveButton.setBackgroundColor(Design.softGreen);
-        saveButton.setBackgroundHoverColor(Design.darkSoftGreen);
-        saveButton.setOnMouseClicked(event -> submit(isAddPage));
+        CustomButton submitButton = new CustomButton(isAddPage ? "Add Plant" : "Submit changes", buttonWidth, buttonHeight);
+        submitButton.setTextColour(Design.white);
+        submitButton.setTextHoverColour(Design.grey95);
+        submitButton.setBackgroundColor(Design.softGreen);
+        submitButton.setBackgroundHoverColor(Design.darkSoftGreen);
+        submitButton.setOnMouseClicked(event -> submit(isAddPage));
 
         HBox bottomRow = new HBox(
             backButton,
-            saveButton
+            submitButton
         );
         bottomRow.setSpacing(Design.spacing);
 
