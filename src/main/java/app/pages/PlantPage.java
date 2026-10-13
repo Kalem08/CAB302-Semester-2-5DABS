@@ -17,6 +17,10 @@ import app.model.Plant;
 import app.model.SQLitePlantDAO;
 import User.authManager;
 
+import User.SQLiteBookmarkDAO;
+import User.SQLiteUserDAO;
+import User.SQLiteHistoryDAO;
+
 //this is the page that contains all of the details/content about a plant
 public class PlantPage extends VBox
 {
@@ -35,6 +39,21 @@ public class PlantPage extends VBox
     //full constructor
     public PlantPage(Plant plant, String searchQuery)
     {
+        // Automatically record plant viewing history for signed-in users
+        if (plant != null && authManager.isSignedIn()) {
+            String username = authManager.getUsername();
+
+            SQLiteUserDAO userDAO = new SQLiteUserDAO();
+            int userId = userDAO.getUserId(username);
+
+            int plantId = plant.getId();
+
+            if (userId > 0) {
+                SQLiteHistoryDAO historyDAO = new SQLiteHistoryDAO();
+                historyDAO.recordView(userId, plantId);
+            }
+        }
+
         Header header = new Header();
 
         Region horizontalSpacer = new Region();
@@ -83,9 +102,48 @@ public class PlantPage extends VBox
         Region bottomSpacer = new Region();
         VBox.setVgrow(bottomSpacer, Priority.ALWAYS);
 
+        // Bookmark button for signed-in users
+        Button bookmarkButton = new Button("Add Bookmark");
+
+        // Check whether the current plant is already bookmarked
+        if (plant != null && authManager.isSignedIn()) {
+            String username = authManager.getUsername();
+
+            SQLiteUserDAO userDAO = new SQLiteUserDAO();
+            int userId = userDAO.getUserId(username);
+
+            SQLiteBookmarkDAO bookmarkDAO = new SQLiteBookmarkDAO();
+            int plantId = plant.getId();
+
+            if (bookmarkDAO.isBookmarked(userId, plantId)) {
+                bookmarkButton.setText("Remove Bookmark");
+            }
+        }
+
+        bookmarkButton.setOnAction(event -> {
+            if (plant == null || !authManager.isSignedIn()) {
+                return;
+            }
+
+            String username = authManager.getUsername();
+            SQLiteUserDAO userDAO = new SQLiteUserDAO();
+            int userId = userDAO.getUserId(username);
+
+            SQLiteBookmarkDAO bookmarkDAO = new SQLiteBookmarkDAO();
+            int plantId = plant.getId();
+
+            if (!bookmarkDAO.isBookmarked(userId, plantId)) {
+                bookmarkDAO.addBookmark(userId, plantId);
+                bookmarkButton.setText("Remove Bookmark");
+            } else {
+                bookmarkDAO.removeBookmark(userId, plantId);
+                bookmarkButton.setText("Add Bookmark");
+            }
+        });
+
         Button returnToResultsButton = new Button("Return to search results");
         returnToResultsButton.setOnAction(event ->
-            HelloApplication.scene.setRoot(new ResultsPage(searchQuery)));
+                HelloApplication.scene.setRoot(new ResultsPage(searchQuery)));
 
         VBox leftColumn = new VBox(
             title,
@@ -104,8 +162,9 @@ public class PlantPage extends VBox
             dropdownSpacer,
             createAdditionalInfoPane(plant),
 
-            bottomSpacer,
-            returnToResultsButton
+                bottomSpacer,
+                bookmarkButton,
+                returnToResultsButton
         );
 
         //MARK: Right column
