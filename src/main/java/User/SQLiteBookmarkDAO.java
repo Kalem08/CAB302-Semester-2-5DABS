@@ -6,7 +6,9 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-
+/**
+ * SQLiteBookmarkDAO is a data access object (DAO) that provides methods for interacting with the Bookmarks table in the SQLite database.
+ */
 public class SQLiteBookmarkDAO implements IBookmarkDAO {
 
     @Override

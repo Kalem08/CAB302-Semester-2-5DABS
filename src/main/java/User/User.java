@@ -7,6 +7,10 @@ public record User(String username, String password, Role role) {
         this(username, password, Role.STANDARD);
     }
 
+    /**
+     * Constructs a new User record with the specified username, password, and role.
+     * Validates that the username and password are not empty and that the role is not null
+     */
     public User {
         if (username == null || username.trim().isEmpty()) {
             throw new IllegalArgumentException("Username cannot be empty");

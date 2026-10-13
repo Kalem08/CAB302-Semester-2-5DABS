@@ -24,6 +24,26 @@ public class Plant {
     private String subspecies;
 
     //MARK: Constructor
+    /**
+     * Constructs a new Plant object with the specified details.
+     * @param generalisedInfo The general information about the plant
+     * @param growthInfo The growth information of the plant
+     * @param images The image URLs of the plant
+     * @param stateProvince The state or province where the plant is found
+     * @param scientificName The scientific name of the plant
+     * @param kingdom The kingdom classification of the plant
+     * @param phylum The phylum classification of the plant
+     * @param pclass The class classification of the plant
+     * @param order The order classification of the plant
+     * @param family The family classification of the plant
+     * @param genus The genus classification of the plant
+     * @param taxonRank The taxonomic rank of the plant
+     * @param vernacularName The common name of the plant
+     * @param species The species classification of the plant
+     * @param edible Indicates if the plant is edible
+     * @param hazardous Indicates if the plant is hazardous
+     * @param subspecies The subspecies classification of the plant
+     */
     public Plant (String generalisedInfo,
                   String growthInfo,
                   String images,
