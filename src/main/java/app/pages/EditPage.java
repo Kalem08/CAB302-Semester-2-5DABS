@@ -204,7 +204,7 @@ public class EditPage extends VBox
         Plant updatedPlant = new Plant(
             descriptionField.getText(),
             growthInfoField.getText(),
-            (isAdding ? "" : plant.getImage()), //avoid trying to get an image if this is a new plant, as getImage() will return null
+            (isAdding ? "" : plant.getImage()), //avoid trying to get an image if this is a new plant, as 'plant' is null and getImage() will give an error
             locationField.getText(),
             scientificNameField.getText(),
             kingdomField.getText(),
@@ -220,7 +220,10 @@ public class EditPage extends VBox
             hazardousField.getText(),
             subspeciesField.getText()
         );
-        updatedPlant.setID(plant.getId());
+        //only copy the ID if we're editing a plant
+        if (!isAdding)
+            updatedPlant.setID(plant.getId());
+
         return updatedPlant;
     }
 }
