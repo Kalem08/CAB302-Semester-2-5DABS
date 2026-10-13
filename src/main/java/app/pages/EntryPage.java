@@ -29,6 +29,23 @@ public class EntryPage extends VBox
      */
     public EntryPage()
     {
+        Region horizontalSpacer = new Region();
+        HBox.setHgrow(horizontalSpacer, Priority.ALWAYS);
+
+        //account buttons
+        logInButton = new CustomButton("Log in", 100, 40);
+        logInButton.setBackgroundColor(Design.superLightGrey);
+        logInButton.setBackgroundHoverColor(Color.LIGHTGREY);
+        logInButton.setOnMouseClicked(event -> Navigation.openLogInPage());
+
+        registerButton = new CustomButton("Register", 100, 40);
+        registerButton.setBackgroundColor(Design.superLightGrey);
+        registerButton.setBackgroundHoverColor(Color.LIGHTGREY);
+        registerButton.setOnMouseClicked(event -> Navigation.openRegisterPage());
+
+        //signed in label
+        signedInLabel = new Label("Signed in as '" + authManager.getUsername() + "'");
+
         //accountButton
         int diameter = 40;
         accountButton = new ImageButton("Leaf.png", diameter / 2, diameter, diameter);
@@ -38,14 +55,16 @@ public class EntryPage extends VBox
         accountButton.setBackgroundHoverColor(Design.darkGreen);
         accountButton.setOnMouseClicked(event -> Navigation.openAccountPage());
 
-        Region horizontalSpacer = new Region();
-        HBox.setHgrow(horizontalSpacer, Priority.ALWAYS);
-
         HBox topBar = new HBox(
             horizontalSpacer,
+            logInButton,
+            registerButton,
+            signedInLabel,
             accountButton
         );
+        topBar.setSpacing(Design.spacing);
         topBar.setPadding(new Insets(Design.padding));
+        topBar.setAlignment(Pos.CENTER);
 
         //MARK: Logo
         ImageView logo = new ImageView(Design.getLogo());
@@ -66,20 +85,6 @@ public class EntryPage extends VBox
         searchButton.setTextHoverColour(Color.BLACK);
         searchButton.setOnMouseClicked(event -> search());
 
-        //account buttons
-        logInButton = new CustomButton("Log in", 100, 40);
-        logInButton.setBackgroundColor(Design.superLightGrey);
-        logInButton.setBackgroundHoverColor(Color.LIGHTGREY);
-        logInButton.setOnMouseClicked(event -> Navigation.openLogInPage());
-
-        registerButton = new CustomButton("Register", 100, 40);
-        registerButton.setBackgroundColor(Design.superLightGrey);
-        registerButton.setBackgroundHoverColor(Color.LIGHTGREY);
-        registerButton.setOnMouseClicked(event -> Navigation.openRegisterPage());
-
-        //signed in label
-        signedInLabel = new Label("Signed in as '" + authManager.getUsername() + "'");
-
         VBox centreBox = new VBox();
         centreBox.setAlignment(Pos.CENTER);
         centreBox.setSpacing(15.0);
@@ -91,18 +96,18 @@ public class EntryPage extends VBox
             searchButton
         );
         VBox.setVgrow(centreBox, Priority.ALWAYS);
-        // VBox.setV
+        centreBox.setAlignment(Pos.CENTER);
 
-        HBox lowerBox = new HBox();
-        lowerBox.setAlignment(Pos.CENTER);
-        lowerBox.setSpacing(20.0);
-        lowerBox.setPadding(new Insets(0, 0, 20, 0)); //20 pixels of spacing from the bottom
-        // lowerBox.setFillHeight(false);
-        lowerBox.getChildren().addAll(
-            signedInLabel,
-            logInButton,
-            registerButton
-        );
+        // HBox lowerBox = new HBox();
+        // lowerBox.setAlignment(Pos.CENTER);
+        // lowerBox.setSpacing(20.0);
+        // lowerBox.setPadding(new Insets(0, 0, 20, 0)); //20 pixels of spacing from the bottom
+        // // lowerBox.setFillHeight(false);
+        // lowerBox.getChildren().addAll(
+        //     signedInLabel,
+        //     logInButton,
+        //     registerButton
+        // );
 
         Region bottomSpacer = new Region();
         bottomSpacer.setMaxHeight(50);
@@ -112,15 +117,13 @@ public class EntryPage extends VBox
         getChildren().addAll(
             topBar,
             centreBox,
-            bottomSpacer,
-            lowerBox
+            bottomSpacer
+            // lowerBox
         );
 
         //change colour of root
         setStyle("-fx-background-color: #FFFFFF;");
-
-        centreBox.setAlignment(Pos.CENTER);
-        lowerBox.setAlignment(Pos.CENTER);
+        // lowerBox.setAlignment(Pos.CENTER);
 
         updateAccountButtonsVisibility();
     }
@@ -135,10 +138,12 @@ public class EntryPage extends VBox
     private void updateAccountButtonsVisibility()
     {
         Boolean isSignedIn = authManager.isSignedIn();
+
         //when logged in
         signedInLabel.setVisible(isSignedIn);
         signedInLabel.setManaged(isSignedIn);
         accountButton.setVisible(isSignedIn);
+        accountButton.setManaged(isSignedIn);
 
         //when logged out
         logInButton.setVisible(!isSignedIn);
