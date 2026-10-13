@@ -34,40 +34,19 @@ public class AccountPage extends VBox
         titleLabel.setFont(Font.font("Arial", FontWeight.BOLD, 24));
         titleLabel.setUnderline(true);
 
-        //display name
-        // Label displayNameLabel = new Label("Display name:");
-        // CustomTextfield displayNameTextField = new CustomTextfield("Display name...", textfieldWidth, textfieldHeight);
-        // HBox displayNameRow = new HBox(
-        //     displayNameLabel,
-        //     displayNameTextField
-        // );
-        // displayNameRow.setSpacing(Design.spacing);
-        // displayNameRow.setAlignment(Pos.CENTER_LEFT);
-
         //username
         Label usernameLabel = new Label("Username: " + authManager.getUsername());
-        // CustomTextfield usernameTextfield = new CustomTextfield("Username...", textfieldWidth, textfieldHeight);
-        HBox usernameRow = new HBox(
-            usernameLabel
-            // usernameTextfield
-        );
-        usernameRow.setSpacing(Design.spacing);
-        usernameRow.setAlignment(Pos.CENTER_LEFT);
-
-        //password
-        // Label passwordLabel = new Label("Password:");
-        // CustomTextfield passwordTextField = new CustomTextfield("Password...", textfieldWidth, textfieldHeight);
-        // HBox passwordRow = new HBox(
-        //     passwordLabel,
-        //     passwordTextField
+        // // CustomTextfield usernameTextfield = new CustomTextfield("Username...", textfieldWidth, textfieldHeight);
+        // HBox usernameRow = new HBox(
+        //     usernameLabel
+        //     // usernameTextfield
         // );
-        // passwordRow.setSpacing(Design.spacing);
-        // passwordRow.setAlignment(Pos.CENTER_LEFT);
+        // usernameRow.setSpacing(Design.spacing);
+        // usernameRow.setAlignment(Pos.CENTER_LEFT);
 
-        // CustomButton saveButton = new CustomButton("Save changes", buttonWidth, textfieldHeight);
-        // saveButton.setBackgroundColor(Design.grey80);
-        // saveButton.setBackgroundHoverColor(Design.grey70);
-        // saveButton.setOnMouseClicked(event -> saveAccountDetails());
+        //add plant button
+        CustomButton addPlantButton = new CustomButton("Add new plant", buttonWidth, textfieldHeight);
+        addPlantButton.setOnMouseClicked(event -> Navigation.openAddPage(null));
 
         //logout button
         CustomButton logoutButton = new CustomButton("Log out", buttonWidth, textfieldHeight);
@@ -82,11 +61,9 @@ public class AccountPage extends VBox
 
         VBox leftColumn = new VBox(
             titleLabel,
-            // displayNameRow,
-            usernameRow,
-            // passwordRow,
-            // saveButton,
+            usernameLabel,
             verticalSpacer,
+            addPlantButton,
             logoutButton
         );
         leftColumn.setSpacing(Design.spacing);

@@ -7,6 +7,7 @@ import javafx.scene.control.Alert;
 
 public class EditPageLogic
 {
+    //MARK: Save edits
     public static void saveEdits(Plant updatedPlant, String searchQuery) //addPlant method won't have the query paramater
     {
         if (updatedPlant == null)

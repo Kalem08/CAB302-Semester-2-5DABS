@@ -186,10 +186,12 @@ public class EditPage extends VBox
      */
     void submit(boolean isAdding)
     {
+        Plant constructedPlant = formPlantFromTextfields(isAdding);
+
         if (isAdding)
-            EditPageLogic.addPlant(formPlantFromTextfields(), searchQuery);
+            EditPageLogic.addPlant(constructedPlant, searchQuery);
         else
-            EditPageLogic.saveEdits(formPlantFromTextfields(), searchQuery);
+            EditPageLogic.saveEdits(constructedPlant, searchQuery);
     }
 
     //MARK: Form plant
@@ -197,12 +199,12 @@ public class EditPage extends VBox
      * Uses the textfields from the EditPage to form a plant class instance.
      * @return A new plant object
      */
-    Plant formPlantFromTextfields()
+    Plant formPlantFromTextfields(boolean isAdding)
     {
         Plant updatedPlant = new Plant(
             descriptionField.getText(),
             growthInfoField.getText(),
-            plant.getImage(),
+            (isAdding ? "" : plant.getImage()), //avoid trying to get an image if this is a new plant, as getImage() will return null
             locationField.getText(),
             scientificNameField.getText(),
             kingdomField.getText(),
