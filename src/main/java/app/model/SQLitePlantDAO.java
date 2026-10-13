@@ -9,7 +9,9 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.sql.Statement;
-
+/**
+ * SQLitePlantDAO is an implementation of the IPlantDAO interface that interacts with the application's SQLite database.
+ */
 public class SQLitePlantDAO implements IPlantDAO {
 
     @Override
@@ -252,10 +254,27 @@ public class SQLitePlantDAO implements IPlantDAO {
         return search(query, Integer.MAX_VALUE, 0);
     }
 
+    /**
+     * Searches plants by scientific or vernacular name with pagination.
+     * @param query the name text to search for
+     * @param limit the maximum number of results to return
+     * @param offset the number of results to skip before starting to collect the result set
+     * @return all plants when the query is blank, otherwise matching plants
+     */
     public List<Plant> search(String query, int limit, int offset) {
         return search(query, "", "", "", limit, offset);
     }
 
+    /**
+     * Searches plants by scientific or vernacular name with optional filters and pagination.
+     * @param query the name text to search for
+     * @param location the location filter (stateProvince)
+     * @param family the family filter
+     * @param genus the genus filter
+     * @param limit the maximum number of results to return
+     * @param offset the number of results to skip before starting to collect the result set
+     * @return all plants when the query is blank, otherwise matching plants
+     */
     public List<Plant> search(String query, String location, String family,
                               String genus, int limit, int offset) {
         if (limit < 1 || offset < 0) {
@@ -332,10 +351,23 @@ public class SQLitePlantDAO implements IPlantDAO {
         return plants;
     }
 
+    /**
+     * Counts the number of plants matching the search query.
+     * @param query the name text to search for
+     * @return the count of matching plants
+     */
     public int count(String query) {
         return count(query, "", "", "");
     }
 
+    /**
+     * Counts the number of plants matching the search query and optional filters.
+     * @param query the name text to search for
+     * @param location the location filter (stateProvince)
+     * @param family the family filter
+     * @param genus the genus filter
+     * @return the count of matching plants
+     */
     public int count(String query, String location, String family, String genus) {
         String sql = "SELECT COUNT(*) FROM PlantsData";
         boolean hasQuery = query != null && !query.trim().isEmpty();
@@ -375,6 +407,12 @@ public class SQLitePlantDAO implements IPlantDAO {
         }
     }
 
+    /**
+     * Retrieves distinct values for a specified column in the PlantsData table.
+     * @param column the column name to retrieve distinct values from (must be one of "stateProvince", "family", or "genus")
+     * @return a list of distinct values for the specified column
+     * @throws IllegalArgumentException if the specified column is not supported
+     */
     public List<String> distinctValues(String column) {
         if (!List.of("stateProvince", "family", "genus").contains(column)) {
             throw new IllegalArgumentException("Unsupported filter column: " + column);
@@ -398,16 +436,35 @@ public class SQLitePlantDAO implements IPlantDAO {
         return values;
     }
 
+    /**
+     * Returns a default value for additional information fields if they are null or blank.
+     * @param value the value to check
+     * @return "N/a" if the value is null or blank, otherwise returns the original value
+     */
     private String additionalInfoValue(String value) {
         return value == null || value.isBlank() ? "N/a" : value;
     }
 
+    /**
+     * Adds a filter condition to the list of conditions if the value is not null or blank.
+     * @param conditions the list of conditions to add to
+     * @param value the value to check
+     * @param column the column name for the condition
+     */
     private void addFilterCondition(List<String> conditions, String value, String column) {
         if (value != null && !value.trim().isEmpty()) {
             conditions.add("LOWER(" + column + ") = LOWER(?)");
         }
     }
 
+    /**
+     * Sets a parameter in the PreparedStatement if the value is not null or blank.
+     * @param statement the PreparedStatement to set the parameter in
+     * @param parameterIndex the index of the parameter to set
+     * @param value the value to set
+     * @return the next parameter index
+     * @throws SQLException if a database access error occurs
+     */
     private int setFilterParameter(PreparedStatement statement, int parameterIndex, String value)
             throws SQLException {
         if (value != null && !value.trim().isEmpty()) {

@@ -3,7 +3,9 @@ package app.model;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
-
+/**
+ * MockPlantDAO is a mock implementation of the IPlantDAO interface for testing purposes.
+ */
 public class MockPlantDAO implements IPlantDAO {
     /**
      * A static list of plants to be used as a mock database.

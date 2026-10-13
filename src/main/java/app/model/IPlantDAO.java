@@ -1,7 +1,9 @@
 package app.model;
 
 import java.util.List;
-
+/**
+ * IPlantDAO is an interface that defines the methods for interacting with a plant database.
+ */
 public interface IPlantDAO {
     /**
      * Adds a new plant to the database.
