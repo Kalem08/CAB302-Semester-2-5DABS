@@ -19,6 +19,7 @@ public class Design
     public static int padding = 10;
     // public static int horizontalSpacing = 10;
     // public static int verticalSpacing = 10;
+    public static int defaultButtonWidth = 100;
     public static int defaultButtonHeight = 50;
     public static int headerHeight = 70;
 
