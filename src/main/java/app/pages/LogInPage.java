@@ -98,7 +98,7 @@ public class LogInPage extends StackPane
             // leftLeafImage.getHeight(),
             imageHeight / 2,
             imageHeight,
-            Design.superLightGrey
+            Design.grey90
         );
         Blend blend = new Blend(
             BlendMode.SRC_ATOP,
