@@ -17,8 +17,10 @@ public class Design
     //spacing & padding
     public static int spacing = 10;
     public static int padding = 10;
-    public static int horizontalSpacing = 10;
-    public static int verticalSpacing = 10;
+    // public static int horizontalSpacing = 10;
+    // public static int verticalSpacing = 10;
+    public static int defaultButtonHeight = 50;
+    public static int headerHeight = 70;
 
     //MARK: Colours
     //greys

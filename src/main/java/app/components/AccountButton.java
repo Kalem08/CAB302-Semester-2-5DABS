@@ -9,12 +9,11 @@ import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.Circle;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-// import javafx.scene.text.Font;
-// import javafx.scene.text.FontWeight;
 
 import app.Design;
 import app.Navigation;
 import User.authManager;
+import app.HelloApplication;
 
 /**
  * A button in the upper right-hand corner of the screen that shows the account icon and account name.
@@ -69,11 +68,9 @@ public class AccountButton extends StackPane
         leafIcon.setPreserveRatio(true);
 
         StackPane profileIcon = new StackPane(
-            // redRectangle,
             greenCircle,
             leafIcon
         );
-        // profileIcon.setMaxWidth(Region.USE_PREF_SIZE);
         profileIcon.setPrefWidth(profileDiameter);
         
         //MARK: Content
@@ -81,7 +78,6 @@ public class AccountButton extends StackPane
             labelContainer,
             profileIcon
         );
-        // content.setSpacing(Design.spacing);
         content.setPadding(new Insets(Design.padding / 2));
         content.setAlignment(Pos.CENTER_RIGHT);
 
@@ -90,12 +86,8 @@ public class AccountButton extends StackPane
             content
         );
         setMinWidth(width);
-        // setPrefWidth(width);
-        // setMaxWidth(width);
-        // setPrefHeight(height);
 
         setHoverEffect();
-
         setOnMouseClicked(event -> Navigation.openAccountPage());
     }
 

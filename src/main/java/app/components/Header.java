@@ -5,7 +5,6 @@ package app.components;
 import javafx.scene.layout.*;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
-// import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 
 import app.Design;
@@ -22,8 +21,6 @@ public class Header extends StackPane
     CustomButton logInButton;
     CustomButton registerButton;
     CustomTextfield searchTextfield;
-    // Label usernameLabel;
-    // ImageButton accountButton;
     AccountButton accountButton;
 
     //MARK: Constructor
@@ -59,29 +56,18 @@ public class Header extends StackPane
         searchButton.setOnMouseClicked(event -> search());
 
         //login/register
-        logInButton = new CustomButton("Log In", buttonWidth, logoWidth);
+        logInButton = new CustomButton("Log in", buttonWidth, Design.defaultButtonHeight);
         logInButton.setBackgroundColor(Design.white);
         logInButton.setBackgroundHoverColor(Design.grey70);
         logInButton.setOnMouseClicked(event -> Navigation.openLogInPage());
 
-        registerButton = new CustomButton("Register", buttonWidth, logoWidth);
+        registerButton = new CustomButton("Register", buttonWidth, Design.defaultButtonHeight);
         registerButton.setBackgroundColor(Design.white);
         registerButton.setBackgroundHoverColor(Design.grey70);
         registerButton.setOnMouseClicked(event -> Navigation.openRegisterPage());
 
         //account button
-        // int diameter = 40;
-        // accountButton = new ImageButton("Leaf.png", diameter / 2, diameter, diameter);
-        // accountButton.background.setArcWidth(diameter);
-        // accountButton.background.setArcHeight(diameter);
-        // accountButton.setBackgroundColor(Design.mediumGreen);
-        // accountButton.setBackgroundHoverColor(Design.darkGreen);
-        // accountButton.setOnMouseClicked(event -> Navigation.openAccountPage());
-
         accountButton = new AccountButton(Design.white, Design.grey80);
-        // accountButton.setOnMouseClicked(event -> Navigation.openAccountPage());
-
-        // usernameLabel = new Label(authManager.getUsername());
 
         //create spacers
         Region leftSpacer = new Region();
@@ -98,7 +84,6 @@ public class Header extends StackPane
             rightSpacer,
             logInButton,
             registerButton,
-            // usernameLabel,
             accountButton
         );
         content.setAlignment(Pos.CENTER);
@@ -111,9 +96,9 @@ public class Header extends StackPane
             background,
             content
         );
-        // setPrefHeight(60);
-        setMinHeight(60);
         setMinWidth(0); //need to set min width so header can shrink when window shrinks
+        setMinHeight(Design.headerHeight);
+        setMaxHeight(Design.headerHeight);
 
         updateAccountButtonsVisibility();
     }
