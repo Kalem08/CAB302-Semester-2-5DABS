@@ -12,17 +12,19 @@ import app.Design;
 import app.Navigation;
 import app.components.CustomButton;
 import app.components.CustomTextfield;
-import app.components.ImageButton;
+// import app.components.ImageButton;
+import app.components.AccountButton;
 import User.authManager;
 
 //the entry page when the user first opens the app
 public class EntryPage extends VBox
 {
-    Label signedInLabel;
-    ImageButton accountButton;
+    CustomTextfield searchTextfield;
     CustomButton logInButton;
     CustomButton registerButton;
-    CustomTextfield searchTextfield;
+    // Label signedInLabel;
+    // ImageButton accountButton;
+    AccountButton accountButton;
 
     /**
      * Creates an entry page which is visible when the app is first opened.
@@ -34,32 +36,35 @@ public class EntryPage extends VBox
 
         //account buttons
         logInButton = new CustomButton("Log in", 100, 40);
-        logInButton.setBackgroundColor(Design.superLightGrey);
+        logInButton.setBackgroundColor(Design.grey90);
         logInButton.setBackgroundHoverColor(Color.LIGHTGREY);
         logInButton.setOnMouseClicked(event -> Navigation.openLogInPage());
 
         registerButton = new CustomButton("Register", 100, 40);
-        registerButton.setBackgroundColor(Design.superLightGrey);
+        registerButton.setBackgroundColor(Design.grey90);
         registerButton.setBackgroundHoverColor(Color.LIGHTGREY);
         registerButton.setOnMouseClicked(event -> Navigation.openRegisterPage());
 
         //signed in label
-        signedInLabel = new Label("Signed in as '" + authManager.getUsername() + "'");
+        // signedInLabel = new Label("Signed in as '" + authManager.getUsername() + "'");
 
         //accountButton
-        int diameter = 40;
-        accountButton = new ImageButton("Leaf.png", diameter / 2, diameter, diameter);
-        accountButton.background.setArcWidth(diameter);
-        accountButton.background.setArcHeight(diameter);
-        accountButton.setBackgroundColor(Design.mediumGreen);
-        accountButton.setBackgroundHoverColor(Design.darkGreen);
-        accountButton.setOnMouseClicked(event -> Navigation.openAccountPage());
+        // int diameter = 40;
+        // accountButton = new ImageButton("Leaf.png", diameter / 2, diameter, diameter);
+        // accountButton.background.setArcWidth(diameter);
+        // accountButton.background.setArcHeight(diameter);
+        // accountButton.setBackgroundColor(Design.mediumGreen);
+        // accountButton.setBackgroundHoverColor(Design.darkGreen);
+        // accountButton.setOnMouseClicked(event -> Navigation.openAccountPage());
+
+        accountButton = new AccountButton(Design.grey90, Design.grey80);
+        // accountButton.setOnMouseClicked(event -> Navigation.openAccountPage());
 
         HBox topBar = new HBox(
             horizontalSpacer,
             logInButton,
             registerButton,
-            signedInLabel,
+            // signedInLabel,
             accountButton
         );
         topBar.setSpacing(Design.spacing);
@@ -74,12 +79,12 @@ public class EntryPage extends VBox
         Label subtitleLabel = new Label("A digital encyclopedia for Australian native plants");
 
         searchTextfield = new CustomTextfield("Search...", 800, 50);
-        searchTextfield.setBackgroundColor(Design.superLightGrey);
+        searchTextfield.setBackgroundColor(Design.grey90);
         searchTextfield.textfield.setOnAction(event -> search());
 
         //search button
         CustomButton searchButton = new CustomButton("Search", 100, 40);
-        searchButton.setBackgroundColor(Design.superLightGrey);
+        searchButton.setBackgroundColor(Design.grey90);
         searchButton.setBackgroundHoverColor(Color.LIGHTGREY);
         searchButton.setTextColour(Design.grey20);
         searchButton.setTextHoverColour(Color.BLACK);
@@ -140,8 +145,8 @@ public class EntryPage extends VBox
         Boolean isSignedIn = authManager.isSignedIn();
 
         //when logged in
-        signedInLabel.setVisible(isSignedIn);
-        signedInLabel.setManaged(isSignedIn);
+        // signedInLabel.setVisible(isSignedIn);
+        // signedInLabel.setManaged(isSignedIn);
         accountButton.setVisible(isSignedIn);
         accountButton.setManaged(isSignedIn);
 
