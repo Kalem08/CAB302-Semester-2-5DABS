@@ -13,14 +13,15 @@ import app.Navigation;
 import app.components.CustomButton;
 import app.components.CustomTextfield;
 import app.components.AccountButton;
+import app.components.AuthButton;
 import User.authManager;
 
 //the entry page when the user first opens the app
 public class EntryPage extends VBox
 {
     CustomTextfield searchTextfield;
-    CustomButton logInButton;
-    CustomButton registerButton;
+    AuthButton logInButton;
+    AuthButton registerButton;
     AccountButton accountButton;
 
     /**
@@ -32,15 +33,8 @@ public class EntryPage extends VBox
         HBox.setHgrow(horizontalSpacer, Priority.ALWAYS);
 
         //account buttons
-        logInButton = new CustomButton("Log in", 100, Design.defaultButtonHeight);
-        logInButton.setBackgroundColor(Design.grey90);
-        logInButton.setBackgroundHoverColor(Color.LIGHTGREY);
-        logInButton.setOnMouseClicked(event -> Navigation.openLogInPage());
-
-        registerButton = new CustomButton("Register", 100, Design.defaultButtonHeight);
-        registerButton.setBackgroundColor(Design.grey90);
-        registerButton.setBackgroundHoverColor(Color.LIGHTGREY);
-        registerButton.setOnMouseClicked(event -> Navigation.openRegisterPage());
+        logInButton = new AuthButton("Log in", Design.defaultButtonWidth, Design.defaultButtonHeight, Design.grey90, Design.grey80, false);
+        registerButton = new AuthButton("Register", Design.defaultButtonWidth, Design.defaultButtonHeight, Design.grey90, Design.grey80, true);
 
         //accountButton
         accountButton = new AccountButton(Design.grey90, Design.grey80);

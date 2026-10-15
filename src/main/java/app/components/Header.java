@@ -18,8 +18,8 @@ public class Header extends StackPane
     int searchElementHeight = 30;
     int buttonWidth = 100;
 
-    CustomButton logInButton;
-    CustomButton registerButton;
+    AuthButton logInButton;
+    AuthButton registerButton;
     CustomTextfield searchTextfield;
     AccountButton accountButton;
 
@@ -56,15 +56,8 @@ public class Header extends StackPane
         searchButton.setOnMouseClicked(event -> search());
 
         //login/register
-        logInButton = new CustomButton("Log in", buttonWidth, Design.defaultButtonHeight);
-        logInButton.setBackgroundColor(Design.white);
-        logInButton.setBackgroundHoverColor(Design.grey70);
-        logInButton.setOnMouseClicked(event -> Navigation.openLogInPage());
-
-        registerButton = new CustomButton("Register", buttonWidth, Design.defaultButtonHeight);
-        registerButton.setBackgroundColor(Design.white);
-        registerButton.setBackgroundHoverColor(Design.grey70);
-        registerButton.setOnMouseClicked(event -> Navigation.openRegisterPage());
+        logInButton = new AuthButton("Log in", Design.defaultButtonWidth, Design.defaultButtonHeight, Design.white, Design.grey70, false);
+        registerButton = new AuthButton("Register", Design.defaultButtonWidth, Design.defaultButtonHeight, Design.white, Design.grey70, true);
 
         //account button
         accountButton = new AccountButton(Design.white, Design.grey80);
