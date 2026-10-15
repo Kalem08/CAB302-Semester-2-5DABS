@@ -1,4 +1,7 @@
 package User;
+
+import java.util.List;
+
 /**
  * IBookmarkDAO is an interface that defines the methods for interacting with the Bookmarks table in the database.
  */
@@ -25,4 +28,7 @@ public interface IBookmarkDAO {
      * @return true if the plant is bookmarked by the user, false otherwise.
      */
     boolean isBookmarked(int userId, int plantId);
+
+    List<Integer> getBookmarks(int userId);
 }
+

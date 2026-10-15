@@ -17,7 +17,7 @@ public class EditPageController
     {
         if (updatedPlant == null)
         {
-            showError("No plant entry is available to update.");
+            showError("No plant entry is available to update.", false);
             return;
         }
 
@@ -28,7 +28,27 @@ public class EditPageController
         }
         catch (RuntimeException exception)
         {
-            showError("The plant entry could not be updated: " + exception.getMessage());
+            showError("The plant entry could not be updated: " + exception.getMessage(), false);
+        }
+    }
+
+    //MARK: Add plant
+    public static void addPlant(Plant newPlant, String searchQuery)
+    {
+        if (newPlant == null)
+        {
+            showError("No plant entry is available to update.", true);
+            return;
+        }
+
+        try
+        {
+            new SQLitePlantDAO().addPlant(newPlant);
+            Navigation.openPlantPage(newPlant, searchQuery);
+        }
+        catch (RuntimeException exception)
+        {
+            showError("The plant entry could not be added: " + exception.getMessage(), true);
         }
     }
 
@@ -37,10 +57,10 @@ public class EditPageController
      * Shows an error message.
      * @param message The message to display.
      */
-    private static void showError(String message)
+    private static void showError(String message, boolean isAdding)
     {
         Alert error = new Alert(Alert.AlertType.ERROR);
-        error.setTitle("Unable to update plant");
+        error.setTitle(isAdding ? "Unable to add plant" : "Unable to update plant");
         error.setHeaderText("The plant entry could not be saved.");
         error.setContentText(message);
         error.showAndWait();

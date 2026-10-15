@@ -1,21 +1,15 @@
 package app.components;
 
 //MARK: Imports
-import javafx.scene.control.*;
+// import javafx.scene.control.*;
 import javafx.scene.layout.*;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
-import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 
 import app.Design;
 import app.Navigation;
 import User.authManager;
-// import app.components.AuthenticationPanel.AuthMode;
-// import app.pages.AccountPage;
-// import app.pages.EntryPage;
-// import app.pages.LogInPage;
-// import app.pages.ResultsPage;
 
 //MARK: Class
 /**
@@ -26,11 +20,10 @@ public class Header extends StackPane
     int searchElementHeight = 30;
     int buttonWidth = 100;
 
-    CustomButton logInButton;
-    CustomButton registerButton;
+    AuthButton logInButton;
+    AuthButton registerButton;
     CustomTextfield searchTextfield;
-    Label usernameLabel;
-    ImageButton accountButton;
+    AccountButton accountButton;
 
     //MARK: Constructor
     /**
@@ -39,52 +32,37 @@ public class Header extends StackPane
     public Header()
     {
         Rectangle background = new Rectangle();
-        background.setFill(Color.LIGHTGRAY);
+        background.setFill(Design.grey90);
         background.widthProperty().bind(this.widthProperty()); //assume the width and height of the header
         background.heightProperty().bind(this.heightProperty());
 
         //logo
         int logoWidth = 200;
         ImageButton logo = new ImageButton("Logo.png", logoWidth, logoWidth + 20, 50);
-        logo.setBackgroundColor(Color.WHITE);
+        logo.setBackgroundColor(Design.white);
         logo.setBackgroundHoverColor(Design.grey70);
         logo.setOnMouseClicked(event -> Navigation.openEntryPage());
         
         //textfield
         searchTextfield = new CustomTextfield("Search...", 400, searchElementHeight);
-        searchTextfield.setBackgroundColor(Design.superLightGrey);
+        searchTextfield.setBackgroundColor(Design.white);
         searchTextfield.textfield.setOnAction(event -> search());
 
         //search button
         CustomButton searchButton = new CustomButton("Search", 60, searchElementHeight);
         searchButton.setTextSize(12);
-        searchButton.setBackgroundColor(Color.WHITESMOKE);
+        searchButton.setBackgroundColor(Design.white);
         searchButton.setBackgroundHoverColor(Design.grey70);
         searchButton.setTextColour(Design.grey20);
-        searchButton.setTextHoverColour(Color.BLACK);
+        searchButton.setTextHoverColour(Design.black);
         searchButton.setOnMouseClicked(event -> search());
 
         //login/register
-        logInButton = new CustomButton("Log In", buttonWidth, logoWidth);
-        logInButton.setBackgroundColor(Color.WHITE);
-        logInButton.setBackgroundHoverColor(Design.grey70);
-        logInButton.setOnMouseClicked(event -> Navigation.openLogInPage());
-
-        registerButton = new CustomButton("Register", buttonWidth, logoWidth);
-        registerButton.setBackgroundColor(Color.WHITE);
-        registerButton.setBackgroundHoverColor(Design.grey70);
-        registerButton.setOnMouseClicked(event -> Navigation.openRegisterPage());
+        logInButton = new AuthButton("Log in", Design.defaultButtonWidth, Design.defaultButtonHeight, Design.white, Design.grey70, false);
+        registerButton = new AuthButton("Register", Design.defaultButtonWidth, Design.defaultButtonHeight, Design.white, Design.grey70, true);
 
         //account button
-        int diameter = 40;
-        accountButton = new ImageButton("Leaf.png", diameter / 2, diameter, diameter);
-        accountButton.background.setArcWidth(diameter);
-        accountButton.background.setArcHeight(diameter);
-        accountButton.setBackgroundColor(Design.mediumGreen);
-        accountButton.setBackgroundHoverColor(Design.darkGreen);
-        accountButton.setOnMouseClicked(event -> Navigation.openAccountPage());
-
-        usernameLabel = new Label(authManager.getUsername());
+        accountButton = new AccountButton(Design.white, Design.grey80);
 
         //create spacers
         Region leftSpacer = new Region();
@@ -94,7 +72,6 @@ public class Header extends StackPane
 
         HBox content = new HBox();
         content.getChildren().addAll(
-            // titleLabel,
             logo,
             leftSpacer,
             searchTextfield,
@@ -102,7 +79,6 @@ public class Header extends StackPane
             rightSpacer,
             logInButton,
             registerButton,
-            usernameLabel,
             accountButton
         );
         content.setAlignment(Pos.CENTER);
@@ -111,10 +87,13 @@ public class Header extends StackPane
         content.setFillHeight(false); //sub-elements should not stretch to fill the container
         
         //add everything to the header stack
-        getChildren().addAll(background, content);
-        setPrefHeight(60); //previously 50
-        setMinHeight(60);
+        getChildren().addAll(
+            background,
+            content
+        );
         setMinWidth(0); //need to set min width so header can shrink when window shrinks
+        setMinHeight(Design.headerHeight);
+        setMaxHeight(Design.headerHeight);
 
         updateAccountButtonsVisibility();
     }

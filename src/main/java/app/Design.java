@@ -17,12 +17,15 @@ public class Design
     //spacing & padding
     public static int spacing = 10;
     public static int padding = 10;
-    public static int horizontalSpacing = 10;
-    public static int verticalSpacing = 10;
+    // public static int horizontalSpacing = 10;
+    // public static int verticalSpacing = 10;
+    public static int defaultButtonWidth = 100;
+    public static int defaultButtonHeight = 50;
+    public static int headerHeight = 70;
 
     //MARK: Colours
     //greys
-    public static Color superLightGrey = Color.web("#f0f0f0");
+    // public static Color superLightGrey = Color.web("#f0f0f0");
     public static Color superDarkGrey = Color.web("#0f0f0f");
     //greys with a brightness from 0->100
     public static Color white = Color.WHITE;

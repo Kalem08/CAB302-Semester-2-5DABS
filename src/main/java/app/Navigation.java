@@ -58,7 +58,7 @@ public class Navigation
      */
     public static void openEditPage(Plant plant)
     {
-        HelloApplication.setPage(new EditPage(plant));
+        HelloApplication.setPage(new EditPage(plant, false));
     }
 
     /**
@@ -68,7 +68,17 @@ public class Navigation
      */
     public static void openEditPage(Plant plant, String searchQuery)
     {
-        HelloApplication.setPage(new EditPage(plant, searchQuery));
+        HelloApplication.setPage(new EditPage(plant, searchQuery, false));
+    }
+
+    public static void openAddPage(Plant plant)
+    {
+        HelloApplication.setPage(new EditPage(plant, true));
+    }
+
+    public static void openAddPage(Plant plant, String searchQuery)
+    {
+        HelloApplication.setPage(new EditPage(plant, searchQuery, true));
     }
 
     /**
