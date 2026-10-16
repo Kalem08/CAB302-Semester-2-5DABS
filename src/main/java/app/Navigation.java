@@ -26,7 +26,7 @@ public class Navigation
 
     /**
      * Show the results page of all the plants matching a given query.
-     * @param query The term to use when searching
+     * @param searchQuery The term to use when searching
      */
     public static void openResultsPage(String searchQuery)
     {
