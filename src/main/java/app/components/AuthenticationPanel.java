@@ -37,12 +37,6 @@ public class AuthenticationPanel extends VBox
     Color darkTextColour = Design.grey20;
 
     //MARK: Constructors
-    //empty constructor
-    //this can probably be deleted! The code should always specify whether 'log in' or 'register' is shown
-    public AuthenticationPanel()
-    {
-        // this(false); //default to 'log in' mode
-    }
 
     /**
      * Creates a panel for authenticating the user depending on if they are signing in or registering.
