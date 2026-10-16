@@ -10,16 +10,23 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Locale;
-
+/**
+ * SQLiteUserDAO is a data access object (DAO) that provides methods for interacting with the Users table in the SQLite database.
+ */
 public class SQLiteUserDAO {
+    /**
+     * Registers a new user in the database.
+     * @param user The user to register.
+     * @return true if the user was successfully registered, false if the username already exists.
+     */
     public boolean registerUser(User user) {
         String sql = "INSERT INTO Users (Username, Hash, Role) VALUES (?, ?, ?)";
 
         try (Connection connection = DatabaseConnection.getConnection();
              PreparedStatement statement = connection.prepareStatement(sql)) {
-            statement.setString(1, user.getUsername());
-            statement.setString(2, hashPassword(user.getPassword()));
-            statement.setString(3, user.getRole().name());
+            statement.setString(1, user.username());
+            statement.setString(2, hashPassword(user.password()));
+            statement.setString(3, user.role().name());
             statement.executeUpdate();
             return true;
         } catch (SQLException e) {
@@ -30,6 +37,11 @@ public class SQLiteUserDAO {
         }
     }
 
+    /**
+     * Checks if a user with the given username exists in the database.
+     * @param username The username to check.
+     * @return true if the user exists, false otherwise.
+     */
     public boolean exists(String username) {
         String sql = "SELECT 1 FROM Users WHERE Username = ?";
 
@@ -45,6 +57,12 @@ public class SQLiteUserDAO {
         }
     }
 
+    /**
+     * Authenticates a user by checking if the provided username and password match the stored credentials.
+     * @param username The username of the user.
+     * @param password The password of the user.
+     * @return true if the credentials are valid, false otherwise.
+     */
     public boolean authenticate(String username, String password) {
         String sql = "SELECT Hash FROM Users WHERE Username = ?";
 
@@ -62,6 +80,12 @@ public class SQLiteUserDAO {
             throw new IllegalStateException("Unable to authenticate user", e);
         }
     }
+
+    /**
+     * Retrieves the user ID for a given username.
+     * @param username The username of the user.
+     * @return The user ID, or -1 if the user does not exist.
+     */
     public int getUserId(String username) {
         String sql = "SELECT UserId FROM Users WHERE Username = ?";
 
@@ -83,6 +107,11 @@ public class SQLiteUserDAO {
         return -1;
     }
 
+    /**
+     * Retrieves the role of a user based on their username.
+     * @param username The username of the user.
+     * @return The role of the user, or Role.STANDARD if the user does not exist or has no role assigned.
+     */
     public Role getUserRole(String username) {
         String sql = "SELECT Role FROM Users WHERE Username = ?";
 
@@ -111,6 +140,11 @@ public class SQLiteUserDAO {
         }
     }
 
+    /**
+     * Hashes a password using SHA-256.
+     * @param password The password to hash.
+     * @return The hashed password.
+     */
     private String hashPassword(String password) {
         try {
             MessageDigest digest = MessageDigest.getInstance("SHA-256");

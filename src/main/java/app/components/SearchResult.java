@@ -17,17 +17,22 @@ import app.Design;
 //this file creates a UI element for each search result
 public class SearchResult extends StackPane
 {
-    int width = 800;
     int height = 100;
 
+    /**
+     * Creates an empty result element in the search results page.
+     */
     public SearchResult()
     {
         this(null);
     }
 
+    /**
+     * Creates a result element in the search results page.
+     * @param plant The plant to display in this node.
+     */
     public SearchResult(Plant plant)
     {
-        // Rectangle background = new Rectangle(width, height, Color.LIGHTGREY);
         Rectangle background = new Rectangle();
         background.setFill(Color.LIGHTGREY);
         background.setArcWidth(Design.cornerRadius);
@@ -69,7 +74,10 @@ public class SearchResult extends StackPane
         hStack.setPadding(new Insets(Design.padding));
         hStack.setAlignment(Pos.TOP_LEFT); //all elements within the result should go to the top left
 
-        getChildren().addAll(background, hStack);
+        getChildren().addAll(
+            background,
+            hStack
+        );
         setPrefHeight(height);
         setMinWidth(0);
     }

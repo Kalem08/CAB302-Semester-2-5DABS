@@ -9,6 +9,9 @@ import java.sql.SQLException;
 import java.util.List;
 import java.util.ArrayList;
 
+/**
+ * SQLiteBookmarkDAO is a data access object (DAO) that provides methods for interacting with the Bookmarks table in the SQLite database.
+ */
 public class SQLiteBookmarkDAO implements IBookmarkDAO {
 
     @Override

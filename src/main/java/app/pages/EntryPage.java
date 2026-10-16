@@ -16,7 +16,9 @@ import app.components.AccountButton;
 import app.components.AuthButton;
 import User.authManager;
 
-//the entry page when the user first opens the app
+/**
+ * The page present when the user first opens the app.
+ */
 public class EntryPage extends VBox
 {
     CustomTextfield searchTextfield;
@@ -99,13 +101,19 @@ public class EntryPage extends VBox
         updateAccountButtonsVisibility();
     }
 
-    //MARK: Methods
+    //MARK: Search
+    /**
+     * Uses the value in the search textfield to load the results page.
+     */
     void search()
     {
         Navigation.openResultsPage(searchTextfield.getText());
     }
 
-    //toggles visibility of buttons
+     //MARK: Toggle button
+    /**
+     * Toggles visibility of buttons dependeing on if the user is signed in or not.
+     */
     private void updateAccountButtonsVisibility()
     {
         Boolean isSignedIn = authManager.isSignedIn();

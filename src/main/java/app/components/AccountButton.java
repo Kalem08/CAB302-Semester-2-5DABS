@@ -92,6 +92,9 @@ public class AccountButton extends StackPane
     }
 
     //MARK: Methods
+    /**
+     * Sets the hover effect for the button.
+     */
     void setHoverEffect()
     {
         //mouse over

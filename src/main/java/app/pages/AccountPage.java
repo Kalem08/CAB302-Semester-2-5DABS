@@ -23,6 +23,9 @@ import app.model.Plant;
 import app.model.SQLitePlantDAO;
 import javafx.scene.input.MouseEvent;
 
+/**
+ * A page for users to see their account details.
+ */
 public class AccountPage extends VBox
 {
     int textfieldWidth = 200;
@@ -217,13 +220,19 @@ public class AccountPage extends VBox
         VBox.setVgrow(horizontalStack, Priority.ALWAYS);
     }
 
-    //MARK: Methods
+    //MARK: Save details
+    /**
+     * Save the changes made on this page to the user's account.
+     */
     void saveAccountDetails()
     {
         HelloApplication.print("saveAccountDetails is not implemented yet.");
     }
 
-    //sign out and load new page
+    //MARK: Logout
+    /**
+     * Sign out and load the entry page.
+     */
     void logout()
     {
         authManager.signOut();

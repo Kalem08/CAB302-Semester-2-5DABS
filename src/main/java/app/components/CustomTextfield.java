@@ -9,8 +9,10 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
-// import javafx.scene.textfield;
 
+/**
+ * A custom textfield element.
+ */
 public class CustomTextfield extends StackPane
 {
     public Rectangle background;
@@ -22,21 +24,25 @@ public class CustomTextfield extends StackPane
 
     //MARK: Constructors
     //textfield constructor
+    /**
+     * Creates a custom textfield.
+     * @param placeholder The placeholder text
+     * @param w The width of the textfield
+     * @param h The height of the textfields
+     */
     public CustomTextfield(String placeholder, int w, int h)
     {
-        width = w;
-        height = h;
-        placeholderString = placeholder;
-
-        createRectangle();
-
-        textfield = new TextField();
-        formatTextfield();
-
-        getChildren().addAll(background, textfield);
+        this(placeholder, w, h, false);
     }
 
     //password constructor
+    /**
+     * Creates a custom textfield.
+     * @param placeholder The placeholder text
+     * @param w The width of the textfield
+     * @param h The height of the textfields
+     * @param usePasswordField If true, uses a password field with hidden characters instead of a regular textfield
+     */
     public CustomTextfield(String placeholder, int w, int h, boolean usePasswordField) //overrides original constructor if the boolean is present
     {
         width = w;
@@ -44,14 +50,20 @@ public class CustomTextfield extends StackPane
         placeholderString = placeholder;
 
         createRectangle();
-
-        textfield = new PasswordField();
+        
+        if (usePasswordField)
+            textfield = new PasswordField();
+        else
+            textfield = new TextField();
         formatTextfield();
 
         getChildren().addAll(background, textfield);
     }
 
-    //MARK: Background
+    //MARK: Rectangle
+    /**
+     * Creates a rectangle with rounded corners, and a light grey default colour.
+     */
     void createRectangle()
     {
         background = new Rectangle(width, height);
@@ -60,28 +72,37 @@ public class CustomTextfield extends StackPane
         background.setArcHeight(height);
     }
 
-    //MARK: Methods
+    //MARK: Background colour
+    /**
+     * Sets the background colour of the textfield element.
+     * @param colour The colour for the background
+     */
     public void setBackgroundColor(Color colour)
     {
         background.setFill(colour);
     }
 
-    //access text value
+    //MARK: Get text
+    /**
+     * Gets the value from the internal textfield variable.
+     * @return String value from the textfield element
+     */
     public String getText()
     {
         return textfield.getText();
     }
+    
+    /**
+     * Clears the textfield element.
+     */
     public void clear()
     {
         textfield.clear();
     }
 
-    public void usePasswordField()
-    {
-        textfield = new PasswordField();
-        formatTextfield();
-    }
-
+    /**
+     * Sets the font, colour, placeholder string and padding of the textfield element.
+     */
     public void formatTextfield()
     {
         textfield.setPromptText(placeholderString);

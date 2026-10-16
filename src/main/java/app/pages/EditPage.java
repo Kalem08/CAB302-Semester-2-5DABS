@@ -13,9 +13,11 @@ import app.components.CustomButton;
 import app.components.Header;
 import app.components.PlantEditField;
 import app.model.Plant;
-// import app.model.SQLitePlantDAO;
-import app.page_logic.EditPageLogic;
+import app.page_logic.EditPageController;
 
+/**
+ * A page that allows a user to edit the details of a given plant.
+ */
 public class EditPage extends VBox
 {
     int buttonWidth = 150;
@@ -46,11 +48,20 @@ public class EditPage extends VBox
     private final PlantEditField subspeciesField;
 
     //MARK: Constructors
+    /**
+     * A page for editing and suggesting changes to the properties of a plant.
+     * @param plant The plant to be edited
+     */
     public EditPage(Plant plant, boolean isAddPage)
     {
         this(plant, "", isAddPage);
     }
 
+    /**
+     * A page for editing and suggesting changes to the properties of a plant.
+     * @param plant The plant to be edited
+     * @param searchQuery The search term to return to when exiting the page
+     */
     public EditPage(Plant plant, String searchQuery, boolean isAddPage)
     {
         this.plant = plant;
@@ -188,9 +199,9 @@ public class EditPage extends VBox
         Plant constructedPlant = formPlantFromTextfields(isAdding);
 
         if (isAdding)
-            EditPageLogic.addPlant(constructedPlant, searchQuery);
+            EditPageController.addPlant(constructedPlant, searchQuery);
         else
-            EditPageLogic.saveEdits(constructedPlant, searchQuery);
+            EditPageController.saveEdits(constructedPlant, searchQuery);
     }
 
     //MARK: Form plant

@@ -1,15 +1,17 @@
 package User;
-
-public class User {
-    private final String username;
-    private final String password;
-    private final Role role;
-
+/**
+ * User is a record that represents a user in the application, containing their username, password, and role.
+ */
+public record User(String username, String password, Role role) {
     public User(String username, String password) {
         this(username, password, Role.STANDARD);
     }
 
-    public User(String username, String password, Role role) {
+    /**
+     * Constructs a new User record with the specified username, password, and role.
+     * Validates that the username and password are not empty and that the role is not null
+     */
+    public User {
         if (username == null || username.trim().isEmpty()) {
             throw new IllegalArgumentException("Username cannot be empty");
         }
@@ -20,24 +22,5 @@ public class User {
             throw new IllegalArgumentException("Role cannot be null");
         }
 
-        this.username = username;
-        this.password = password;
-        this.role = role;
-    }
-
-    public String getUsername() {
-        return this.username;
-    }
-
-    public String getPassword() {
-        return this.password;
-    }
-
-    public Role getRole() {
-        return role;
-    }
-
-    public boolean isAdmin() {
-        return role == Role.ADMINISTRATOR;
     }
 }

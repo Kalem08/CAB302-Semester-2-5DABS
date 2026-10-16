@@ -7,8 +7,11 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-
+/**
+ * SQLiteHistoryDAO is a data access object (DAO) that provides methods for interacting with the History table in the SQLite database.
+ */
 public class SQLiteHistoryDAO implements IHistoryDAO {
+    
     @Override
     public void recordView(int userId, int plantId) {
         String sql = "INSERT INTO History (UserId, PlantId, ViewedAt) " +

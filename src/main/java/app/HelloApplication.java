@@ -50,13 +50,21 @@ public class HelloApplication extends Application
         }
     }
 
-    //use this method to change primary node/container that is present in the scene
+    //MARK: Set page
+    /**
+     * Use this method to change the root node/container that is present in the scene.
+     * @param newPage The new root Node
+     */
     public static void setPage(Parent newPage)
     {
         scene.setRoot(newPage);
     }
 
-    //shorthand method for 'System.out.println()'
+    //MARK: Print
+    /**
+     * A shorthand method name for 'System.out.println()'.
+     * @param value The value to print into the console/log
+     */
     public static void print(Object value)
     {
         System.out.println(value);

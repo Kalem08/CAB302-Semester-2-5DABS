@@ -21,22 +21,34 @@ import User.SQLiteBookmarkDAO;
 import User.SQLiteUserDAO;
 import User.SQLiteHistoryDAO;
 
-//this is the page that contains all of the details/content about a plant
+/**
+ * A page that contains all of the details about a plant.
+ */
 public class PlantPage extends VBox
 {
     //MARK: Constructors
+    /**
+     * Creates an empty page for details of a plant, but with no plant specified.
+     */
     public PlantPage()
     {
         this(null);
     }
 
-    //partial constructor
+    /**
+     * Creates a page for reading all about a particular plant, containing all of it's properties from the database.
+     * @param plant The plant whose details will be shown
+     */
     public PlantPage(Plant plant)
     {
         this(plant, "");
     }
 
-    //full constructor
+    /**
+     * Creates a page for reading all about a particular plant, containing all of it's properties from the database.
+     * @param plant The plant whose details will be shown
+     * @param searchQuery The search term to use when returning to the search results page
+     */
     public PlantPage(Plant plant, String searchQuery)
     {
         // Automatically record plant viewing history for signed-in users
@@ -216,6 +228,11 @@ public class PlantPage extends VBox
     }
 
     //MARK: Taxonomy Pane
+    /**
+     * Returns a collapsible element containing the taxonomy information of a plant.
+     * @param plant The specified plant
+     * @return A collapsible TitlePane element
+     */
     private TitledPane createTaxonomyPane(Plant plant)
     {
         GridPane table = new GridPane();
@@ -239,6 +256,11 @@ public class PlantPage extends VBox
         return taxonomyPane;
     }
 
+    //MARK: Additional Info Pane
+    /**
+     * Returns a collapsible element containing the edible, hazardous and subspecies details of a plant.
+     * @param plant The specified plant
+     */
     private TitledPane createAdditionalInfoPane(Plant plant)
     {
         GridPane table = new GridPane();
@@ -256,6 +278,14 @@ public class PlantPage extends VBox
         return additionalInfoPane;
     }
 
+    //MARK: Add row
+    /**
+     * Returns a collapsible element containing the edible, hazardous and subspecies details of a plant.
+     * @param table The table to add a row to
+     * @param row The row number to add at (starting at index 0)
+     * @param field The title of this row
+     * @param value The value of this row
+     */
     private void addTaxonomyRow(GridPane table, int row, String field, String value)
     {
         Label fieldLabel = new Label(field);
@@ -264,6 +294,12 @@ public class PlantPage extends VBox
         table.add(new Label(value == null || value.isBlank() ? "Not available" : value), 1, row);
     }
 
+    //MARK: Confirm plant deletion
+    /**
+     * Creates an Alert element for deleting the Plant entry in the database.
+     * @param plant The plant to be deleted
+     * @param searchQuery The term to use when returning to the search results page
+     */
     private void confirmPlantDeletion(Plant plant, String searchQuery)
     {
         if (!authManager.canManagePlants())

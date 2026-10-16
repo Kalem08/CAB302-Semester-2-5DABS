@@ -15,7 +15,9 @@ import app.Design;
 import app.components.AuthenticationPanel;
 import app.components.AuthenticationPanel.AuthMode;
 
-//could also be called 'AccountPanel' or 'AuthenticationPanel', as this encompasses both log in AND registration
+/**
+ * A page for allowing users to either log in or register.
+ */
 public class LogInPage extends StackPane
 {
     //MARK: Variables
@@ -25,14 +27,20 @@ public class LogInPage extends StackPane
     int elementWidth = boxWidth - (Design.padding * 2);
     Color darkTextColour = Design.grey20;
 
+    //MARK: Constructors
     //empty constructor
+    /**
+     * Creates a log in page, defaulting to signing in rather than registering.
+     */
     public LogInPage()
     {
-        // this(false); //default to 'log in' mode
-        this(AuthMode.Login);
+        this(AuthMode.Login); //default to 'log in' mode
     }
 
-    //MARK: Constructor
+    /**
+     * Creates a log in page.
+     * @param authenticationMode Describes whether the 'log in' or 'register' panel is shown initially.
+     */
     public LogInPage(AuthMode authenticationMode)
     {
         // this.registrationMode = registrationMode;

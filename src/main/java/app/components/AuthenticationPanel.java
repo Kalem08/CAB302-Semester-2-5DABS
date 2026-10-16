@@ -14,6 +14,9 @@ import app.Navigation;
 import app.components.CustomButton.HoverState;
 import User.authManager;
 
+/**
+ * A component of the sign-in page for logging in and/or registering. Contains textfields for username and password.
+ */
 public class AuthenticationPanel extends VBox
 {
     //MARK: Variables
@@ -33,18 +36,12 @@ public class AuthenticationPanel extends VBox
     int elementWidth = boxWidth - (Design.padding * 2);
     Color darkTextColour = Design.grey20;
 
-    Boolean inRegisterMode()
-    {
-        return registrationMode == AuthMode.Register;
-    }
+    //MARK: Constructors
 
-    //empty constructor
-    public AuthenticationPanel()
-    {
-        // this(false); //default to 'log in' mode
-    }
-
-    //MARK: Constructor
+    /**
+     * Creates a panel for authenticating the user depending on if they are signing in or registering.
+     * @param mode Either 'Login' or 'Register'
+     */
     public AuthenticationPanel(AuthMode mode)
     {
         this.registrationMode = mode;
@@ -151,7 +148,7 @@ public class AuthenticationPanel extends VBox
         guestButton.label.setTextFill(Design.grey50);
         guestButton.setTextColour(Design.grey50);
         guestButton.setTextHoverColour(Design.grey50);
-        guestButton.setOnMouseClicked(event -> openEntryPage());
+        guestButton.setOnMouseClicked(event -> Navigation.openEntryPage());
         guestButton.shouldUnderlineLabel = HoverState.onHover;
 
         Region topSpacer2 = new Region();
@@ -159,7 +156,7 @@ public class AuthenticationPanel extends VBox
         Region bottomSpacer2 = new Region();
         VBox.setVgrow(bottomSpacer2, Priority.ALWAYS);
         
-        //MARK: VBox
+        //MARK: Body
         VBox content = new VBox(
             titleLabel,
             topSpacer2,
@@ -191,13 +188,10 @@ public class AuthenticationPanel extends VBox
         updateMode();
     }
 
-    //MARK: Methods
-    void openEntryPage()
-    {
-        // HelloApplication.scene.setRoot(new EntryPage());
-        Navigation.openEntryPage();
-    }
-
+    //MARK: Switch mode
+    /**
+     * Toggles the authentication mode between 'Login' and 'Register'.
+     */
     void switchAuthMode()
     {
         registrationMode = inRegisterMode() ? AuthMode.Login : AuthMode.Register; //toggle boolean
@@ -205,6 +199,10 @@ public class AuthenticationPanel extends VBox
         updateMode();
     }
 
+    //MARK: Submit
+    /**
+     * Uses values from the username and password textfields to attempt to login or register, depending on the authentication mode.
+     */
     void submitCredentials()
     {
         String username = usernameTextfield.getText().trim();
@@ -213,29 +211,33 @@ public class AuthenticationPanel extends VBox
 
         if (inRegisterMode())
         {
-            if (manager.Registration()) {
+            if (manager.Registration())
+            {
                 statusLabel.setText("Account created. You can now log in.");
                 registrationMode = AuthMode.Login;
                 passwordTextfield.clear();
                 updateMode();
-            } else {
+            }
+            else
+            {
                 statusLabel.setText("Username exists or password is invalid (8+ chars, upper, lower, special).");
             }
-        } else if (manager.authenticate()) {
+        }
+        else if (manager.authenticate())
+        {
             statusLabel.setText("Login successful.");
             Navigation.openEntryPage();
-        } else {
+        }
+        else
+        {
             statusLabel.setText("Username or password is incorrect.");
         }
     }
 
-    void forgotPassword()
-    {
-        //not implemented yet
-        System.out.println("forgotPassword not implemented yet");
-    }
-
-    //updates Nodes to correctly represent the current mode
+    //MARK: Update mode elements
+    /**
+     * updates labels and buttons to correctly represent the current authentication mode.
+     */
     private void updateMode()
     {
         titleLabel.setText(inRegisterMode() ? "Register" : "Log In");
@@ -249,6 +251,29 @@ public class AuthenticationPanel extends VBox
         }
     }
 
+    //MARK: Forgot password
+    /** 
+     * Used to load a page/panel for resetting the user's password.
+    */
+    void forgotPassword()
+    {
+        //not implemented yet
+        System.out.println("forgotPassword not implemented yet");
+    }
+
+    /**
+     * Returns true if mode is set to 'Register'.
+     * @return True if mode is set to 'Register'
+     */
+    Boolean inRegisterMode()
+    {
+        return registrationMode == AuthMode.Register;
+    }
+
+    //MARK: Enum
+    /**
+     * An enum for whether the user is signing in or registering an account.
+     */
     public enum AuthMode
     {
         Login,
