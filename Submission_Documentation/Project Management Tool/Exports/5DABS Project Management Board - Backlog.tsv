@@ -3,10 +3,13 @@ Pagination of displayed items	https://github.com/Kalem08/CAB302-Semester-2-5DABS
 Filtering Functionality	https://github.com/Kalem08/CAB302-Semester-2-5DABS/issues/15	geniuseduzz, Kalem08	Done					L	https://github.com/Kalem08/CAB302-Semester-2-5DABS/issues/13
 Display search/filter results as list	https://github.com/Kalem08/CAB302-Semester-2-5DABS/issues/16	geniuseduzz, Kalem08	Done					S	https://github.com/Kalem08/CAB302-Semester-2-5DABS/issues/13
 Search functionality	https://github.com/Kalem08/CAB302-Semester-2-5DABS/issues/17	geniuseduzz, Kalem08	Done					M	https://github.com/Kalem08/CAB302-Semester-2-5DABS/issues/13
-Account Privileges	https://github.com/Kalem08/CAB302-Semester-2-5DABS/issues/10	Kalem08, tazukain	Backlog					M	https://github.com/Kalem08/CAB302-Semester-2-5DABS/issues/40
+User Testing & Feedback	https://github.com/Kalem08/CAB302-Semester-2-5DABS/issues/92	geniuseduzz, Kalem08, PixelProgram1, tazukain	Done		3 / 3 (100%)				https://github.com/Kalem08/CAB302-Semester-2-5DABS/issues/88
+User Testing Questionnaire	https://github.com/Kalem08/CAB302-Semester-2-5DABS/issues/98	geniuseduzz, tazukain	Done						https://github.com/Kalem08/CAB302-Semester-2-5DABS/issues/92
+Usability Assessment	https://github.com/Kalem08/CAB302-Semester-2-5DABS/issues/99	geniuseduzz, tazukain	Done						https://github.com/Kalem08/CAB302-Semester-2-5DABS/issues/92
 Accounts Implementation (Authentication)	https://github.com/Kalem08/CAB302-Semester-2-5DABS/issues/6	Kalem08, tazukain	Done		2 / 2 (100%)			M	https://github.com/Kalem08/CAB302-Semester-2-5DABS/issues/22
 Login/Register systems	https://github.com/Kalem08/CAB302-Semester-2-5DABS/issues/7	Kalem08, tazukain	Done					S	https://github.com/Kalem08/CAB302-Semester-2-5DABS/issues/6
 User Account Storage	https://github.com/Kalem08/CAB302-Semester-2-5DABS/issues/9	Kalem08, tazukain	Done					S	https://github.com/Kalem08/CAB302-Semester-2-5DABS/issues/6
+Account Privileges	https://github.com/Kalem08/CAB302-Semester-2-5DABS/issues/10	Kalem08, tazukain	Done					M	https://github.com/Kalem08/CAB302-Semester-2-5DABS/issues/40
 Core App Functionality	https://github.com/Kalem08/CAB302-Semester-2-5DABS/issues/11	Kalem08, MHerman19	Done		4 / 4 (100%)			XL	https://github.com/Kalem08/CAB302-Semester-2-5DABS/issues/22
 population of database from API	https://github.com/Kalem08/CAB302-Semester-2-5DABS/issues/12	Kalem08	Done					L	https://github.com/Kalem08/CAB302-Semester-2-5DABS/issues/11
 Plants Browser	https://github.com/Kalem08/CAB302-Semester-2-5DABS/issues/13	Kalem08	Done		4 / 4 (100%)			L	https://github.com/Kalem08/CAB302-Semester-2-5DABS/issues/11
@@ -17,27 +20,43 @@ Search functionality	https://github.com/Kalem08/CAB302-Semester-2-5DABS/issues/1
 Basic information	https://github.com/Kalem08/CAB302-Semester-2-5DABS/issues/19	Kalem08, PixelProgram1	Done					M	https://github.com/Kalem08/CAB302-Semester-2-5DABS/issues/18
 Additional information	https://github.com/Kalem08/CAB302-Semester-2-5DABS/issues/20	Kalem08, PixelProgram1	Done					M	https://github.com/Kalem08/CAB302-Semester-2-5DABS/issues/18
 Header image	https://github.com/Kalem08/CAB302-Semester-2-5DABS/issues/21	Kalem08, PixelProgram1	Done					S	https://github.com/Kalem08/CAB302-Semester-2-5DABS/issues/18
-Administration	https://github.com/Kalem08/CAB302-Semester-2-5DABS/issues/40	MHerman19	Backlog		0 / 4 (0%)			M	
-Adding plant entries (Admin)	https://github.com/Kalem08/CAB302-Semester-2-5DABS/issues/42	MHerman19	Backlog					M	https://github.com/Kalem08/CAB302-Semester-2-5DABS/issues/40
-Edit entries (Admin)	https://github.com/Kalem08/CAB302-Semester-2-5DABS/issues/43	MHerman19	Backlog					S	https://github.com/Kalem08/CAB302-Semester-2-5DABS/issues/40
-Remove entries (admin)	https://github.com/Kalem08/CAB302-Semester-2-5DABS/issues/45	MHerman19	Backlog					S	https://github.com/Kalem08/CAB302-Semester-2-5DABS/issues/40
+Adding plant entries (Admin)	https://github.com/Kalem08/CAB302-Semester-2-5DABS/issues/42	Kalem08, MHerman19	Done					M	https://github.com/Kalem08/CAB302-Semester-2-5DABS/issues/40
+Edit entries (Admin)	https://github.com/Kalem08/CAB302-Semester-2-5DABS/issues/43	Kalem08, MHerman19	Done					S	https://github.com/Kalem08/CAB302-Semester-2-5DABS/issues/40
+Remove entries (admin)	https://github.com/Kalem08/CAB302-Semester-2-5DABS/issues/45	Kalem08, MHerman19	Done					S	https://github.com/Kalem08/CAB302-Semester-2-5DABS/issues/40
+Improved Data	https://github.com/Kalem08/CAB302-Semester-2-5DABS/issues/90	Kalem08	Done		3 / 3 (100%)				https://github.com/Kalem08/CAB302-Semester-2-5DABS/issues/88
+User Testing & Feedback	https://github.com/Kalem08/CAB302-Semester-2-5DABS/issues/92	geniuseduzz, Kalem08, PixelProgram1, tazukain	Done		3 / 3 (100%)				https://github.com/Kalem08/CAB302-Semester-2-5DABS/issues/88
+Full Plant Descriptions	https://github.com/Kalem08/CAB302-Semester-2-5DABS/issues/95	Kalem08	Done						https://github.com/Kalem08/CAB302-Semester-2-5DABS/issues/90
+Plant Growth Info	https://github.com/Kalem08/CAB302-Semester-2-5DABS/issues/96	Kalem08	Done						https://github.com/Kalem08/CAB302-Semester-2-5DABS/issues/90
+Additional Info Fields	https://github.com/Kalem08/CAB302-Semester-2-5DABS/issues/97	Kalem08	Done						https://github.com/Kalem08/CAB302-Semester-2-5DABS/issues/90
+Implementation of features derived from feedback	https://github.com/Kalem08/CAB302-Semester-2-5DABS/issues/100	Kalem08, PixelProgram1	Done		2 / 2 (100%)				https://github.com/Kalem08/CAB302-Semester-2-5DABS/issues/92
+Improvement of search results page	https://github.com/Kalem08/CAB302-Semester-2-5DABS/issues/101	Kalem08	Done						https://github.com/Kalem08/CAB302-Semester-2-5DABS/issues/100
+Test cases passed	https://github.com/Kalem08/CAB302-Semester-2-5DABS/issues/55	MHerman19	In progress					L	https://github.com/Kalem08/CAB302-Semester-2-5DABS/issues/50
+Test Case Implementation	https://github.com/Kalem08/CAB302-Semester-2-5DABS/issues/54	MHerman19	In review					L	https://github.com/Kalem08/CAB302-Semester-2-5DABS/issues/50
 Design - Plant Research Model and MVP Field Definition	https://github.com/Kalem08/CAB302-Semester-2-5DABS/issues/33	MHerman19	Done		4 / 4 (100%)	P0			https://github.com/Kalem08/CAB302-Semester-2-5DABS/issues/11
 Architecture - Domain Modelling and Layered Package Structure	https://github.com/Kalem08/CAB302-Semester-2-5DABS/issues/34	MHerman19	Done		4 / 4 (100%)	P1			https://github.com/Kalem08/CAB302-Semester-2-5DABS/issues/11
 Database - SQLite Schema Design and DAO Persistence Mapping	https://github.com/Kalem08/CAB302-Semester-2-5DABS/issues/35	MHerman19	Done		4 / 4 (100%)	P2			https://github.com/Kalem08/CAB302-Semester-2-5DABS/issues/22
 UI Design	https://github.com/Kalem08/CAB302-Semester-2-5DABS/issues/23	MHerman19, PixelProgram1	Done		5 / 5 (100%)			L	https://github.com/Kalem08/CAB302-Semester-2-5DABS/issues/22
 Core App Functionality	https://github.com/Kalem08/CAB302-Semester-2-5DABS/issues/11	Kalem08, MHerman19	Done		4 / 4 (100%)			XL	https://github.com/Kalem08/CAB302-Semester-2-5DABS/issues/22
+fix: correct JavaFX module configuration	https://github.com/Kalem08/CAB302-Semester-2-5DABS/pull/32	MHerman19	Done						
 Finalise core MVP plant attributes and types	https://github.com/Kalem08/CAB302-Semester-2-5DABS/issues/37	MHerman19	Done						https://github.com/Kalem08/CAB302-Semester-2-5DABS/issues/33
 Define data validation and quality rules for botanical fields	https://github.com/Kalem08/CAB302-Semester-2-5DABS/issues/38	MHerman19	Done						https://github.com/Kalem08/CAB302-Semester-2-5DABS/issues/33
 Compile sample plant records with research provenance	https://github.com/Kalem08/CAB302-Semester-2-5DABS/issues/39	MHerman19	Done						https://github.com/Kalem08/CAB302-Semester-2-5DABS/issues/33
+Administration	https://github.com/Kalem08/CAB302-Semester-2-5DABS/issues/40	MHerman19	Done		4 / 4 (100%)			M	https://github.com/Kalem08/CAB302-Semester-2-5DABS/issues/88
 Document deferred plant attributes for future iterations	https://github.com/Kalem08/CAB302-Semester-2-5DABS/issues/41	MHerman19	Done						https://github.com/Kalem08/CAB302-Semester-2-5DABS/issues/33
+Adding plant entries (Admin)	https://github.com/Kalem08/CAB302-Semester-2-5DABS/issues/42	Kalem08, MHerman19	Done					M	https://github.com/Kalem08/CAB302-Semester-2-5DABS/issues/40
+Edit entries (Admin)	https://github.com/Kalem08/CAB302-Semester-2-5DABS/issues/43	Kalem08, MHerman19	Done					S	https://github.com/Kalem08/CAB302-Semester-2-5DABS/issues/40
 Define conceptual domain model relationships	https://github.com/Kalem08/CAB302-Semester-2-5DABS/issues/44	MHerman19	Done						https://github.com/Kalem08/CAB302-Semester-2-5DABS/issues/34
+Remove entries (admin)	https://github.com/Kalem08/CAB302-Semester-2-5DABS/issues/45	Kalem08, MHerman19	Done					S	https://github.com/Kalem08/CAB302-Semester-2-5DABS/issues/40
 Establish Java package skeleton structure	https://github.com/Kalem08/CAB302-Semester-2-5DABS/issues/46	MHerman19	Done						https://github.com/Kalem08/CAB302-Semester-2-5DABS/issues/34
 Draft core Java domain model classes	https://github.com/Kalem08/CAB302-Semester-2-5DABS/issues/47	MHerman19	Done						https://github.com/Kalem08/CAB302-Semester-2-5DABS/issues/34
 Document layered MVC and DAO architectural flow to isolate UI from database	https://github.com/Kalem08/CAB302-Semester-2-5DABS/issues/48	MHerman19	Done						https://github.com/Kalem08/CAB302-Semester-2-5DABS/issues/34
 Draft SQLite table definitions with PK/FK constraints	https://github.com/Kalem08/CAB302-Semester-2-5DABS/issues/49	MHerman19	Done						https://github.com/Kalem08/CAB302-Semester-2-5DABS/issues/35
+Test Driven Development	https://github.com/Kalem08/CAB302-Semester-2-5DABS/issues/50	MHerman19	Done		2 / 2 (100%)			L	
 Design normalized schema extension for distributions and sources	https://github.com/Kalem08/CAB302-Semester-2-5DABS/issues/51	MHerman19	Done						https://github.com/Kalem08/CAB302-Semester-2-5DABS/issues/35
 Define DAO method signatures	https://github.com/Kalem08/CAB302-Semester-2-5DABS/issues/52	MHerman19	Done						https://github.com/Kalem08/CAB302-Semester-2-5DABS/issues/35
 Specify DatabaseManager connection and DatabaseInitializer creation flow	https://github.com/Kalem08/CAB302-Semester-2-5DABS/issues/53	MHerman19	Done						https://github.com/Kalem08/CAB302-Semester-2-5DABS/issues/35
+Implement SQLite JDBC plant persistence with DAO and unit tests	https://github.com/Kalem08/CAB302-Semester-2-5DABS/pull/72	MHerman19	Done						
+User Page Functionality	https://github.com/Kalem08/CAB302-Semester-2-5DABS/issues/89	MHerman19	Done		2 / 2 (100%)				https://github.com/Kalem08/CAB302-Semester-2-5DABS/issues/88
 UI Design	https://github.com/Kalem08/CAB302-Semester-2-5DABS/issues/23	MHerman19, PixelProgram1	Done		5 / 5 (100%)			L	https://github.com/Kalem08/CAB302-Semester-2-5DABS/issues/22
 Colour Palette	https://github.com/Kalem08/CAB302-Semester-2-5DABS/issues/30	PixelProgram1	Done					XS	https://github.com/Kalem08/CAB302-Semester-2-5DABS/issues/23
 Header Bar	https://github.com/Kalem08/CAB302-Semester-2-5DABS/issues/29	PixelProgram1	Done					S	https://github.com/Kalem08/CAB302-Semester-2-5DABS/issues/23
@@ -52,16 +71,18 @@ Additional information	https://github.com/Kalem08/CAB302-Semester-2-5DABS/issues
 Header image	https://github.com/Kalem08/CAB302-Semester-2-5DABS/issues/21	Kalem08, PixelProgram1	Done					S	https://github.com/Kalem08/CAB302-Semester-2-5DABS/issues/18
 Flexible UI elements	https://github.com/Kalem08/CAB302-Semester-2-5DABS/issues/31	PixelProgram1	Done					M	https://github.com/Kalem08/CAB302-Semester-2-5DABS/issues/23
 Splash screen UI	https://github.com/Kalem08/CAB302-Semester-2-5DABS/issues/36	PixelProgram1	Done						https://github.com/Kalem08/CAB302-Semester-2-5DABS/issues/24
-Account Privileges	https://github.com/Kalem08/CAB302-Semester-2-5DABS/issues/10	Kalem08, tazukain	Backlog					M	https://github.com/Kalem08/CAB302-Semester-2-5DABS/issues/40
+User Testing & Feedback	https://github.com/Kalem08/CAB302-Semester-2-5DABS/issues/92	geniuseduzz, Kalem08, PixelProgram1, tazukain	Done		3 / 3 (100%)				https://github.com/Kalem08/CAB302-Semester-2-5DABS/issues/88
+Implementation of features derived from feedback	https://github.com/Kalem08/CAB302-Semester-2-5DABS/issues/100	Kalem08, PixelProgram1	Done		2 / 2 (100%)				https://github.com/Kalem08/CAB302-Semester-2-5DABS/issues/92
+Improvement of User Accounts buttons	https://github.com/Kalem08/CAB302-Semester-2-5DABS/issues/102	PixelProgram1	Done						https://github.com/Kalem08/CAB302-Semester-2-5DABS/issues/100
 Accounts Implementation (Authentication)	https://github.com/Kalem08/CAB302-Semester-2-5DABS/issues/6	Kalem08, tazukain	Done		2 / 2 (100%)			M	https://github.com/Kalem08/CAB302-Semester-2-5DABS/issues/22
 Login/Register systems	https://github.com/Kalem08/CAB302-Semester-2-5DABS/issues/7	Kalem08, tazukain	Done					S	https://github.com/Kalem08/CAB302-Semester-2-5DABS/issues/6
 User Account Storage	https://github.com/Kalem08/CAB302-Semester-2-5DABS/issues/9	Kalem08, tazukain	Done					S	https://github.com/Kalem08/CAB302-Semester-2-5DABS/issues/6
-Test Driven Development	https://github.com/Kalem08/CAB302-Semester-2-5DABS/issues/50		In progress		2 / 2 (100%)			L	
-Test cases passed	https://github.com/Kalem08/CAB302-Semester-2-5DABS/issues/55		In progress					L	https://github.com/Kalem08/CAB302-Semester-2-5DABS/issues/50
-Test Case Implementation	https://github.com/Kalem08/CAB302-Semester-2-5DABS/issues/54		In review					L	https://github.com/Kalem08/CAB302-Semester-2-5DABS/issues/50
-Added Javadocs 	https://github.com/Kalem08/CAB302-Semester-2-5DABS/pull/70		In review						
-Prototype development	https://github.com/Kalem08/CAB302-Semester-2-5DABS/issues/22		Done		4 / 4 (100%)			XL	
-fix: correct JavaFX module configuration	https://github.com/Kalem08/CAB302-Semester-2-5DABS/pull/32		Done						
+Account Privileges	https://github.com/Kalem08/CAB302-Semester-2-5DABS/issues/10	Kalem08, tazukain	Done					M	https://github.com/Kalem08/CAB302-Semester-2-5DABS/issues/40
+User Testing & Feedback	https://github.com/Kalem08/CAB302-Semester-2-5DABS/issues/92	geniuseduzz, Kalem08, PixelProgram1, tazukain	Done		3 / 3 (100%)				https://github.com/Kalem08/CAB302-Semester-2-5DABS/issues/88
+User Testing Questionnaire	https://github.com/Kalem08/CAB302-Semester-2-5DABS/issues/98	geniuseduzz, tazukain	Done						https://github.com/Kalem08/CAB302-Semester-2-5DABS/issues/92
+Usability Assessment	https://github.com/Kalem08/CAB302-Semester-2-5DABS/issues/99	geniuseduzz, tazukain	Done						https://github.com/Kalem08/CAB302-Semester-2-5DABS/issues/92
+Initial Temporary Javadocs (do not merge)	https://github.com/Kalem08/CAB302-Semester-2-5DABS/pull/70		In review						
+Prototype development	https://github.com/Kalem08/CAB302-Semester-2-5DABS/issues/22		Done		4 / 4 (100%)			XL	https://github.com/Kalem08/CAB302-Semester-2-5DABS/issues/88
 Merge Scene Prototypes	https://github.com/Kalem08/CAB302-Semester-2-5DABS/pull/56		Done						
 Simplify directories and implement basic pages	https://github.com/Kalem08/CAB302-Semester-2-5DABS/pull/58		Done						
 Merge Custom Button and Textfield	https://github.com/Kalem08/CAB302-Semester-2-5DABS/pull/59		Done						
@@ -76,4 +97,13 @@ Added account button visibility methods	https://github.com/Kalem08/CAB302-Semest
 Cleaned up the package file structuring	https://github.com/Kalem08/CAB302-Semester-2-5DABS/pull/68		Done						
 Log In Page Overhaul	https://github.com/Kalem08/CAB302-Semester-2-5DABS/pull/69		Done						
 Merge Account Page Overhaul	https://github.com/Kalem08/CAB302-Semester-2-5DABS/pull/71		Done						
-Implement SQLite JDBC plant persistence with DAO and unit tests	https://github.com/Kalem08/CAB302-Semester-2-5DABS/pull/72		Done						
+Pulling Improved Database into main	https://github.com/Kalem08/CAB302-Semester-2-5DABS/pull/73		Done						
+Keeping master in line with integration for now	https://github.com/Kalem08/CAB302-Semester-2-5DABS/pull/74		Done						
+Merge Small Cleanup	https://github.com/Kalem08/CAB302-Semester-2-5DABS/pull/75		Done						
+Removing unnecessary table from DB	https://github.com/Kalem08/CAB302-Semester-2-5DABS/pull/76		Done						
+Merge edit-page-UI to integration	https://github.com/Kalem08/CAB302-Semester-2-5DABS/pull/77		Done						
+Administrative functionality implementation	https://github.com/Kalem08/CAB302-Semester-2-5DABS/pull/78		Done						
+Administrative functionality	https://github.com/Kalem08/CAB302-Semester-2-5DABS/pull/79		Done						
+Implement user bookmarks and viewing history	https://github.com/Kalem08/CAB302-Semester-2-5DABS/pull/80		Done						
+Merge seperate-edit-page-logic branch	https://github.com/Kalem08/CAB302-Semester-2-5DABS/pull/81		Done						
+Added Javadoc comments	https://github.com/Kalem08/CAB302-Semester-2-5DABS/pull/82		Done						
